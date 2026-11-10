@@ -1,0 +1,64 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 512 512"
+  fill="none"
+>
+  <title>Power Guard</title>
+
+  <!-- Shield outline -->
+  <path
+    d="
+      M256 42
+      L418 112
+      V247
+      C418 344 353 414 256 470
+      C159 414 94 344 94 247
+      V112
+      L256 42Z
+    "
+    stroke="#08265C"
+    stroke-width="28"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <!-- Lightning bolt -->
+  <path
+    d="
+      M287 91
+      L157 268
+      H238
+      L211 414
+      L355 222
+      H273
+      L287 91Z
+    "
+    fill="#FFB800"
+    stroke="#FFB800"
+    stroke-width="5"
+    stroke-linejoin="round"
+  />
+
+  <!-- Plug integrated into shield -->
+  <g
+    stroke="#08265C"
+    stroke-width="20"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <!-- Plug prongs -->
+    <path d="M369 331 L382 293" />
+    <path d="M408 344 L421 306" />
+
+    <!-- Plug body -->
+    <path
+      d="
+        M365 344
+        L416 361
+        C414 385 398 400 378 394
+        C358 388 352 365 365 344Z
+      "
+      fill="#08265C"
+    />
+  </g>
+</svg>
