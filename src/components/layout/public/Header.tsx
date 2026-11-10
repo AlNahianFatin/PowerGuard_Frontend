@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
 import { useGetMe, useLogout } from "@/hooks";
-import { UserRole } from "@/types";
+import type { UserRole } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -54,7 +54,7 @@ export default function Header() {
         <div className="flex items-center gap-2">
           <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" />
           <div>
-            <h1 className="font-bold text-indigo-900 text-2xl">Power Guard</h1>
+            <h1 className="font-bold text-primary text-2xl">Power Guard</h1>
             <h2 className="font-medium text-md">Solving power outage lightning fast</h2>
           </div>
         </div>
