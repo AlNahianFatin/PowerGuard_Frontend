@@ -2,6 +2,7 @@ import apiClient from "@/lib/apiClient";
 import type {
   LoginPayload,
   RegistrationPayload,
+  ResendOtpPayload,
   VerifyAccountPayload,
 } from "@/types";
 
@@ -15,6 +16,10 @@ export function verifyAccount(payload: VerifyAccountPayload) {
 
 export function userRegistration(payload: RegistrationPayload) {
   return apiClient("/auth/register", { method: "POST", body: payload });
+}
+
+export function userResendOtp(payload: ResendOtpPayload) {
+  return apiClient("/auth/resend-otp", { method: "POST", body: payload });
 }
 
 export function userLogout() {

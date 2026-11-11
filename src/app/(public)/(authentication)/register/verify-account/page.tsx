@@ -1,4 +1,5 @@
 import VerifyAccountForm from "@/components/form/verify-account-form";
+import VerifyAccountLoader from "@/components/loader/verify-account-loader";
 import Image from "next/image";
 
 import Link from "next/link";
@@ -18,7 +19,7 @@ export default function VerifyAccountPage() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <Suspense fallback={<p>Loading...</p>}>
+            <Suspense fallback={<VerifyAccountLoader />}>
               <VerifyAccountForm mode="customer" />
             </Suspense>
           </div>

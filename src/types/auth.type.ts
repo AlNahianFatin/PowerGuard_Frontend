@@ -9,6 +9,10 @@ export interface RegistrationPayload {
   };
 }
 
+export interface ResendOtpPayload {
+  email: string;
+}
+
 export interface LoginPayload {
   email: string;
   password: string;

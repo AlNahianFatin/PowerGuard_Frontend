@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
 import { useGetMe, useLogout } from "@/hooks";
 import type { UserRole } from "@/types";
@@ -24,7 +25,7 @@ export default function Header() {
 
   const queryClient = useQueryClient();
   const { data, isLoading } = useGetMe();
-  const { mutate: logout } = useLogout();
+  const { mutate: logout, isPending: isLogoutPending } = useLogout();
 
   const role: UserRole = !!data?.data && data?.data.role;
 
@@ -85,7 +86,11 @@ export default function Header() {
           )}
           {!isLoading && data && (
             <Button onClick={handleLogout} variant="destructive">
-              Logout
+              {
+                isLogoutPending ?
+                  <><Spinner />Logging out</>
+                  : "Logout"
+              }
             </Button>
           )}
         </div>

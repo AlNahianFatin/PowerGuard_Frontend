@@ -53,6 +53,7 @@ export default function LoginForm() {
           });
           router.push("/");
         },
+        // biome-ignore lint/suspicious/noExplicitAny: <sd>
         onError: (err: any) => {
           toast.add({
             title: "Authorization failure",
@@ -148,7 +149,7 @@ export default function LoginForm() {
           <Button disabled={loginPending} type="submit">
             {loginPending ? (
               <>
-                <Spinner /> submitting
+                <Spinner /> Submitting
               </>
             ) : (
               "Submit"

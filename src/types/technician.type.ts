@@ -51,7 +51,7 @@ export interface Doctor {
   user: User;
 }
 
-export interface DoctorParams {
+export interface TechnicianParams {
   verificationStatus?: DoctorVerificationStatus;
   page?: number;
   limit?: number;
@@ -77,7 +77,7 @@ export interface PublicDoctorProfile {
   createdAt: string;
 }
 
-export interface PublicDoctorParams {
+export interface PublicTechnicianParams {
   page?: number;
   limit?: number;
   searchTerm?: string;

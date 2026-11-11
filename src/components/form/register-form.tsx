@@ -83,6 +83,7 @@ export function RegisterForm() {
           const params = new URLSearchParams({ email: registrationData.email });
           router.push(`/register/verify-account?${params.toString()}`);
         },
+        // biome-ignore lint/suspicious/noExplicitAny: <vds>
         onError: (err: any) => {
           toast.add({
             title: "Authorization failure",
@@ -304,7 +305,7 @@ export function RegisterForm() {
           <Button disabled={registrationPending} type="submit">
             {registrationPending ? (
               <>
-                <Spinner /> submitting
+                <Spinner /> Submitting
               </>
             ) : (
               "Submit"

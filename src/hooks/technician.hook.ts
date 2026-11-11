@@ -5,9 +5,9 @@ import {
   getAllPublicDoctors,
   getPublicDoctorProfile,
   getTodayScheduleByDoctor,
-  verifyDoctorAccount,
+  verifyTechnicianAccount,
 } from "@/api";
-import { DoctorParams, PublicDoctorParams } from "@/types";
+import type { TechnicianParams, PublicTechnicianParams } from "@/types";
 import {
   useMutation,
   useQuery,
@@ -23,25 +23,25 @@ export function useApplyAsTechnician() {
 
 export function useVerifyTechnicianAccount() {
   return useMutation({
-    mutationFn: verifyDoctorAccount,
+    mutationFn: verifyTechnicianAccount,
   });
 }
 
-export function useGetAllDoctors(params: DoctorParams) {
+export function useGetAllTechnicians(params: TechnicianParams) {
   return useQuery({
     queryKey: ["doctors", params],
     queryFn: () => getAllDoctors(params),
   });
 }
 
-export function useGetAllPublicDoctors(params: PublicDoctorParams) {
+export function useGetAllPublicDoctors(params: PublicTechnicianParams) {
   return useQuery({
     queryKey: ["doctor", "public", params],
     queryFn: () => getAllPublicDoctors(params),
   });
 }
 
-export function useSuspenseGetPublicDoctors(params: PublicDoctorParams) {
+export function useSuspenseGetPublicDoctors(params: PublicTechnicianParams) {
   return useSuspenseQuery({
     queryKey: ["doctors", "public", params],
     queryFn: () => getAllPublicDoctors(params),
@@ -56,7 +56,7 @@ export function usePublicDoctorProfile(doctorId: string) {
   });
 }
 
-export function useSuspenseGetAllDoctors(params: DoctorParams) {
+export function useSuspenseGetAllDoctors(params: TechnicianParams) {
   return useSuspenseQuery({
     queryKey: ["doctors", params],
     queryFn: () => getAllDoctors(params),

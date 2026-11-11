@@ -5,12 +5,19 @@ import {
   userLogin,
   userLogout,
   userRegistration,
+  userResendOtp,
   verifyAccount,
 } from "@/api";
 
 export function useLogin() {
   return useMutation({
     mutationFn: userLogin,
+  });
+}
+
+export function useResendAccountOtp() {
+  return useMutation({
+    mutationFn: userResendOtp,
   });
 }
 
