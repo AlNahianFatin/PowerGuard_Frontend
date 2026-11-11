@@ -2,8 +2,10 @@ export interface RegistrationPayload {
   name: string;
   email: string;
   password: string;
-  patient: {
+  confirmPassword: string;
+  customer: {
     contactNumber?: string;
+    address?: string;
   };
 }
 

@@ -1,5 +1,5 @@
-import Logo from "@/assets/svg/Logo";
 import VerifyAccountForm from "@/components/form/verify-account-form";
+import Image from "next/image";
 
 import Link from "next/link";
 import { Suspense } from "react";
@@ -11,24 +11,27 @@ export default function VerifyAccountPage() {
         <div className="flex justify-center gap-2 md:justify-start">
           <Link href="/" className="flex items-center gap-2 font-medium">
             <div className="flex items-center gap-2">
-              <Logo />
-              <span>PH Healthcare</span>
+              <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" unoptimized />
+              <p className="font-bold text-primary text-2xl">Power Guard</p>
             </div>
           </Link>
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             <Suspense fallback={<p>Loading...</p>}>
-              <VerifyAccountForm mode="patient" />
+              <VerifyAccountForm mode="customer" />
             </Suspense>
           </div>
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">
-        <img
+        <Image
           src="/register.jpg"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" fill
+          priority
+          unoptimized
+          sizes="50vw"
         />
       </div>
     </div>

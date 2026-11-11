@@ -1,4 +1,4 @@
-import * as React from "react"
+import type * as React from "react"
 import { cn } from "cn"
 
 import { Button } from "@/components/ui/button"
@@ -6,7 +6,9 @@ import { ChevronLeftIcon, ChevronRightIcon, MoreHorizontalIcon } from "lucide-re
 
 function Pagination({ className, ...props }: React.ComponentProps<"nav">) {
   return (
-    <nav
+    // biome-ignore lint/a11y/useSemanticElements: <explanation>
+<nav
+      // biome-ignore lint/a11y/noRedundantRoles: <explanation>
       role="navigation"
       aria-label="pagination"
       data-slot="pagination"

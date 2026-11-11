@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import GoogleLoginComponent from "../modules/google-login/GoogleLogin";
-import { patientRegistrationSchema } from "@/validation";
-import z from "zod";
+import { customerRegistrationSchema } from "@/validation";
+import type z from "zod";
 import { useRegistration } from "@/hooks";
 import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
@@ -26,15 +26,24 @@ export function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  type PatientDefaultValues = z.infer<typeof patientRegistrationSchema>;
+  type CustomerDefaultValues = z.infer<typeof customerRegistrationSchema>;
 
-  const defaultValues: PatientDefaultValues = {
-    name: "Mir",
-    email: "mir@gmail.com",
-    contactNumber: "01912345678",
-    password: "@User123456",
-    confirmPassword: "@User123456",
+  const defaultValues: CustomerDefaultValues = {
+    name: "",
+    email: "",
+    contactNumber: "",
+    address: "",
+    password: "",
+    confirmPassword: "",
   };
+  // const defaultValues: PatientDefaultValues = {
+  //   name: "Mir",
+  //   email: "mir@gmail.com",
+  //   contactNumber: "01912345678",
+  //   address: "A, abc road, Dhaka",
+  //   password: "@User123456",
+  //   confirmPassword: "@User123456",
+  // };
 
   const { mutate: registration, isPending: registrationPending } =
     useRegistration();
@@ -42,15 +51,17 @@ export function RegisterForm() {
   const form = useForm({
     defaultValues,
     validators: {
-      onSubmit: patientRegistrationSchema,
+      onSubmit: customerRegistrationSchema,
     },
     onSubmit: async ({ value }) => {
       const registrationData = {
         name: value.name,
         email: value.email,
         password: value.password,
-        patient: {
+        confirmPassword: value.confirmPassword,
+        customer: {
           contactNumber: value.contactNumber,
+          address: value.address,
         },
       };
 
@@ -59,24 +70,24 @@ export function RegisterForm() {
           if (!res.success) {
             toast.add({
               title: "Server Failure",
-              description: "Something went wrong. Please try again",
+              description: res.message ?? "Something went wrong. Please try again",
               type: "error",
             });
           }
 
           toast.add({
             title: "Registration Successful",
-            description: "Please verify your account",
+            description: res.data?.message || res.message || "Please verify your account",
             type: "success",
           });
           const params = new URLSearchParams({ email: registrationData.email });
           router.push(`/register/verify-account?${params.toString()}`);
         },
-        onError: (err) => {
+        onError: (err: any) => {
           toast.add({
             title: "Authorization failure",
             description:
-              err.message || "Something went wrong. Please try again",
+              err.data?.message || err.message || "Something went wrong. Please try again",
             type: "error",
           });
         },
@@ -118,7 +129,7 @@ export function RegisterForm() {
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
-                      autoComplete="name"
+                    // autoComplete="name"
                     />
                   </div>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -159,13 +170,39 @@ export function RegisterForm() {
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Phone Number</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Phone Number (Optional)</FieldLabel>
                   <div className="relative">
                     <Input
                       id={field.name}
                       name={field.name}
                       type="tel"
                       placeholder="+880 1712 345678"
+                      value={field.state.value}
+                      onBlur={field.handleBlur}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      aria-invalid={isInvalid}
+                      autoComplete="off"
+                    />
+                  </div>
+                  {isInvalid && <FieldError errors={field.state.meta.errors} />}
+                </Field>
+              );
+            }}
+          </form.Field>
+
+          <form.Field name="address">
+            {(field) => {
+              const isInvalid =
+                field.state.meta.isTouched && !field.state.meta.isValid;
+              return (
+                <Field data-invalid={isInvalid}>
+                  <FieldLabel htmlFor={field.name}>Address (Optional)</FieldLabel>
+                  <div className="relative">
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      type="text"
+                      placeholder="A, abc road, dhaka"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
@@ -278,7 +315,7 @@ export function RegisterForm() {
 
       <FieldSeparator>Or continue with</FieldSeparator>
 
-      {/* <GoogleLoginComponent /> */}
+      <GoogleLoginComponent />
 
       <div className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}

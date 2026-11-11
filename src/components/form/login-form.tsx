@@ -13,11 +13,10 @@ import {
 import { loginSchema } from "@/validation";
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
-import { useGoogleOAuth, useLogin } from "@/hooks";
+import { useLogin } from "@/hooks";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
-import { GoogleLogin } from "@react-oauth/google";
 import Link from "next/link";
 import GoogleLoginComponent from "../modules/google-login/GoogleLogin";
 
@@ -29,8 +28,8 @@ export default function LoginForm() {
 
   const form = useForm({
     defaultValues: {
-      email: "mirhussain@gmail.com",
-      password: "@Doctor123456",
+      email: "",
+      password: "",
     },
     // defaultValues: {
     //   email: "superadmin@gmail.com",
@@ -49,16 +48,18 @@ export default function LoginForm() {
         onSuccess: (res) => {
           toast.add({
             title: "Login Success",
-            description: "Welcome back",
+            description: res.message ?? "Welcome back",
             type: "success",
           });
           router.push("/");
         },
-        onError: (err) => {
+        onError: (err: any) => {
           toast.add({
             title: "Authorization failure",
             description:
-              err.message || "Something went wrong. Please try again",
+              err.data?.message ||
+              err.message ||
+              "Something went wrong. Please try again",
             type: "error",
           });
         },
@@ -98,7 +99,7 @@ export default function LoginForm() {
                     onChange={(e) => field.handleChange(e.target.value)}
                     onBlur={field.handleBlur}
                     value={field.state.value}
-                    autoComplete="off"
+                    // autoComplete="off"
                     aria-invalid={isInvalid}
                   />
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -158,7 +159,7 @@ export default function LoginForm() {
 
       <FieldSeparator>Or continue with</FieldSeparator>
 
-      {/* <GoogleLoginComponent /> */}
+      <GoogleLoginComponent />
 
       <div className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}

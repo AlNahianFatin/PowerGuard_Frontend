@@ -24,10 +24,10 @@ export default function GoogleLoginComponent() {
     googleLogin(
       { idToken },
       {
-        onSuccess: () => {
+        onSuccess: (res) => {
           toast.add({
             title: "Logged in Successfully",
-            description: "Welcome back",
+            description: res.message ?? "Welcome back",
             type: "success",
           });
           router.push("/");

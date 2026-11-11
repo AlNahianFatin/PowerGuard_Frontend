@@ -1,5 +1,5 @@
-import Logo from "@/assets/svg/Logo";
 import DoctorApplyForm from "@/components/form/doctor-apply-form";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function ApplyPage() {
@@ -9,8 +9,8 @@ export default function ApplyPage() {
         <div className="flex justify-center gap-2 md:justify-start">
           <Link href="/" className="flex items-center gap-2 font-medium">
             <div className="flex items-center gap-2">
-              <Logo />
-              <span>PH Healthcare</span>
+              <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" />
+              <p className="font-bold text-primary text-2xl">Power Guard</p>
             </div>
           </Link>
         </div>
@@ -21,7 +21,7 @@ export default function ApplyPage() {
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">
-        <img
+        <Image
           src="/login.jpg"
           alt="Image"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"

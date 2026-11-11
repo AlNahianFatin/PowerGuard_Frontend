@@ -11,37 +11,37 @@ import Link from "next/link";
 export default function Header() {
   const routes = [
     { name: "Home", url: "/" },
-    { name: "Doctors", url: "/doctors" },
+    { name: "Today's schedule", url: "/schedules" },
     { name: "About us", url: "/about-us" },
   ];
 
   const dashboardRoute: Record<UserRole, string> = {
-    SUPER_ADMIN: "/admin",
     ADMIN: "/admin",
-    DOCTOR: "/doctor",
-    PATIENT: "/dashboard",
+    OPERATOR: "/operator",
+    TECHNICIAN: "/technician",
+    CUSTOMER: "/customer",
   };
 
+  const queryClient = useQueryClient();
   const { data, isLoading } = useGetMe();
   const { mutate: logout } = useLogout();
-  const queryClient = useQueryClient();
 
   const role: UserRole = !!data?.data && data?.data.role;
 
   const handleLogout = () => {
     logout(undefined, {
-      onSuccess: () => {
+      onSuccess: (res) => {
         toast.add({
-          title: "Tata",
-          description: "Logged out successfully",
+          title: "See you soon!",
+          description: res.message ?? "Logged out successfully",
           type: "success",
         });
         queryClient.removeQueries({ queryKey: ["user"] });
       },
-      onError: () => {
+      onError: (error) => {
         toast.add({
           title: "Logout failed",
-          description: "Something Went Wrong",
+          description: error.message ?? "Something Went Wrong",
           type: "error",
         });
       },
@@ -52,10 +52,16 @@ export default function Header() {
     <header className="w-full h-16 border border-b">
       <div className="flex justify-between items-center h-full max-w-7xl mx-auto">
         <div className="flex items-center gap-2">
-          <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" />
+          <Image
+            src="/logo.svg"
+            alt="Power Guard logo"
+            width={50}
+            height={50}
+            unoptimized
+          />
           <div>
-            <h1 className="font-bold text-primary text-2xl">Power Guard</h1>
-            <h2 className="font-medium text-md">Solving power outage lightning fast</h2>
+            <p className="font-bold text-primary text-2xl">Power Guard</p>
+            <p className="font-medium text-md">Solving power outage lightning fast</p>
           </div>
         </div>
 

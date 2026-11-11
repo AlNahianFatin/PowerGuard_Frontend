@@ -14,15 +14,16 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
 import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
 import { useEffect, useState } from "react";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
-import { useVerifyAccount, useVerifyDoctorAccount } from "@/hooks";
+import { useVerifyAccount, useVerifyTechnicianAccount } from "@/hooks";
 import { toast } from "../ui/toast";
+import { Spinner } from "../ui/spinner";
 
 const RESEND_COOLDOWN = 120;
 
 export default function VerifyAccountForm({
-  mode = "patient",
+  mode = "customer",
 }: {
-  mode: "doctor" | "patient";
+  mode: "technician" | "customer";
 }) {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -31,10 +32,10 @@ export default function VerifyAccountForm({
   const [isInvalid, setIsInvalid] = useState(false);
   const [resendTimer, setResendTimer] = useState(RESEND_COOLDOWN);
 
-  const { mutate: verifyPatient } = useVerifyAccount();
-  const { mutate: verifyDoctor } = useVerifyDoctorAccount();
+  const { mutate: verifyCustomer, isPending: verificationPending } = useVerifyAccount();
+  const { mutate: verifyTechnician, isPending: technicianVerificationPending } = useVerifyTechnicianAccount();
 
-  const verify = mode === "doctor" ? verifyDoctor : verifyPatient;
+  const verify = mode === "technician" ? verifyTechnician : verifyCustomer;
 
   const email = searchParams.get("email") || "";
 
@@ -42,7 +43,7 @@ export default function VerifyAccountForm({
     if (!email) {
       router.push("/");
     }
-  }, [email]);
+  }, [email, router.push]);
 
   useEffect(() => {
     if (resendTimer <= 0) {
@@ -54,7 +55,7 @@ export default function VerifyAccountForm({
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [resendTimer]);
 
   const handleOTP = () => {
     if (otp.length !== 6) {
@@ -68,20 +69,20 @@ export default function VerifyAccountForm({
     };
 
     verify(verifyData, {
-      onSuccess: (res) => {
+      onSuccess: (res: any) => {
         if (!res.success) {
           toast.add({
             title: "Server Failure",
-            description: "Something went wrong. Please try again",
+            description: res.data?.message || res.message || "Something went wrong. Please try again",
             type: "error",
           });
         }
 
-        if (mode === "doctor") {
+        if (mode === "technician") {
           toast.add({
             title: "Verification Successful",
             description:
-              "An admin will approve your account. This may take time. Please check your email in few days",
+              res.message || "An admin will approve your account. This may take time. Please check your email in few days",
             type: "success",
           });
           router.push("/");
@@ -91,15 +92,15 @@ export default function VerifyAccountForm({
 
         toast.add({
           title: "Verification Successful",
-          description: "Welcome onboard",
+          description: res.message || "Welcome onboard",
           type: "success",
         });
         router.push("/");
       },
-      onError: (err) => {
+      onError: (err: any) => {
         toast.add({
           title: "Verification failure",
-          description: err.message || "Something went wrong. Please try again",
+          description: err.data?.message || err.message || "Something went wrong. Please try again",
           type: "error",
         });
       },
@@ -163,8 +164,14 @@ export default function VerifyAccountForm({
       </CardContent>
       <CardFooter>
         <Button disabled={resendTimer > 0}>Resend</Button>
-        <Button type="submit" form="otp-form">
-          Submit
+        <Button disabled={verificationPending || technicianVerificationPending} type="submit" form="otp-form">
+          {verificationPending || technicianVerificationPending ? (
+            <>
+              <Spinner /> submitting
+            </>
+          ) : (
+            "Submit"
+          )}
         </Button>
       </CardFooter>
     </Card>

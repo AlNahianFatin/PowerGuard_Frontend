@@ -15,13 +15,13 @@ import {
   useSuspenseQuery,
 } from "@tanstack/react-query";
 
-export function useApplyAsDoctor() {
+export function useApplyAsTechnician() {
   return useMutation({
     mutationFn: applyAsDoctor,
   });
 }
 
-export function useVerifyDoctorAccount() {
+export function useVerifyTechnicianAccount() {
   return useMutation({
     mutationFn: verifyDoctorAccount,
   });

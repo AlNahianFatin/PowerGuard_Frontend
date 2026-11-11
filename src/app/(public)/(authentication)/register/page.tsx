@@ -1,5 +1,5 @@
-import Logo from "@/assets/svg/Logo";
 import { RegisterForm } from "@/components/form/register-form";
+import Image from "next/image";
 
 import Link from "next/link";
 
@@ -10,8 +10,14 @@ export default function RegisterPage() {
         <div className="flex justify-center gap-2 md:justify-start">
           <Link href="/" className="flex items-center gap-2 font-medium">
             <div className="flex items-center gap-2">
-              <Logo />
-              <span>PH Healthcare</span>
+              <Image
+                src="/logo.svg"
+                alt="Power Guard logo"
+                width={50}
+                height={50}
+                unoptimized
+              />
+              <p className="font-bold text-primary text-2xl">Power Guard</p>
             </div>
           </Link>
         </div>
@@ -22,10 +28,13 @@ export default function RegisterPage() {
         </div>
       </div>
       <div className="relative hidden bg-muted lg:block">
-        <img
+        <Image
           src="/register.jpg"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" fill
+          priority
+          unoptimized
+          sizes="50vw"
         />
       </div>
     </div>
