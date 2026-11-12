@@ -10,7 +10,7 @@ import {
   useResetPassword,
 } from "@/hooks";
 
-import { ResetPasswordSchema } from "@/validation";
+import { ResendOtpSchema, ResetPasswordSchema } from "@/validation";
 import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
 import { Input } from "../ui/input";
@@ -139,14 +139,17 @@ export default function ResetPasswordForm() {
     },
   });
 
-  const handleResend = () => {
-    if (!email || resendTimer > 0 || resendOtpPending) {
-      return;
-    }
+  const resendForm = useForm({
+    defaultValues: {
+      email,
+    },
 
-    resendOtp(
-      { email },
-      {
+    validators: {
+      onSubmit: ResendOtpSchema,
+    },
+
+    onSubmit: ({ value }) => {
+      resendOtp(value, {
         // biome-ignore lint/suspicious/noExplicitAny: <df>
         onSuccess: (res: any) => {
           if (res?.success === false) {
@@ -161,10 +164,8 @@ export default function ResetPasswordForm() {
             return;
           }
 
-          // Start the cooldown only after a successful resend.
           setResendTimer(RESEND_COOLDOWN);
 
-          // Clear the previous OTP.
           form.setFieldValue("otp", "");
 
           toast.add({
@@ -186,8 +187,16 @@ export default function ResetPasswordForm() {
             type: "error",
           });
         },
-      },
-    );
+      });
+    },
+  });
+
+  const handleResend = () => {
+    if (!email || resendTimer > 0 || resendOtpPending) {
+      return;
+    }
+
+    void resendForm.handleSubmit();
   };
 
   const formatTimer = (seconds: number) => {
@@ -224,7 +233,7 @@ export default function ResetPasswordForm() {
           <FieldGroup>
             <form.Field name="otp">
               {(field) => {
-                const isInvalid = field.state.meta.errors.length > 0;
+                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
                 return (
                   <Field data-invalid={isInvalid}>
@@ -241,7 +250,7 @@ export default function ResetPasswordForm() {
                       onBlur={field.handleBlur}
                       pattern={REGEXP_ONLY_DIGITS}
                       aria-invalid={isInvalid}
-                      autoComplete="one-time-code"
+                      autoComplete="off"
                     >
                       <InputOTPGroup>
                         <InputOTPSlot index={0} />
@@ -263,7 +272,7 @@ export default function ResetPasswordForm() {
 
             <form.Field name="newPassword">
               {(field) => {
-                const isInvalid = field.state.meta.errors.length > 0;
+                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
                 return (
                   <Field data-invalid={isInvalid}>
@@ -276,7 +285,7 @@ export default function ResetPasswordForm() {
                         id={field.name}
                         name={field.name}
                         type={showNewPassword ? "text" : "password"}
-                        placeholder="*********"
+                        placeholder="Enter your new password"
                         autoComplete="newPassword"
                         value={field.state.value}
                         onChange={(event) =>
@@ -287,7 +296,7 @@ export default function ResetPasswordForm() {
                       />
                       <button
                         type="button"
-                        onClick={() => setShowNewPassword(!showNewPassword)}
+                        onClick={() => setShowNewPassword((prev) => !prev)}
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
                         aria-label={
                           showNewPassword ? "Hide password" : "Show password"
@@ -310,7 +319,7 @@ export default function ResetPasswordForm() {
 
             <form.Field name="confirmNewPassword">
               {(field) => {
-                const isInvalid = field.state.meta.errors.length > 0;
+                const isInvalid = field.state.meta.isTouched && !field.state.meta.isValid;
 
                 return (
                   <Field data-invalid={isInvalid}>
@@ -334,7 +343,7 @@ export default function ResetPasswordForm() {
                       <button
                         type="button"
                         onClick={() =>
-                          setShowConfirmNewPassword(!showConfirmNewPassword)
+                          setShowConfirmNewPassword((prev) => !prev)
                         }
                         className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
                         aria-label={

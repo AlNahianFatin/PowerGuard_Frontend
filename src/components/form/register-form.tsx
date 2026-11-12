@@ -51,6 +51,7 @@ export function RegisterForm() {
   const form = useForm({
     defaultValues,
     validators: {
+      onChange: customerRegistrationSchema,
       onSubmit: customerRegistrationSchema,
     },
     onSubmit: async ({ value }) => {
@@ -240,7 +241,7 @@ export function RegisterForm() {
                     />
                     <button
                       type="button"
-                      onClick={() => setShowPassword(!showPassword)}
+                      onClick={() => setShowPassword((prev) => !prev)}
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
                       aria-label={
                         showPassword ? "Hide password" : "Show password"
@@ -282,7 +283,7 @@ export function RegisterForm() {
                     <button
                       type="button"
                       onClick={() =>
-                        setShowConfirmPassword(!showConfirmPassword)
+                        setShowConfirmPassword((prev) => !prev)
                       }
                       className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground focus:outline-none"
                       aria-label={

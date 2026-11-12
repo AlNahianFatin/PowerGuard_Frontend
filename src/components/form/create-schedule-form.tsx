@@ -25,6 +25,7 @@ export default function CreateScheduleForm({
       meetingLink: "https://meet.google.com/aiu-ctor-moh",
     },
     validators: {
+      onChange: scheduleSchema,
       onSubmit: scheduleSchema,
     },
     onSubmit: ({ value }) => {

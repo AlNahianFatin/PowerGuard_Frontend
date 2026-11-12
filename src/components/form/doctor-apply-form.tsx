@@ -38,7 +38,7 @@ import {
 } from "@/validation";
 import { formatFileSize } from "@/utils";
 import { DoctorApplicationData } from "@/types";
-import { useApplyAsDoctor } from "@/hooks";
+import { useApplyAsTechnician } from "@/hooks";
 import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
 
@@ -62,7 +62,7 @@ import { Spinner } from "../ui/spinner";
 
 export default function DoctorApplyForm() {
   const router = useRouter();
-  const { mutate: apply, isPending: applyPending } = useApplyAsDoctor();
+  const { mutate: apply, isPending: applyPending } = useApplyAsTechnician();
 
   const form = useForm({
     defaultValues: {
@@ -95,6 +95,7 @@ export default function DoctorApplyForm() {
     // },
 
     validators: {
+      onChange: doctorApplicationSchema,
       onSubmit: doctorApplicationSchema,
     },
 
@@ -125,7 +126,8 @@ export default function DoctorApplyForm() {
           additionalFiles: value.additionalFiles,
         },
         {
-          onSuccess: (res) => {
+          // biome-ignore lint/suspicious/noExplicitAny: <asf>
+          onSuccess: (res: { success: any; }) => {
             if (!res.success) {
               toast.add({
                 title: "Server Failure",
@@ -145,7 +147,8 @@ export default function DoctorApplyForm() {
             });
             router.push(`/apply/verify-account?${params.toString()}`);
           },
-          onError: (err) => {
+          // biome-ignore lint/suspicious/noExplicitAny: <sd>
+          onError: (err: { message: any; }) => {
             toast.add({
               title: "Application failure",
               description:
@@ -512,6 +515,7 @@ export default function DoctorApplyForm() {
                   <FieldLabel htmlFor="resume-field">Resume</FieldLabel>
                   <div className="flex flex-wrap items-center gap-3">
                     <Button
+                      // biome-ignore lint/a11y/noLabelWithoutControl: <sdf>
                       render={<label htmlFor="resume-field" />}
                       nativeButton={false}
                       variant="outline"
@@ -577,6 +581,7 @@ export default function DoctorApplyForm() {
                   </FieldLabel>
                   <div className="flex flex-wrap items-center gap-3">
                     <Button
+                      // biome-ignore lint/a11y/noLabelWithoutControl: <sd>
                       render={<label htmlFor="additional-file-field" />}
                       nativeButton={false}
                       variant="outline"

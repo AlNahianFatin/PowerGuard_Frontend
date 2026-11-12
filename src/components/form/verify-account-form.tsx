@@ -1,6 +1,21 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useForm } from "@tanstack/react-form";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+
+import {
+  useVerifyAccount,
+  useVerifyTechnicianAccount,
+  useResendOtp,
+} from "@/hooks";
+
+import { ResendOtpSchema, UserVerificationSchema } from "@/validation";
+import { toast } from "../ui/toast";
+import { Spinner } from "../ui/spinner";
+import { Button } from "../ui/button";
+
 import {
   Card,
   CardContent,
@@ -9,18 +24,20 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { Button } from "../ui/button";
-import { InputOTP, InputOTPGroup, InputOTPSlot } from "../ui/input-otp";
-import { Field, FieldDescription, FieldError, FieldLabel } from "../ui/field";
-import { useEffect, useState } from "react";
-import { REGEXP_ONLY_DIGITS } from "input-otp";
+
 import {
-  useVerifyAccount,
-  useVerifyTechnicianAccount,
-  useResendOtp,
-} from "@/hooks";
-import { toast } from "../ui/toast";
-import { Spinner } from "../ui/spinner";
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "../ui/field";
+
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSlot,
+} from "../ui/input-otp";
 
 const RESEND_COOLDOWN = 5 * 60;
 
@@ -29,11 +46,11 @@ export default function VerifyAccountForm({
 }: {
   mode: "technician" | "customer";
 }) {
-  const searchParams = useSearchParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const [otp, setOtp] = useState("");
-  const [isInvalid, setIsInvalid] = useState(false);
+  const email = searchParams.get("email")?.trim().toLowerCase() ?? "";
+
   const [resendTimer, setResendTimer] = useState(RESEND_COOLDOWN);
 
   const {
@@ -50,13 +67,6 @@ export default function VerifyAccountForm({
     mutate: resendOtp,
     isPending: resendOtpPending,
   } = useResendOtp();
-
-  // const {
-  //   mutate: resendTechnicianOtp,
-  //   isPending: technicianResendPending,
-  // } = useResendTechnicianAccountOtp();
-
-  const email = searchParams.get("email")?.trim().toLowerCase() || "";
 
   const verificationPendingState =
     verificationPending || technicianVerificationPending;
@@ -77,15 +87,92 @@ export default function VerifyAccountForm({
     return () => clearInterval(timer);
   }, [resendTimer]);
 
-  const handleResend = () => {
-    if (!email || resendTimer > 0 || resendOtpPending) return;
+  const form = useForm({
+    defaultValues: {
+      otp: "",
+    },
 
-    resendOtp(
-      { email },
-      {
-        // biome-ignore lint/suspicious/noExplicitAny: <reyery>
+    validators: {
+      onChange: UserVerificationSchema,
+      onSubmit: UserVerificationSchema,
+    },
+
+    onSubmit: ({ value }) => {
+      const verifyData = {
+        email,
+        otp: value.otp,
+      };
+
+      const verifyMutation =
+        mode === "technician" ? verifyTechnician : verifyCustomer;
+
+      verifyMutation(verifyData, {
+        // biome-ignore lint/suspicious/noExplicitAny: API response
         onSuccess: (res: any) => {
-          if (!res.success) {
+          if (res?.success === false) {
+            toast.add({
+              title: "Verification Failed",
+              description:
+                res.data?.message ||
+                res.message ||
+                "Something went wrong. Please try again.",
+              type: "error",
+            });
+
+            return;
+          }
+
+          if (mode === "technician") {
+            toast.add({
+              title: "Verification Successful",
+              description:
+                res?.message ||
+                "An admin will approve your account. Please check your email in a few days.",
+              type: "success",
+            });
+
+            router.push("/");
+            return;
+          }
+
+          toast.add({
+            title: "Verification Successful",
+            description: res?.message || "Welcome onboard!",
+            type: "success",
+          });
+
+          router.push("/");
+        },
+
+        // biome-ignore lint/suspicious/noExplicitAny: API error
+        onError: (err: any) => {
+          toast.add({
+            title: "Verification Failed",
+            description:
+              err.data?.message ||
+              err.message ||
+              "Something went wrong. Please try again.",
+            type: "error",
+          });
+        },
+      });
+    },
+  });
+
+  const resendForm = useForm({
+    defaultValues: {
+      email,
+    },
+
+    validators: {
+      onSubmit: ResendOtpSchema,
+    },
+
+    onSubmit: ({ value }) => {
+      resendOtp(value, {
+        // biome-ignore lint/suspicious/noExplicitAny: API response
+        onSuccess: (res: any) => {
+          if (res?.success === false) {
             toast.add({
               title: "Resend Failed",
               description:
@@ -94,22 +181,24 @@ export default function VerifyAccountForm({
                 "Unable to resend OTP. Please try again.",
               type: "error",
             });
+
             return;
           }
 
           setResendTimer(RESEND_COOLDOWN);
 
-          setOtp("");
-          setIsInvalid(false);
+          form.resetField("otp");
 
           toast.add({
             title: "OTP Sent",
             description:
-              res.message || "A new verification OTP has been sent to your email.",
+              res?.message ||
+              "A new verification OTP has been sent to your email.",
             type: "success",
           });
         },
-        // biome-ignore lint/suspicious/noExplicitAny: <rgre>
+
+        // biome-ignore lint/suspicious/noExplicitAny: API error
         onError: (err: any) => {
           toast.add({
             title: "Resend Failed",
@@ -120,69 +209,16 @@ export default function VerifyAccountForm({
             type: "error",
           });
         },
-      },
-    );
-  };
+      });
+    },
+  });
 
-  const handleOTP = () => {
-    if (otp.length !== 6) {
-      setIsInvalid(true);
+  const handleResend = () => {
+    if (!email || resendTimer > 0 || resendOtpPending) {
       return;
     }
 
-    const verifyData = { email, otp };
-
-    const verifyMutation =
-      mode === "technician" ? verifyTechnician : verifyCustomer;
-
-    verifyMutation(verifyData, {
-      // biome-ignore lint/suspicious/noExplicitAny: <sgs>
-      onSuccess: (res: any) => {
-        if (res?.success === false) {
-          toast.add({
-            title: "Verification Failed",
-            description:
-              res.data?.message ||
-              res.message ||
-              "Something went wrong. Please try again.",
-            type: "error",
-          });
-          return;
-        }
-
-        if (mode === "technician") {
-          toast.add({
-            title: "Verification Successful",
-            description:
-              res.message ||
-              "An admin will approve your account. Please check your email in a few days.",
-            type: "success",
-          });
-
-          router.push("/");
-          return;
-        }
-
-        toast.add({
-          title: "Verification Successful",
-          description: res.message || "Welcome onboard!",
-          type: "success",
-        });
-
-        router.push("/");
-      },
-      // biome-ignore lint/suspicious/noExplicitAny: <rg>
-      onError: (err: any) => {
-        toast.add({
-          title: "Verification Failed",
-          description:
-            err.data?.message ||
-            err.message ||
-            "Something went wrong. Please try again.",
-          type: "error",
-        });
-      },
-    });
+    void resendForm.handleSubmit();
   };
 
   const formatTimer = (seconds: number) => {
@@ -194,12 +230,15 @@ export default function VerifyAccountForm({
     ).padStart(2, "0")}`;
   };
 
-  if (!email) return null;
+  if (!email) {
+    return null;
+  }
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Verify Account</CardTitle>
+
         <CardDescription>
           Please provide the OTP we sent to your email.
         </CardDescription>
@@ -207,52 +246,59 @@ export default function VerifyAccountForm({
 
       <CardContent>
         <form
-          id="otp-form"
-          onSubmit={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleOTP();
+          id="verify-account-form"
+          onSubmit={(event) => {
+            event.preventDefault();
+            event.stopPropagation();
+            void form.handleSubmit();
           }}
         >
-          <Field data-invalid={isInvalid}>
-            <FieldLabel htmlFor="otp">OTP</FieldLabel>
+          <FieldGroup>
+            <form.Field name="otp">
+              {(field) => {
+                const isInvalid = field.state.meta.errors.length > 0;
 
-            <InputOTP
-              maxLength={6}
-              onChange={(value) => {
-                setOtp(value);
-                if (isInvalid) setIsInvalid(false);
+                return (
+                  <Field data-invalid={isInvalid}>
+                    <FieldLabel htmlFor={field.name}>
+                      OTP
+                    </FieldLabel>
+
+                    <InputOTP
+                      id={field.name}
+                      name={field.name}
+                      maxLength={6}
+                      value={field.state.value}
+                      onChange={(value) => field.handleChange(value)}
+                      onBlur={field.handleBlur}
+                      pattern={REGEXP_ONLY_DIGITS}
+                      aria-invalid={isInvalid}
+                      autoComplete="one-time-code"
+                    >
+                      <InputOTPGroup>
+                        <InputOTPSlot index={0} />
+                        <InputOTPSlot index={1} />
+                        <InputOTPSlot index={2} />
+                        <InputOTPSlot index={3} />
+                        <InputOTPSlot index={4} />
+                        <InputOTPSlot index={5} />
+                      </InputOTPGroup>
+                    </InputOTP>
+
+                    {isInvalid && (
+                      <FieldError errors={field.state.meta.errors} />
+                    )}
+                  </Field>
+                );
               }}
-              value={otp}
-              autoComplete="off"
-              name="otp"
-              id="otp"
-              pattern={REGEXP_ONLY_DIGITS}
-            >
-              <InputOTPGroup>
-                <InputOTPSlot index={0} />
-                <InputOTPSlot index={1} />
-                <InputOTPSlot index={2} />
-                <InputOTPSlot index={3} />
-                <InputOTPSlot index={4} />
-                <InputOTPSlot index={5} />
-              </InputOTPGroup>
-            </InputOTP>
-
-            {isInvalid && (
-              <FieldError
-                errors={[
-                  { message: "Please enter a valid 6-digit OTP." },
-                ]}
-              />
-            )}
+            </form.Field>
 
             <FieldDescription>
               {resendTimer > 0
                 ? `Resend available in ${formatTimer(resendTimer)}`
                 : "Didn't receive the OTP? You can resend it now."}
             </FieldDescription>
-          </Field>
+          </FieldGroup>
         </form>
       </CardContent>
 
@@ -260,7 +306,11 @@ export default function VerifyAccountForm({
         <Button
           type="button"
           variant="outline"
-          disabled={resendTimer > 0 || resendOtpPending}
+          disabled={
+            resendTimer > 0 ||
+            resendOtpPending ||
+            verificationPendingState
+          }
           onClick={handleResend}
         >
           {resendOtpPending ? (
@@ -275,7 +325,7 @@ export default function VerifyAccountForm({
 
         <Button
           type="submit"
-          form="otp-form"
+          form="verify-account-form"
           disabled={verificationPendingState || resendOtpPending}
         >
           {verificationPendingState ? (

@@ -35,6 +35,7 @@ export default function ForgotPasswordForm() {
     //   email: "superadmin@gmail.com",
     // },
     validators: {
+      onChange: ForgotPasswordSchema,
       onSubmit: ForgotPasswordSchema,
     },
     onSubmit: ({ value }) => {
