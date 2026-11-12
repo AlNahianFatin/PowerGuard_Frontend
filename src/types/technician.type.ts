@@ -1,87 +1,104 @@
-import { User } from "./user.type";
+import type { User } from "./user.type";
 
-export interface DoctorApplicationData {
-  user: {
-    name: string;
-    email: string;
-  };
-  doctor: {
-    specialization: string;
-    licenseNumber: string;
-    qualifications: string;
-    experienceYears: number;
-    contactNumber: string;
-    address: string;
-    consultationFee: number | undefined;
-    bio: string;
-  };
-}
+export type TechnicianStatus = "AVAILABLE" | "ASSIGNED";
 
-export interface DoctorApplicationPayload {
-  resume: File;
-  additionalFiles: File[];
-  data: DoctorApplicationData;
-}
+export type TechnicianVerificationStatus = "PENDING" | "APPROVED" | "REJECTED";
 
-export type DoctorVerificationStatus = "PENDING" | "APPROVED" | "REJECTED";
-
-export interface Doctor {
+export interface Technician {
   id: string;
   name: string;
   email: string;
-  address?: string | null;
-  specialization: string;
-  licenseNumber: string;
-  qualifications: string;
+  address?: string;
+
+  status: TechnicianStatus;
+
   experienceYears: number;
-  bio?: string | null;
-  consultationFee?: number | string | null;
-  contactNumber?: string | null;
-  verificationStatus: DoctorVerificationStatus;
-  rejectionReason?: string | null;
-  reviewedBy?: string | null;
-  reviewedAt?: string | null;
-  resume?: string | null;
-  additionalFiles?: { url: string; publicId: string }[] | null;
+
+  bio?: string;
+
+  contactNumber?: string;
+
+  verificationStatus: TechnicianVerificationStatus;
+  rejectionReason?: string;
+  reviewedBy?: string;
+  reviewedAt?: string;
+
+  resume?: string;
+  resumePublicId?: string;
+
+  additionalFiles?: { url: string; publicId: string }[];
+
   isDeleted: boolean;
-  deletedAt?: null | string;
+  deletedAt?: null;
+
   createdAt: string;
   updatedAt: string;
+
   userId: string;
   user: User;
 }
 
 export interface TechnicianParams {
-  verificationStatus?: DoctorVerificationStatus;
   page?: number;
   limit?: number;
-  searchTerm?: string;
+  sortBy?: string;
   sortOrder?: "desc" | "asc";
+  status?: TechnicianStatus;
+  email?: string;
+  verificationStatus?: TechnicianVerificationStatus;
+  searchTerm?: string;
 }
 
-export interface ApproveDoctorPayload {
-  doctorId: string;
+export interface AvailableTechnicianParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "desc" | "asc";
+  searchTerm?: string;
+}
+
+export interface TechnicianApplicationData {
+  user: {
+    name: string;
+    email: string;
+  };
+  technician: {
+    address?: string;
+    experienceYears: number;
+    bio?: string;
+    contactNumber?: string;
+  };
+}
+
+export interface TechnicianApplicationPayload {
+  resume: File;
+  additionalFiles: File[];
+  data: TechnicianApplicationData;
+}
+
+export interface ApproveTechnicianPayload {
+  technicianId: string;
   verificationStatus: "APPROVED" | "REJECTED";
   rejectionReason?: string;
 }
 
-export interface PublicDoctorProfile {
-  id: string;
-  name: string;
-  specialization: string;
-  licenseNumber: string;
-  qualifications: string;
-  experienceYears: number;
-  bio?: string | null;
-  consultationFee?: number | string | null;
-  createdAt: string;
-}
+// export interface PublicDoctorProfile {
+//   id: string;
+//   name: string;
+//   specialization: string;
+//   licenseNumber: string;
+//   qualifications: string;
+//   experienceYears: number;
+//   bio?: string | null;
+//   consultationFee?: number | string | null;
+//   createdAt: string;
+// }
 
-export interface PublicTechnicianParams {
-  page?: number;
-  limit?: number;
-  searchTerm?: string;
-  specialization?: string;
-  sortBy?: string;
-  sortOrder?: "desc" | "asc";
-}
+// export interface PublicTechnicianParams {
+//   page?: number;
+//   limit?: number;
+//   searchTerm?: string;
+//   specialization?: string;
+//   sortBy?: string;
+//   sortOrder?: "desc" | "asc";
+// }

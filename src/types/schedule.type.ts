@@ -1,28 +1,51 @@
-export type ScheduleStatus = "DRAFT" | "PUBLISHED";
+import type { Feeder } from "./feeder.type";
+import type { User } from "./user.type";
+
+export type ScheduleStatus = "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED";
 
 export interface Schedule {
   id: string;
+
   startDateTime: string;
   endDateTime: string;
-  totalSlots: number;
-  availableSlots: number;
-  meetingLink: string;
+
+  reason: string;
   status: ScheduleStatus;
-  doctorId: string;
+
   createdAt: string;
   updatedAt: string;
+
+  isDeleted: boolean;
+  deletedBy?: string;
+  deletedByUser?: User;
+  deletedAt?: string;
+
+  feederId: string;
+  feeder: Feeder;
+
+  creatorId: string;
+  createdByUser: User;
+}
+
+export interface ScheduleParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "desc" | "asc";
+  status?: ScheduleStatus;
+  searchTerm?: string;
 }
 
 export interface CreateSchedulePayload {
   startDateTime: string;
   endDateTime: string;
-  meetingLink: string;
+  reason: string;
+  feederId: string;
 }
 
-export interface ScheduleParams {
-  status?: ScheduleStatus;
-  page?: number;
-  limit?: number;
-  sortBy?: string;
-  sortOrder?: "desc" | "asc";
+export interface UpdateSchedulePayload {
+  startDateTime?: string;
+  endDateTime?: string;
+  reason?: string;
+  feederId?: string;
 }
