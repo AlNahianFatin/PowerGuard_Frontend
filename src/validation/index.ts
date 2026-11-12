@@ -1,3 +1,3 @@
 export * from "./auth.validation";
-export * from "./doctor-application.validation";
 export * from "./schedule.validation";
+export * from "./technician-application.validation";

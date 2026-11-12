@@ -1,3 +1,4 @@
 export * from "./admin.routes";
-export * from "./doctor.routes";
-export * from "./patient.routes";
+export * from "./customer.routes";
+export * from "./operator.routes";
+export * from "./technician.routes";

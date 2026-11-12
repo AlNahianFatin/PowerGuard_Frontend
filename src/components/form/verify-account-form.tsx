@@ -89,6 +89,7 @@ export default function VerifyAccountForm({
 
   const form = useForm({
     defaultValues: {
+      email,
       otp: "",
     },
 

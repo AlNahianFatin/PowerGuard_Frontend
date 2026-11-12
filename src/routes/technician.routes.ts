@@ -1,16 +1,16 @@
-const prefix = "/dashboard";
+const prefix = "/technician";
 
-export const patientRoutes = [
+export const technicianRoutes = [
   {
-    title: "Bookings",
+    title: "Schedule",
     items: [
       {
         title: "Overview",
         url: `${prefix}`,
       },
       {
-        title: "My Appointments",
-        url: `${prefix}/my-appointments`,
+        title: "Create Schedule",
+        url: `${prefix}/schedules`,
       },
     ],
   },

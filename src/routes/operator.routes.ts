@@ -1,16 +1,16 @@
-const prefix = "/doctor";
+const prefix = "/operator";
 
-export const doctorRoutes = [
+export const operatorRoutes = [
   {
-    title: "Schedule",
+    title: "Management",
     items: [
       {
         title: "Overview",
         url: `${prefix}`,
       },
       {
-        title: "Create Schedule",
-        url: `${prefix}/schedules`,
+        title: "Doctor Approval",
+        url: `${prefix}/approve-doctor`,
       },
     ],
   },
@@ -24,7 +24,6 @@ export const doctorRoutes = [
       {
         title: "Data Fetching",
         url: "#",
-        isActive: true,
       },
     ],
   },
