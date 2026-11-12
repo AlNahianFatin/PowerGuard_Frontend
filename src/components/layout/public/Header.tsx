@@ -12,7 +12,7 @@ import Link from "next/link";
 export default function Header() {
   const routes = [
     { name: "Home", url: "/" },
-    { name: "Today's schedule", url: "/schedules" },
+    { name: "Schedules", url: "/schedules" },
     { name: "About us", url: "/about-us" },
   ];
 

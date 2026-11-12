@@ -17,7 +17,7 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
 import {
   useVerifyAccount,
   useVerifyTechnicianAccount,
-  useResendAccountOtp,
+  useResendOtp,
 } from "@/hooks";
 import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
@@ -49,7 +49,7 @@ export default function VerifyAccountForm({
   const {
     mutate: resendOtp,
     isPending: resendOtpPending,
-  } = useResendAccountOtp();
+  } = useResendOtp();
 
   // const {
   //   mutate: resendTechnicianOtp,
@@ -63,7 +63,7 @@ export default function VerifyAccountForm({
 
   useEffect(() => {
     if (!email) {
-      router.replace("/");
+      router.replace("/register");
     }
   }, [email, router]);
 

@@ -146,6 +146,10 @@ export default function LoginForm() {
             }}
           </form.Field>
 
+          <Link href="/forgot-password" className="text-right text-sm text-muted-foreground font-medium hover:text-primary">
+            Forgot Password?
+          </Link>
+
           <Button disabled={loginPending} type="submit">
             {loginPending ? (
               <>

@@ -9,6 +9,17 @@ export interface RegistrationPayload {
   };
 }
 
+export interface ForgotPasswordPayload {
+  email: string;
+}
+
+export interface ResetPasswordPayload {
+  email: string;
+  newPassword: string;
+  confirmNewPassword: string;
+  otp: string;
+}
+
 export interface ResendOtpPayload {
   email: string;
 }
