@@ -48,16 +48,13 @@ export const technicianApplicationSchema = z.object({
   address: z
     .string("Not a string!")
     .trim()
-    .min(5, "Address must be at least 5 characters long")
     .max(100, "Address cannot be greater than 100 characters long")
     .optional(),
 
   experienceYears: z
-    .string()
-    .trim()
-    .refine((value) => /^\d+$/.test(value), {
-      message: "Years of experience must be whole value",
-    })
+    .coerce
+    .number()
+    .int("Years of experience must be whole value")
     .refine((value) => Number(value) >= 0 && Number(value) <= 60, {
       message: "Years of experience must be between 0 and 60",
     }),
@@ -78,7 +75,7 @@ export const technicianApplicationSchema = z.object({
   resume: getCustomFileSchema<File | null>(
     `Resume must be a PDF, DOC, DOCX or an image file under ${MAX_FILE_SIZE}MB`,
   ).refine((value) => value instanceof File, {
-    message: "A resume of cv is required",
+    message: "A resume or cv is required",
   }),
 
   additionalFiles: z
@@ -100,50 +97,49 @@ export const technicianApplicationSchema = z.object({
 });
 
 export const UpdateTechnicianSchema = z.object({
-	name: z
-		.string("Not a string!")
-		.trim()
-		.min(3, "Name must be at least 3 characters long!")
-		.max(15, "Name cannot be greater than 15 characters long!")
-		.optional(),
+  name: z
+    .string("Not a string!")
+    .trim()
+    .min(3, "Name must be at least 3 characters long!")
+    .max(15, "Name cannot be greater than 15 characters long!")
+    .optional(),
 
-	address: z
-		.string("Not a string!")
-		.trim()
-		.min(5, "Address must be at least 5 characters long")
-		.max(100, "Address cannot be greater than 100 characters long")
-		.optional(),
+  address: z
+    .string("Not a string!")
+    .trim()
+    .max(100, "Address cannot be greater than 100 characters long")
+    .optional(),
 
-	bio: z
-		.string("Not a string!")
-		.trim()
-		.max(MAX_BIO_LENGTH, `Bio cannot exceed ${MAX_BIO_LENGTH} characters`),
+  bio: z
+    .string("Not a string!")
+    .trim()
+    .max(MAX_BIO_LENGTH, `Bio cannot exceed ${MAX_BIO_LENGTH} characters`),
 
-	contactNumber: z
-		.string("Not a string!")
-		.refine((val) => val === "" || /^(?:\+?880|0)1[3-9]\d{8}$/.test(val), {
-			message: "Please provide valid Bangladeshi number",
-		})
-		.optional(),
+  contactNumber: z
+    .string("Not a string!")
+    .refine((val) => val === "" || /^(?:\+?880|0)1[3-9]\d{8}$/.test(val), {
+      message: "Please provide valid Bangladeshi number",
+    })
+    .optional(),
 });
 
 export const SetTechnicianPasswordValidationZodSchema = z.object({
-	email: z.email("Not a valid email!").trim().toLowerCase(),
+  email: z.email("Not a valid email!").trim().toLowerCase(),
 
-	password: z
-		.string("Not a string!!!!!")
-		.min(8, "Password must be minimum 8 characters Long.")
-		.regex(/[a-z]/, "Password must contain at least 1 lowercase letter")
-		.regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
-		.regex(/[0-9]/, "Password must contain at least 1 number")
-		.regex(
-			/[^A-Za-z0-9]/,
-			"Password must contain at least 1 special character",
-		),
+  password: z
+    .string("Not a string!!!!!")
+    .min(8, "Password must be minimum 8 characters Long.")
+    .regex(/[a-z]/, "Password must contain at least 1 lowercase letter")
+    .regex(/[A-Z]/, "Password must contain at least 1 uppercase letter")
+    .regex(/[0-9]/, "Password must contain at least 1 number")
+    .regex(
+      /[^A-Za-z0-9]/,
+      "Password must contain at least 1 special character",
+    ),
 
-	confirmPassword: z.string("Not a string!").min(1, "Please confirm your password"),
+  confirmPassword: z.string("Not a string!").min(1, "Please confirm your password"),
 })
-	.refine((data) => data.password === data.confirmPassword, {
-		message: "Passwords do not match!",
-		path: ["confirmPassword"],
-	});
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match!",
+    path: ["confirmPassword"],
+  });

@@ -78,7 +78,6 @@ export const customerRegistrationSchema = z.object({
   address: z
     .string("Not a string!")
     .trim()
-    .min(5, "Address must be at least 5 characters long")
     .max(100, "Address cannot be greater than 100 characters long")
     .optional(),
 })

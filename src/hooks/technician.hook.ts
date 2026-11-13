@@ -1,13 +1,11 @@
 import {
-  applyAsDoctor,
-  approveDoctor,
-  getAllDoctors,
-  getAllPublicDoctors,
-  getPublicDoctorProfile,
-  getTodayScheduleByDoctor,
+  applyAsTechnician,
+  approveTechnician,
+  getAllTechnicians,
+  getPublicTechnicianProfile,
   verifyTechnicianAccount,
 } from "@/api";
-import type { TechnicianParams, PublicTechnicianParams } from "@/types";
+import type { TechnicianParams } from "@/types";
 import {
   useMutation,
   useQuery,
@@ -17,7 +15,7 @@ import {
 
 export function useApplyAsTechnician() {
   return useMutation({
-    mutationFn: applyAsDoctor,
+    mutationFn: applyAsTechnician,
   });
 }
 
@@ -29,58 +27,58 @@ export function useVerifyTechnicianAccount() {
 
 export function useGetAllTechnicians(params: TechnicianParams) {
   return useQuery({
-    queryKey: ["doctors", params],
-    queryFn: () => getAllDoctors(params),
+    queryKey: ["technicians", params],
+    queryFn: () => getAllTechnicians(params),
   });
 }
 
-export function useGetAllPublicDoctors(params: PublicTechnicianParams) {
+// export function useGetAllPublicDoctors(params: PublicTechnicianParams) {
+//   return useQuery({
+//     queryKey: ["doctor", "public", params],
+//     queryFn: () => getAllPublicDoctors(params),
+//   });
+// }
+
+// export function useSuspenseGetPublicDoctors(params: PublicTechnicianParams) {
+//   return useSuspenseQuery({
+//     queryKey: ["doctors", "public", params],
+//     queryFn: () => getAllPublicDoctors(params),
+//   });
+// }
+
+export function usePublicTechnicianProfile(technicianId: string) {
   return useQuery({
-    queryKey: ["doctor", "public", params],
-    queryFn: () => getAllPublicDoctors(params),
+    queryKey: ["technician", "public", technicianId],
+    queryFn: () => getPublicTechnicianProfile(technicianId),
+    enabled: !!technicianId,
   });
 }
 
-export function useSuspenseGetPublicDoctors(params: PublicTechnicianParams) {
-  return useSuspenseQuery({
-    queryKey: ["doctors", "public", params],
-    queryFn: () => getAllPublicDoctors(params),
-  });
-}
+// export function useSuspenseGetAllDoctors(params: TechnicianParams) {
+//   return useSuspenseQuery({
+//     queryKey: ["doctors", params],
+//     queryFn: () => getAllDoctors(params),
+//   });
+// }
 
-export function usePublicDoctorProfile(doctorId: string) {
-  return useQuery({
-    queryKey: ["doctor", "public", doctorId],
-    queryFn: () => getPublicDoctorProfile(doctorId),
-    enabled: !!doctorId,
-  });
-}
-
-export function useSuspenseGetAllDoctors(params: TechnicianParams) {
-  return useSuspenseQuery({
-    queryKey: ["doctors", params],
-    queryFn: () => getAllDoctors(params),
-  });
-}
-
-export function useApproveDoctor() {
+export function useApproveTechnician() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: approveDoctor,
+    mutationFn: approveTechnician,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["doctors"] });
+      queryClient.invalidateQueries({ queryKey: ["technicians"] });
     },
   });
 }
 
-export function useGetTodayScheduleByDoctor(params: {
-  doctorId?: string;
-  page?: number;
-  limit?: number;
-}) {
-  return useQuery({
-    queryKey: ["schedule", params],
-    queryFn: () => getTodayScheduleByDoctor(params),
-  });
-}
+// export function useGetTodayScheduleByDoctor(params: {
+//   doctorId?: string;
+//   page?: number;
+//   limit?: number;
+// }) {
+//   return useQuery({
+//     queryKey: ["schedule", params],
+//     queryFn: () => getTodayScheduleByDoctor(params),
+//   });
+// }

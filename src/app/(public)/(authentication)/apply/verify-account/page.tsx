@@ -11,7 +11,14 @@ export default function VerifyDoctorAccountPage() {
         <div className="flex justify-center gap-2 md:justify-start">
           <Link href="/" className="flex items-center gap-2 font-medium">
             <div className="flex items-center gap-2">
-              <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" loading="eager" />
+              <Image
+                src="/logo.svg"
+                alt="Power Guard logo"
+                width={50}
+                height={50}
+                loading="eager"
+                unoptimized
+              />
               <p className="font-bold text-primary text-2xl">Power Guard</p>
             </div>
           </Link>
@@ -26,9 +33,13 @@ export default function VerifyDoctorAccountPage() {
       </div>
       <div className="relative hidden bg-muted lg:block">
         <Image
-          src="/login.jpg"
-          alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" loading="eager"
+          src="/apply.jpg"
+          alt="Power Guard technician verification background"
+          fill
+          priority
+          unoptimized
+          sizes="50vw"
+          className="object-cover dark:brightness-[0.2] dark:grayscale" loading="eager"
         />
       </div>
     </div>

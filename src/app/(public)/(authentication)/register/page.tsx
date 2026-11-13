@@ -31,7 +31,7 @@ export default function RegisterPage() {
       <div className="relative hidden bg-muted lg:block">
         <Image
           src="/register.jpg"
-          alt="Image"
+          alt="Power Guard customer registration background"
           className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" fill
           priority
           unoptimized

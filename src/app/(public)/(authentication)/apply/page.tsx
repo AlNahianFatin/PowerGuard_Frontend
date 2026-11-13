@@ -29,8 +29,8 @@ export default function ApplyPage() {
       </div>
       <div className="relative hidden bg-muted lg:block">
         <Image
-          src="/login.jpg"
-          alt="Power Guard login background"
+          src="/apply.jpg"
+          alt="Power Guard technician application background"
           fill
           priority
           unoptimized

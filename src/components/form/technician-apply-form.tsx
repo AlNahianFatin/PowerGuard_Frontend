@@ -2,9 +2,10 @@
 
 import { useForm } from "@tanstack/react-form";
 import {
-    BriefcaseMedical,
+    Briefcase,
     FileText,
     FileUp,
+    FileUser,
     Mail,
     MapPin,
     Phone,
@@ -26,11 +27,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
     technicianApplicationSchema,
-    isAcceptedFileSize,
-    isAcceptedFileType,
     MAX_ADDITIONAL_FILES,
     MAX_FILE_SIZE,
-    MAX_FILE_SIZE_BYTES,
 } from "@/validation";
 import { formatFileSize } from "@/utils";
 import { useApplyAsTechnician } from "@/hooks";
@@ -38,17 +36,19 @@ import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
 import type z from "zod";
 
+const MAX_EXPERIENCE_YEARS = 60;
+
 export default function TechnicianApplyForm() {
     const router = useRouter();
     const { mutate: apply, isPending: applyPending } = useApplyAsTechnician();
 
-    type TechnicianDefaultValues = z.infer<typeof technicianApplicationSchema>;
+    type TechnicianDefaultValues = z.input<typeof technicianApplicationSchema>;
 
     const defaultValues: TechnicianDefaultValues = {
         name: "",
         email: "",
         address: "",
-        experienceYears: "",
+        experienceYears: 0,
         bio: "",
         contactNumber: "",
         resume: null as File | null,
@@ -63,32 +63,44 @@ export default function TechnicianApplyForm() {
         },
 
         onSubmit: async ({ value }) => {
+            if (!(value.resume instanceof File)) {
+                toast.add({
+                    title: "Resume required",
+                    description: "Please upload your resume or CV.",
+                    type: "error",
+                });
+                return;
+            }
+
+            const resume = value.resume;
+
             const technicianData = {
                 user: {
                     name: value.name.trim(),
                     email: value.email.trim(),
                 },
                 technician: {
-                    address: value.address.trim(),
-                    experienceYears: Number(value.experienceYears.trim()),
-                    bio: value.bio.trim(),
-                    contactNumber: value.contactNumber.trim(),
+                    address: value.address?.trim(),
+                    experienceYears: Number(value.experienceYears),
+                    bio: value.bio?.trim(),
+                    contactNumber: value.contactNumber?.trim(),
                 },
             };
 
             apply(
                 {
-                    resume: value.resume as File,
+                    resume,
                     additionalFiles: value.additionalFiles,
                     data: technicianData,
                 },
                 {
                     // biome-ignore lint/suspicious/noExplicitAny: <asf>
-                    onSuccess: (res: { success: any; }) => {
+                    onSuccess: (res: any) => {
+                        console.log("---------------------", res)
                         if (!res.success) {
                             toast.add({
                                 title: "Server Failure",
-                                description: "Something went wrong. Please try again",
+                                description: res.data?.message || res.message || "Something went wrong. Please try again",
                                 type: "error",
                             });
                             return;
@@ -96,7 +108,7 @@ export default function TechnicianApplyForm() {
 
                         toast.add({
                             title: "Application Submitted",
-                            description: "Please verify your account",
+                            description: res.message || "Please verify your account",
                             type: "success",
                         });
                         const params = new URLSearchParams({
@@ -105,11 +117,11 @@ export default function TechnicianApplyForm() {
                         router.push(`/apply/verify-account?${params.toString()}`);
                     },
                     // biome-ignore lint/suspicious/noExplicitAny: <sd>
-                    onError: (err: { message: any; }) => {
+                    onError: (err: any) => {
                         toast.add({
                             title: "Application failure",
                             description:
-                                err.message || "Something went wrong. Please try again",
+                                err.data?.message || err.message || "Something went wrong. Please try again",
                             type: "error",
                         });
                     },
@@ -149,7 +161,7 @@ export default function TechnicianApplyForm() {
                                                 id={field.name}
                                                 name={field.name}
                                                 type="text"
-                                                placeholder="Dr. John Doe"
+                                                placeholder="John Doe"
                                                 value={field.state.value}
                                                 onBlur={field.handleBlur}
                                                 onChange={(e) => field.handleChange(e.target.value)}
@@ -179,7 +191,7 @@ export default function TechnicianApplyForm() {
                                                 id={field.name}
                                                 name={field.name}
                                                 type="email"
-                                                placeholder="doctor@example.com"
+                                                placeholder="technician@example.com"
                                                 value={field.state.value}
                                                 onBlur={field.handleBlur}
                                                 onChange={(e) => field.handleChange(e.target.value)}
@@ -203,7 +215,7 @@ export default function TechnicianApplyForm() {
                                 return (
                                     <Field data-invalid={isInvalid}>
                                         <FieldLabel htmlFor={field.name}>
-                                            Practice address{" "}
+                                            Home address{" "}
                                             <span className="font-normal text-muted-foreground">
                                                 (optional)
                                             </span>
@@ -214,7 +226,7 @@ export default function TechnicianApplyForm() {
                                                 id={field.name}
                                                 name={field.name}
                                                 type="text"
-                                                placeholder="Chamber or hospital address"
+                                                placeholder="Home address"
                                                 value={field.state.value}
                                                 onBlur={field.handleBlur}
                                                 onChange={(e) => field.handleChange(e.target.value)}
@@ -233,41 +245,43 @@ export default function TechnicianApplyForm() {
 
                     </div>
 
-                    <div className="grid gap-5 sm:grid-cols-2">
-                        <form.Field name="experienceYears">
-                            {(field) => {
-                                const isInvalid =
-                                    field.state.meta.isTouched && !field.state.meta.isValid;
-                                return (
-                                    <Field data-invalid={isInvalid}>
-                                        <FieldLabel htmlFor={field.name}>
-                                            Years of experience
-                                        </FieldLabel>
-                                        <div className="relative">
-                                            <BriefcaseMedical className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                                            <Input
-                                                id={field.name}
-                                                name={field.name}
-                                                type="number"
-                                                min={0}
-                                                max={70}
-                                                inputMode="numeric"
-                                                placeholder="10"
-                                                value={field.state.value}
-                                                onBlur={field.handleBlur}
-                                                onChange={(e) => field.handleChange(e.target.value)}
-                                                aria-invalid={isInvalid}
-                                                className="pl-9"
-                                            />
-                                        </div>
-                                        {isInvalid && (
-                                            <FieldError errors={field.state.meta.errors} />
-                                        )}
-                                    </Field>
-                                );
-                            }}
-                        </form.Field>
-                    </div>
+                    <form.Field name="experienceYears">
+                        {(field) => {
+                            const isInvalid =
+                                field.state.meta.isTouched && !field.state.meta.isValid;
+                            return (
+                                <Field data-invalid={isInvalid}>
+                                    <FieldLabel htmlFor={field.name}>
+                                        Years of experience
+                                    </FieldLabel>
+                                    <div className="relative">
+                                        <Briefcase className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+                                        <Input
+                                            id={field.name}
+                                            name={field.name}
+                                            type="number"
+                                            min={0}
+                                            max={MAX_EXPERIENCE_YEARS}
+                                            step={1}
+                                            inputMode="numeric"
+                                            placeholder="10"
+                                            value={String(field.state.value) ?? ""}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                field.handleChange(value === "" ? 0 : Number(value));
+                                            }}
+                                            aria-invalid={isInvalid}
+                                            className="pl-9"
+                                        />
+                                    </div>
+                                    {isInvalid && (
+                                        <FieldError errors={field.state.meta.errors} />
+                                    )}
+                                </Field>
+                            );
+                        }}
+                    </form.Field>
 
                     <form.Field name="bio">
                         {(field) => {
@@ -281,16 +295,20 @@ export default function TechnicianApplyForm() {
                                             (optional)
                                         </span>
                                     </FieldLabel>
-                                    <Textarea
-                                        id={field.name}
-                                        name={field.name}
-                                        rows={4}
-                                        placeholder="Share your background, areas of interest and patient care philosophy..."
-                                        value={field.state.value}
-                                        onBlur={field.handleBlur}
-                                        onChange={(e) => field.handleChange(e.target.value)}
-                                        aria-invalid={isInvalid}
-                                    />
+                                    <div className="relative">
+                                        <FileUser className="pointer-events-none absolute left-3 top-1/4 size-4 -translate-y-1/3 text-muted-foreground" />
+                                        <Textarea
+                                            id={field.name}
+                                            name={field.name}
+                                            rows={4}
+                                            placeholder="Share your background, areas of interest and patient care philosophy..."
+                                            value={field.state.value}
+                                            onBlur={field.handleBlur}
+                                            onChange={(e) => field.handleChange(e.target.value)}
+                                            aria-invalid={isInvalid}
+                                            className="pl-9"
+                                        />
+                                    </div>
                                     <div className="flex items-center justify-between gap-2">
                                         <FieldDescription>
                                             Shown on your public profile after approval.
@@ -311,7 +329,11 @@ export default function TechnicianApplyForm() {
                                 field.state.meta.isTouched && !field.state.meta.isValid;
                             return (
                                 <Field data-invalid={isInvalid}>
-                                    <FieldLabel htmlFor={field.name}>Contact number</FieldLabel>
+                                    <FieldLabel htmlFor={field.name}>Contact number{" "}
+                                        <span className="font-normal text-muted-foreground">
+                                            (optional)
+                                        </span>
+                                    </FieldLabel>
                                     <div className="relative">
                                         <Phone className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                                         <Input
@@ -483,7 +505,7 @@ export default function TechnicianApplyForm() {
                     <Button disabled={applyPending} type="submit">
                         {applyPending ? (
                             <>
-                                <Spinner /> submitting
+                                <Spinner /> Submitting
                             </>
                         ) : (
                             "Submit"

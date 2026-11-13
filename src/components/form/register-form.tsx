@@ -1,7 +1,7 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, MapPin, Phone, User } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -67,11 +67,12 @@ export function RegisterForm() {
       };
 
       registration(registrationData, {
-        onSuccess: (res) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <asd>
+        onSuccess: (res: any) => {
           if (!res.success) {
             toast.add({
               title: "Server Failure",
-              description: res.message ?? "Something went wrong. Please try again",
+              description: res.data?.message || res.message || "Something went wrong. Please try again",
               type: "error",
             });
           }
@@ -122,6 +123,7 @@ export function RegisterForm() {
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Full Name</FieldLabel>
                   <div className="relative">
+                    <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id={field.name}
                       name={field.name}
@@ -131,7 +133,8 @@ export function RegisterForm() {
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
-                    // autoComplete="name"
+                    autoComplete="name"
+                    className="pl-9"
                     />
                   </div>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -148,16 +151,18 @@ export function RegisterForm() {
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Email</FieldLabel>
                   <div className="relative">
+                    <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id={field.name}
                       name={field.name}
                       type="email"
-                      placeholder="m@example.com"
+                      placeholder="user@example.com"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
-                      autoComplete="off"
+                      autoComplete="email"
+                      className="pl-9"
                     />
                   </div>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -172,8 +177,13 @@ export function RegisterForm() {
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Phone Number (Optional)</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Phone Number{" "}
+                    <span className="font-normal text-muted-foreground">
+                      (optional)
+                    </span>
+                  </FieldLabel>
                   <div className="relative">
+                    <Phone className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id={field.name}
                       name={field.name}
@@ -184,6 +194,7 @@ export function RegisterForm() {
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       autoComplete="off"
+                      className="pl-9"
                     />
                   </div>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -198,18 +209,24 @@ export function RegisterForm() {
                 field.state.meta.isTouched && !field.state.meta.isValid;
               return (
                 <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>Address (Optional)</FieldLabel>
+                  <FieldLabel htmlFor={field.name}>Home address{" "}
+                    <span className="font-normal text-muted-foreground">
+                      (optional)
+                    </span>
+                  </FieldLabel>
                   <div className="relative">
+                    <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id={field.name}
                       name={field.name}
                       type="text"
-                      placeholder="A, abc road, dhaka"
+                      placeholder="Home address"
                       value={field.state.value}
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
                       autoComplete="off"
+                      className="pl-9"
                     />
                   </div>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -227,6 +244,7 @@ export function RegisterForm() {
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Password</FieldLabel>
                   <div className="relative">
+                    <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id={field.name}
                       name={field.name}
@@ -236,7 +254,7 @@ export function RegisterForm() {
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
-                      className="pr-10"
+                      className="pl-9 pr-10"
                       autoComplete="off"
                     />
                     <button
@@ -268,6 +286,7 @@ export function RegisterForm() {
                 <Field data-invalid={isInvalid}>
                   <FieldLabel htmlFor={field.name}>Confirm Password</FieldLabel>
                   <div className="relative">
+                    <Lock className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id={field.name}
                       name={field.name}
@@ -277,7 +296,7 @@ export function RegisterForm() {
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
-                      className="pr-10"
+                      className="pl-9 pr-10"
                       autoComplete="off"
                     />
                     <button

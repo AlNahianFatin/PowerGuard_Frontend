@@ -82,17 +82,19 @@ export interface ApproveTechnicianPayload {
   rejectionReason?: string;
 }
 
-// export interface PublicDoctorProfile {
-//   id: string;
-//   name: string;
-//   specialization: string;
-//   licenseNumber: string;
-//   qualifications: string;
-//   experienceYears: number;
-//   bio?: string | null;
-//   consultationFee?: number | string | null;
-//   createdAt: string;
-// }
+export interface PublicTechnicianProfile {
+  id: string;
+  name: string;
+
+  status: TechnicianStatus;
+
+  experienceYears: number;
+
+  bio?: string;
+
+  contactNumber?: string;
+  createdAt: string;
+}
 
 // export interface PublicTechnicianParams {
 //   page?: number;

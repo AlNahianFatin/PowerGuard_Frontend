@@ -29,7 +29,7 @@ export default function ResetPasswordPage() {
             <div className="relative hidden bg-muted lg:block">
                 <Image
                     src="/forgot-password.jpg"
-                    alt="Image"
+                    alt="Power Guard reset password background"
                     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" fill
                     priority
                     unoptimized

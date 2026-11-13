@@ -14,6 +14,7 @@ export default function Header() {
     { name: "Home", url: "/" },
     { name: "Schedules", url: "/schedules" },
     { name: "About us", url: "/about-us" },
+    // { name: "Apply for technician", url: "/apply" },
   ];
 
   const dashboardRoute: Record<Role, string> = {
@@ -69,12 +70,17 @@ export default function Header() {
 
         <nav className="flex gap-5">
           {routes.map((route) => (
-            <Link key={route.url} href={route.url}>
+            <Link key={route.url} href={route.url} className="text-primary hover:text-white hover:bg-primary p-1 rounded-lg">
               {route.name}
             </Link>
           ))}
 
           {role && <Link href={dashboardRoute[role]}>Dashboard</Link>}
+          {!isLoading && !data && (
+            <Link href="/apply" className="text-primary hover:text-white hover:bg-primary p-1 rounded-lg">
+              Apply for technician
+            </Link>
+          )}
         </nav>
         <div>
           {!isLoading && !data && (
