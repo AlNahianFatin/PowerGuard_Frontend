@@ -13,32 +13,55 @@ import {
 import { loginSchema } from "@/validation";
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
-import { useLogin } from "@/hooks";
+import { useGetMe, useLogin } from "@/hooks";
 import { useRouter } from "next/navigation";
 import { toast } from "../ui/toast";
 import { Spinner } from "../ui/spinner";
 import Link from "next/link";
 import GoogleLoginComponent from "../modules/google-login/GoogleLogin";
+import type { Role } from "@/types";
+
+const dashboardRoute: Record<Role, string> = {
+  ADMIN: "/admin",
+  OPERATOR: "/operator",
+  TECHNICIAN: "/technician",
+  CUSTOMER: "/customer",
+};
 
 export default function LoginForm() {
   const router = useRouter();
 
   const [showPassword, setShowPassword] = useState(false);
-  
+
   const [googlePending, setGooglePending] = useState(false);
 
   const { mutate: login, isPending: loginPending } = useLogin();
 
   const isSubmitting = loginPending || googlePending;
 
+  const { data } = useGetMe();
+  const role: Role = !!data?.data && data?.data.role;
+
   const form = useForm({
+    // defaultValues: {
+    //   email: "",
+    //   password: "",
+    // },
     defaultValues: {
-      email: "",
-      password: "",
+      email: "testeradmin@powergurard.com",
+      password: "Tester@admin12345",
     },
     // defaultValues: {
-    //   email: "superadmin@gmail.com",
-    //   password: "Super@admin12345",
+    //   email: "testeroperator@powergurard.com",
+    //   password: "Tester@operator12345",
+    // },
+    // defaultValues: {
+    //   email: "testertechnician@powergurard.com",
+    //   password: "Tester@technician12345",
+    // },
+    // defaultValues: {
+    //   email: "testercustomer@powergurard.com",
+    //   password: "Tester@customer12345",
     // },
     validators: {
       onChange: loginSchema,
@@ -57,7 +80,21 @@ export default function LoginForm() {
             description: res.message ?? "Welcome back",
             type: "success",
           });
-          router.push("/");
+          
+          if (role) {
+            router.push(`${dashboardRoute[role]}`);
+            return;
+          }
+
+          toast.add({
+            title: "Authorization failure",
+            description:
+              res.data?.message ||
+              res.message ||
+              "Could not identify your authorization. Please login again",
+            type: "error",
+          });
+          router.push("/login");
         },
         // biome-ignore lint/suspicious/noExplicitAny: <sd>
         onError: (err: any) => {

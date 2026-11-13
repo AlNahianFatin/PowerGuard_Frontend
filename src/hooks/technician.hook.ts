@@ -54,12 +54,12 @@ export function usePublicTechnicianProfile(technicianId: string) {
   });
 }
 
-// export function useSuspenseGetAllDoctors(params: TechnicianParams) {
-//   return useSuspenseQuery({
-//     queryKey: ["doctors", params],
-//     queryFn: () => getAllDoctors(params),
-//   });
-// }
+export function useSuspenseGetAllTechnicians(params: TechnicianParams) {
+  return useSuspenseQuery({
+    queryKey: ["doctors", params],
+    queryFn: () => getAllTechnicians(params),
+  });
+}
 
 export function useApproveTechnician() {
   const queryClient = useQueryClient();

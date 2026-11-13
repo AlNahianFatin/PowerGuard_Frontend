@@ -1,4 +1,4 @@
-import DoctorApprovalTabs from "@/components/modules/doctor-approval/doctor-approval-tabs";
+import TechnicianApprovalTabs from "@/components/modules/technician-approval/technician-approval-tabs";
 
 export default function page() {
   return (
@@ -7,7 +7,7 @@ export default function page() {
         <h1 className="text-2xl"> Technician approval </h1>
         <p>Review the technician application and approve or reject them.</p>
       </div>
-      <DoctorApprovalTabs />
+      <TechnicianApprovalTabs />
     </section>
   );
 }

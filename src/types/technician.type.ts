@@ -21,6 +21,7 @@ export interface Technician {
   verificationStatus: TechnicianVerificationStatus;
   rejectionReason?: string;
   reviewedBy?: string;
+  reviewer?: User;
   reviewedAt?: string;
 
   resume?: string;

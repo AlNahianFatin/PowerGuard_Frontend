@@ -6,6 +6,7 @@ import { useForm } from "@tanstack/react-form";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 
 import {
+  useGetMe,
   useResendOtp,
   useResetPassword,
 } from "@/hooks";
@@ -36,8 +37,16 @@ import {
   InputOTPSlot,
 } from "../ui/input-otp";
 import { Eye, EyeOff } from "lucide-react";
+import type { Role } from "@/types";
 
 const RESEND_COOLDOWN = 5 * 60;
+
+const dashboardRoute: Record<Role, string> = {
+  ADMIN: "/admin",
+  OPERATOR: "/operator",
+  TECHNICIAN: "/technician",
+  CUSTOMER: "/customer",
+};
 
 export default function ResetPasswordForm() {
   const router = useRouter();
@@ -50,6 +59,9 @@ export default function ResetPasswordForm() {
   const email = searchParams.get("email")?.trim().toLowerCase() ?? "";
 
   const [resendTimer, setResendTimer] = useState(RESEND_COOLDOWN);
+
+  const { data } = useGetMe();
+  const role: Role = !!data?.data && data?.data.role;
 
   const {
     mutate: resendOtp,
@@ -120,7 +132,10 @@ export default function ResetPasswordForm() {
               type: "success",
             });
 
-            router.push("/");
+            if (role) {
+              router.push(`${dashboardRoute[role]}`);
+              return;
+            }
           },
 
           // biome-ignore lint/suspicious/noExplicitAny: <af>

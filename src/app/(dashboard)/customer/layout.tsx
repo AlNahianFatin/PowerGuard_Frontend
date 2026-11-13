@@ -4,8 +4,9 @@ import { ReactNode } from "react";
 
 export default function layout({ children }: { children: ReactNode }) {
   return (
-    <RoleGuard roles={["PATIENT"]}>
-      <DashboardShell role="PATIENT">{children}</DashboardShell>
+    <RoleGuard roles={["CUSTOMER"]}>
+      {/** biome-ignore lint/a11y/useValidAriaRole: <ignore role error mistaking for aria-role> */}
+<DashboardShell role="CUSTOMER">{children}</DashboardShell>
     </RoleGuard>
   );
 }

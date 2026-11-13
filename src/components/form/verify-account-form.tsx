@@ -142,7 +142,7 @@ export default function VerifyAccountForm({
             type: "success",
           });
 
-          router.push("/");
+          router.push("/customer");
         },
 
         // biome-ignore lint/suspicious/noExplicitAny: API error

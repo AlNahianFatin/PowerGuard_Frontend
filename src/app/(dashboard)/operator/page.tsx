@@ -1,7 +1,7 @@
-export default function page() {
+export default function OperatorDashboard() {
   return (
     <div>
-      <h1> This is page component </h1>
+      <h1> This is operator dashboard </h1>
     </div>
   );
 }

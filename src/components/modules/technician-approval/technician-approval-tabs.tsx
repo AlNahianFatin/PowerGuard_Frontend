@@ -1,24 +1,23 @@
 "use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import DoctorApprovalTable from "./doctor-approval-table";
-import { ChangeEvent, Suspense, useState } from "react";
-import DoctorApprovalTableLoading from "./doctor-approval-table-loading";
-import { DoctorParams, DoctorVerificationStatus } from "@/types";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { type ChangeEvent, Suspense, useState } from "react";
+import type { TechnicianParams, TechnicianVerificationStatus } from "@/types";
 import { Input } from "@/components/ui/input";
-import DoctorReviewSheet from "./doctor-review-sheet";
 import useDebounce from "@/hooks/debounce.hook";
-import TablePagination from "@/components/ui/table-pagination";
+import TechnicianApprovalTableLoading from "./technician-approval-table-loading";
+import TechnicianApprovalTable from "./technician-approval-table";
+import TechnicianReviewSheet from "./technician-review-sheet";
 
-const verificationStatus: ["ALL" | DoctorVerificationStatus, string][] = [
-  ["APPROVED", "Approved"],
+const verificationStatus: ["ALL" | TechnicianVerificationStatus, string][] = [
   ["PENDING", "Pending"],
+  ["APPROVED", "Approved"],
   ["REJECTED", "Rejected"],
   ["ALL", "All"],
 ];
 
-export default function DoctorApprovalTabs() {
-  const [tab, setTab] = useState<"ALL" | DoctorVerificationStatus>("ALL");
+export default function TechnicianApprovalTabs() {
+  const [tab, setTab] = useState<"ALL" | TechnicianVerificationStatus>("ALL");
   const [selectedId, setSelectedId] = useState("");
   const [searchInput, setSearchInput] = useState("");
   const [page, setPage] = useState(1);
@@ -30,7 +29,7 @@ export default function DoctorApprovalTabs() {
     setPage(1);
   };
 
-  const queryParams: DoctorParams = {
+  const queryParams: TechnicianParams = {
     page,
     limit: 10,
     ...(tab === "ALL" ? {} : { verificationStatus: tab }),
@@ -58,15 +57,15 @@ export default function DoctorApprovalTabs() {
         </Tabs>
       </div>
 
-      <Suspense fallback={<DoctorApprovalTableLoading />}>
-        <DoctorApprovalTable
+      <Suspense fallback={<TechnicianApprovalTableLoading />}>
+        <TechnicianApprovalTable
           {...queryParams}
           handleReview={setSelectedId}
           handlePageChange={setPage}
         />
       </Suspense>
 
-      <DoctorReviewSheet
+      <TechnicianReviewSheet
         selectedId={selectedId}
         onClose={() => setSelectedId("")}
         {...queryParams}

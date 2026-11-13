@@ -18,15 +18,16 @@ import {
 } from "@/components/ui/sheet";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import { useApproveDoctor, useGetAllDoctors } from "@/hooks";
-import type { ApproveDoctorPayload, DoctorParams } from "@/types";
+import type { ApproveTechnicianPayload, TechnicianParams } from "@/types";
+import { useApproveTechnician, useGetAllTechnicians } from "@/hooks";
 
-interface Props extends DoctorParams {
+
+interface Props extends TechnicianParams {
   selectedId: string;
   onClose: () => void;
 }
 
-export default function DoctorReviewSheet({
+export default function TechnicianReviewSheet({
   selectedId,
   onClose,
   ...params
@@ -34,10 +35,10 @@ export default function DoctorReviewSheet({
   const [confirmRejection, setConfirmRejection] = useState(false);
   const [rejectionReason, setRejectionReason] = useState("");
 
-  const { data } = useGetAllDoctors(params);
-  const { mutate: verify, isPending } = useApproveDoctor();
+  const { data } = useGetAllTechnicians(params);
+  const { mutate: verify, isPending } = useApproveTechnician();
 
-  const selectedDoctor = data?.data?.find((doctor) => doctor.id === selectedId);
+  const selectedTechnician = data?.data?.find((technician) => technician.id === selectedId);
 
   const handleClose = () => {
     setConfirmRejection(false);
@@ -46,24 +47,26 @@ export default function DoctorReviewSheet({
   };
 
   const handleReviewAction = (status: "APPROVED" | "REJECTED") => {
-    const reviewData: ApproveDoctorPayload = {
-      doctorId: selectedId,
+    const reviewData: ApproveTechnicianPayload = {
+      technicianId: selectedId,
       verificationStatus: status,
       rejectionReason: rejectionReason,
     };
 
     verify(reviewData, {
-      onSuccess: (res) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <sdf>
+      onSuccess: (res: any) => {
         console.log("Success", res);
         handleClose();
       },
-      onError: (error) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <sd>
+      onError: (error: any) => {
         console.log("Error", error);
       },
     });
   };
 
-  if (!selectedDoctor) {
+  if (!selectedTechnician) {
     return null;
   }
 
@@ -80,7 +83,7 @@ export default function DoctorReviewSheet({
     <Sheet open={!!selectedId} onOpenChange={handleClose}>
       <SheetContent side="left" className="gap-0 sm:max-w-md">
         <SheetHeader className="border-b">
-          <SheetTitle>Review doctor application</SheetTitle>
+          <SheetTitle>Review technician application</SheetTitle>
           <SheetDescription>
             Verify the details below before approving or rejecting. This action
             cannot be undone.
@@ -93,10 +96,10 @@ export default function DoctorReviewSheet({
               <Stethoscope className="size-5 text-primary" />
             </span>
             <div className="min-w-0">
-              <p className="truncate font-semibold">{selectedDoctor.name}</p>
-              <p className="text-sm text-muted-foreground">
-                {selectedDoctor.specialization}
-              </p>
+              <p className="truncate font-semibold">{selectedTechnician.name}</p>
+              {/* <p className="text-sm text-muted-foreground">
+                {selectedTechnician.specialization}
+              </p> */}
             </div>
           </div>
 
@@ -108,13 +111,13 @@ export default function DoctorReviewSheet({
             </p>
             <div className="flex items-center gap-2 text-sm">
               <Mail className="size-4 shrink-0 text-muted-foreground" />
-              <span className="truncate" title={selectedDoctor.email}>
-                {selectedDoctor.email}
+              <span className="truncate" title={selectedTechnician.email}>
+                {selectedTechnician.email}
               </span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <Phone className="size-4 shrink-0 text-muted-foreground" />
-              <span>{selectedDoctor.contactNumber ?? "—"}</span>
+              <span>{selectedTechnician.contactNumber ?? "—"}</span>
             </div>
           </div>
 
@@ -124,23 +127,23 @@ export default function DoctorReviewSheet({
             <p className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               Credentials
             </p>
-            {detailRow("License no.", selectedDoctor.licenseNumber)}
-            {detailRow("Qualifications", selectedDoctor.qualifications)}
+            {/* {detailRow("License no.", selectedTechnician.licenseNumber)}
+            {detailRow("Qualifications", selectedTechnician.qualifications)} */}
             {detailRow(
               "Experience",
-              selectedDoctor.experienceYears != null
-                ? `${selectedDoctor.experienceYears} yrs`
+              selectedTechnician.experienceYears != null
+                ? `${selectedTechnician.experienceYears} years`
                 : null,
             )}
-            {detailRow(
+            {/* {detailRow(
               "Consultation fee",
-              selectedDoctor.consultationFee != null
-                ? `$${selectedDoctor.consultationFee}`
+              selectedTechnician.consultationFee != null
+                ? `$${selectedTechnician.consultationFee}`
                 : null,
-            )}
+            )} */}
           </div>
 
-          {selectedDoctor.bio && (
+          {selectedTechnician.bio && (
             <>
               <Separator />
               <div className="space-y-2">
@@ -148,7 +151,7 @@ export default function DoctorReviewSheet({
                   Bio
                 </p>
                 <p className="text-sm leading-relaxed text-muted-foreground">
-                  {selectedDoctor.bio}
+                  {selectedTechnician.bio}
                 </p>
               </div>
             </>
@@ -162,12 +165,12 @@ export default function DoctorReviewSheet({
             </p>
             <div className="flex items-center gap-2 text-sm">
               <ShieldCheck className="size-4 shrink-0 text-muted-foreground" />
-              <span>{selectedDoctor.verificationStatus}</span>
+              <span>{selectedTechnician.verificationStatus}</span>
             </div>
             <div className="flex items-center gap-2 text-sm">
               <BadgeCheck className="size-4 shrink-0 text-muted-foreground" />
               <span>
-                {selectedDoctor.user.emailVerified
+                {selectedTechnician.user.emailVerified
                   ? "Email verified"
                   : "Email not verified"}
               </span>
@@ -181,7 +184,7 @@ export default function DoctorReviewSheet({
               <Textarea
                 value={rejectionReason}
                 onChange={(e) => setRejectionReason(e.target.value)}
-                placeholder="Tell the doctor why this application is being rejected…"
+                placeholder="Let the technician know why this application is being rejected…"
                 rows={4}
                 disabled={isPending}
                 autoFocus
