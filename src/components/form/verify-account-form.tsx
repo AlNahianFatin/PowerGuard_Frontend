@@ -128,7 +128,7 @@ export default function VerifyAccountForm({
               title: "Verification Successful",
               description:
                 res?.message ||
-                "An admin will approve your account. Please check your email in a few days.",
+                "An admin will approve your account. Please check your email in a few days",
               type: "success",
             });
 
@@ -151,7 +151,6 @@ export default function VerifyAccountForm({
             title: "Verification Failed",
             description:
               err.data?.message ||
-              err.message ||
               "Something went wrong. Please try again.",
             type: "error",
           });
@@ -205,7 +204,6 @@ export default function VerifyAccountForm({
             title: "Resend Failed",
             description:
               err.data?.message ||
-              err.message ||
               "Unable to resend OTP. Please try again.",
             type: "error",
           });

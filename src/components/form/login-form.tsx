@@ -102,7 +102,6 @@ export default function LoginForm() {
             title: "Authorization failure",
             description:
               err.data?.message ||
-              err.message ||
               "Something went wrong. Please try again",
             type: "error",
           });

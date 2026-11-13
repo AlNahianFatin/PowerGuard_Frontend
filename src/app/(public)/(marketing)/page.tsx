@@ -6,8 +6,8 @@ export default function HomePage() {
       <Image
         src="/logo.svg"
         alt="Power Guard logo"
-        width={50}
-        height={50}
+        width={130}
+        height={100}
         loading="eager"
         unoptimized
       />

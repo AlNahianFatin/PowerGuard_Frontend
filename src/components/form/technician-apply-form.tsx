@@ -121,7 +121,7 @@ export default function TechnicianApplyForm() {
                         toast.add({
                             title: "Application failure",
                             description:
-                                err.data?.message || err.message || "Something went wrong. Please try again",
+                                err.data?.message || "Something went wrong. Please try again",
                             type: "error",
                         });
                     },

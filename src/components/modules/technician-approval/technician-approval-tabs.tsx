@@ -38,12 +38,13 @@ export default function TechnicianApprovalTabs() {
 
   return (
     <>
-      <div className="flex justify-between my-5">
+      <div className="flex justify-baseline my-5 gap-35">
         <div>
           <Input
             onChange={(e) => handleSearch(e)}
             type="search"
             placeholder="Search by name or email"
+            className="w-50"
           />
         </div>
         <Tabs value={tab} onValueChange={(value) => setTab(value)}>

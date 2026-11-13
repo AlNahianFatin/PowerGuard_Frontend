@@ -144,7 +144,6 @@ export default function ResetPasswordForm() {
               title: "Password Reset Failed",
               description:
                 err.data?.message ||
-                err.message ||
                 "Something went wrong. Please try again.",
               type: "error",
             });
@@ -172,7 +171,6 @@ export default function ResetPasswordForm() {
               title: "Resend Failed",
               description:
                 res.data?.message ||
-                res.message ||
                 "Unable to resend OTP. Please try again.",
               type: "error",
             });

@@ -61,7 +61,6 @@ export default function ForgotPasswordForm() {
             title: "OTP sending failure",
             description:
               err.data?.message ||
-              err.message ||
               "Something went wrong. Please try again",
             type: "error",
           });
