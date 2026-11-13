@@ -93,7 +93,7 @@ export default function ResetPasswordForm() {
     onSubmit: ({ value }) => {
       resetPassword(
         {
-          email: value.email,
+          email,
           otp: value.otp,
           newPassword: value.newPassword,
           confirmNewPassword: value.confirmNewPassword,
