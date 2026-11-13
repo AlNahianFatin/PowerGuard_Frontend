@@ -1,19 +1,18 @@
-import { Separator } from "@/components/ui/separator";
 import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { DashboardSidebar } from "./dashboard-sidebar";
-import { ReactNode } from "react";
-import { UserRole } from "@/types";
+import type { ReactNode } from "react";
+import type { Role } from "@/types";
 
 export default function DashboardShell({
   children,
   role,
 }: {
   children: ReactNode;
-  role: UserRole;
+  role: Role;
 }) {
   return (
     <SidebarProvider>

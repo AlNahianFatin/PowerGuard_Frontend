@@ -3,7 +3,14 @@ import Image from "next/image";
 export default function HomePage() {
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center px-4 text-center">
-      <Image src="/logo.svg" alt="Power Guard logo" width="200" height="100" />
+      <Image
+        src="/logo.svg"
+        alt="Power Guard logo"
+        width={50}
+        height={50}
+        loading="eager"
+        unoptimized
+      />
       <h1 className="text-5xl font-bold tracking-tight text-primary">
         Welcome to Power Guard!
       </h1>

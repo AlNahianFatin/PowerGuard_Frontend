@@ -13,7 +13,7 @@ export default function ResetPasswordPage() {
                 <div className="flex justify-center gap-2 md:justify-start">
                     <Link href="/" className="flex items-center gap-2 font-medium">
                         <div className="flex items-center gap-2">
-                            <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" unoptimized />
+                            <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" unoptimized loading="eager" />
                             <p className="font-bold text-primary text-2xl">Power Guard</p>
                         </div>
                     </Link>
@@ -33,7 +33,7 @@ export default function ResetPasswordPage() {
                     className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" fill
                     priority
                     unoptimized
-                    sizes="50vw"
+                    sizes="50vw" loading="eager"
                 />
             </div>
         </div>

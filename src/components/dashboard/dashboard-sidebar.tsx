@@ -12,33 +12,38 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import Logo from "@/assets/svg/Logo";
-import { UserRole } from "@/types";
-import { adminRoutes, doctorRoutes, patientRoutes } from "@/routes";
-import { SidebarItems } from "@/types/sidebar.type";
+import type { Role } from "@/types";
+import { adminRoutes, customerRoutes, operatorRoutes, technicianRoutes } from "@/routes";
+import type { SidebarItems } from "@/types/sidebar.type";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
-const sidebarRoutes: Partial<Record<UserRole, SidebarItems>> = {
-  SUPER_ADMIN: adminRoutes,
+const sidebarRoutes: Partial<Record<Role, SidebarItems>> = {
   ADMIN: adminRoutes,
-  DOCTOR: doctorRoutes,
-  PATIENT: patientRoutes,
+  OPERATOR: operatorRoutes,
+  TECHNICIAN: technicianRoutes,
+  CUSTOMER: customerRoutes,
 };
 
-export function DashboardSidebar({ role }: { role: UserRole }) {
+export function DashboardSidebar({ role }: { role: Role }) {
   const pathname = usePathname();
   const routes: SidebarItems = sidebarRoutes[role] || [];
-
-  console.log(pathname);
 
   return (
     <Sidebar>
       <SidebarHeader>
         <Link href="/">
           <div className="flex items-center gap-2">
-            <Logo />
-            <span>PH Healthcare</span>
+            <Image
+              src="/logo.svg"
+              alt="Power Guard logo"
+              width={50}
+              height={50}
+              loading="eager"
+              unoptimized
+            />
+            <span>Power Guard</span>
           </div>
         </Link>
       </SidebarHeader>

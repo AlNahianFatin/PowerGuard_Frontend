@@ -54,6 +54,7 @@ export default function LoginPage() {
                 width={50}
                 height={50}
                 unoptimized
+                loading="eager"
               />
               <p className="text-2xl font-bold text-primary">
                 Power Guard
@@ -78,7 +79,7 @@ export default function LoginPage() {
           priority
           unoptimized
           sizes="50vw"
-          className="object-cover dark:brightness-[0.2] dark:grayscale"
+          className="object-cover dark:brightness-[0.2] dark:grayscale" loading="eager"
         />
       </div>
     </div>

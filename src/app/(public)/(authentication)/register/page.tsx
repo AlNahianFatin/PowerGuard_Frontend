@@ -16,6 +16,7 @@ export default function RegisterPage() {
                 width={50}
                 height={50}
                 unoptimized
+                loading="eager"
               />
               <p className="font-bold text-primary text-2xl">Power Guard</p>
             </div>
@@ -35,6 +36,7 @@ export default function RegisterPage() {
           priority
           unoptimized
           sizes="50vw"
+          loading="eager"
         />
       </div>
     </div>

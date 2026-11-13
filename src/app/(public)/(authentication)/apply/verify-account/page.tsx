@@ -11,7 +11,7 @@ export default function VerifyDoctorAccountPage() {
         <div className="flex justify-center gap-2 md:justify-start">
           <Link href="/" className="flex items-center gap-2 font-medium">
             <div className="flex items-center gap-2">
-              <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" />
+              <Image src="/logo.svg" alt="Power Guard logo" width="50" height="50" loading="eager" />
               <p className="font-bold text-primary text-2xl">Power Guard</p>
             </div>
           </Link>
@@ -19,7 +19,7 @@ export default function VerifyDoctorAccountPage() {
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
             <Suspense fallback={<p>Loading...</p>}>
-              <VerifyAccountForm mode="doctor" />
+              <VerifyAccountForm mode="technician" />
             </Suspense>
           </div>
         </div>
@@ -28,7 +28,7 @@ export default function VerifyDoctorAccountPage() {
         <Image
           src="/login.jpg"
           alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale" loading="eager"
         />
       </div>
     </div>

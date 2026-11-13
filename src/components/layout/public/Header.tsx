@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "@/components/ui/toast";
 import { useGetMe, useLogout } from "@/hooks";
-import type { UserRole } from "@/types";
+import type { Role } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,7 +16,7 @@ export default function Header() {
     { name: "About us", url: "/about-us" },
   ];
 
-  const dashboardRoute: Record<UserRole, string> = {
+  const dashboardRoute: Record<Role, string> = {
     ADMIN: "/admin",
     OPERATOR: "/operator",
     TECHNICIAN: "/technician",
@@ -27,7 +27,7 @@ export default function Header() {
   const { data, isLoading } = useGetMe();
   const { mutate: logout, isPending: isLogoutPending } = useLogout();
 
-  const role: UserRole = !!data?.data && data?.data.role;
+  const role: Role = !!data?.data && data?.data.role;
 
   const handleLogout = () => {
     logout(undefined, {
@@ -58,6 +58,7 @@ export default function Header() {
             alt="Power Guard logo"
             width={50}
             height={50}
+            loading="eager"
             unoptimized
           />
           <div>
