@@ -21,10 +21,15 @@ import Link from "next/link";
 import GoogleLoginComponent from "../modules/google-login/GoogleLogin";
 
 export default function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
+  const [showPassword, setShowPassword] = useState(false);
+  
+  const [googlePending, setGooglePending] = useState(false);
+
   const { mutate: login, isPending: loginPending } = useLogin();
+
+  const isSubmitting = loginPending || googlePending;
 
   const form = useForm({
     defaultValues: {
@@ -149,8 +154,8 @@ export default function LoginForm() {
             Forgot Password?
           </Link>
 
-          <Button disabled={loginPending} type="submit">
-            {loginPending ? (
+          <Button disabled={isSubmitting} type="submit">
+            {isSubmitting ? (
               <>
                 <Spinner /> Submitting
               </>
@@ -163,7 +168,7 @@ export default function LoginForm() {
 
       <FieldSeparator>Or continue with</FieldSeparator>
 
-      <GoogleLoginComponent />
+      <GoogleLoginComponent onPendingChange={setGooglePending} />
 
       <div className="text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{" "}

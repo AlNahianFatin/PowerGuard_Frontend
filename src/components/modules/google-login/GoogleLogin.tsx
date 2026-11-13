@@ -4,10 +4,21 @@ import { toast } from "@/components/ui/toast";
 import { useGoogleOAuth } from "@/hooks";
 import { GoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default function GoogleLoginComponent() {
+interface GoogleLoginComponentProps {
+  onPendingChange: (pending: boolean) => void;
+}
+
+export default function GoogleLoginComponent({
+  onPendingChange,
+}: GoogleLoginComponentProps) {
   const router = useRouter();
-  const { mutate: googleLogin } = useGoogleOAuth();
+  const { mutate: googleLogin, isPending: googlePending } = useGoogleOAuth();
+
+  useEffect(() => {
+    onPendingChange(googlePending);
+  }, [googlePending, onPendingChange]);
 
   const handleGoogleSuccess = (credentialResponse: { credential?: string }) => {
     const idToken = credentialResponse.credential;
@@ -24,19 +35,21 @@ export default function GoogleLoginComponent() {
     googleLogin(
       { idToken },
       {
-        onSuccess: (res) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <sd>
+        onSuccess: (res: any) => {
           toast.add({
             title: "Logged in Successfully",
-            description: res.message ?? "Welcome back",
+            description: res.data?.message || res.message || "Welcome back",
             type: "success",
           });
           router.push("/");
         },
-        onError: (err) => {
+        // biome-ignore lint/suspicious/noExplicitAny: <sad>
+        onError: (err: any) => {
           toast.add({
             title: "Google OAuth Failed",
             description:
-              err.message || "Something went wrong. Please try again",
+              err.data?.message || err.message || "Something went wrong. Please try again",
             type: "error",
           });
         },
@@ -44,10 +57,11 @@ export default function GoogleLoginComponent() {
     );
   };
 
-  const handleGoogleError = () => {
+  // biome-ignore lint/suspicious/noExplicitAny: <sd>
+  const handleGoogleError = (err: any) => {
     toast.add({
       title: "Google OAuth Failed",
-      description: "Something went wrong. Please try again",
+      description: err.data?.message || err.message || "Something went wrong. Please try again",
       type: "error",
     });
   };
@@ -58,7 +72,8 @@ export default function GoogleLoginComponent() {
       shape="pill"
       text="continue_with"
       onSuccess={handleGoogleSuccess}
-      onError={handleGoogleError}
+      // biome-ignore lint/suspicious/noExplicitAny: <df>
+      onError={(err?: any) => handleGoogleError(err)}
     />
   );
 }

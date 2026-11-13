@@ -75,13 +75,19 @@ export default function Header() {
             </Link>
           ))}
 
-          {role && <Link href={dashboardRoute[role]}>Dashboard</Link>}
+          {role &&
+            <Link href={dashboardRoute[role]} className="text-primary hover:text-white hover:bg-primary p-1 rounded-lg">
+              Dashboard
+            </Link>
+          }
+
           {!isLoading && !data && (
             <Link href="/apply" className="text-primary hover:text-white hover:bg-primary p-1 rounded-lg">
               Apply for technician
             </Link>
           )}
         </nav>
+
         <div>
           {!isLoading && !data && (
             <Button
@@ -91,6 +97,7 @@ export default function Header() {
               Login
             </Button>
           )}
+
           {!isLoading && data && (
             <Button onClick={handleLogout} variant="destructive">
               {

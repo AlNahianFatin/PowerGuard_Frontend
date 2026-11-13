@@ -23,8 +23,11 @@ import { Spinner } from "../ui/spinner";
 
 export function RegisterForm() {
   const router = useRouter();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  const [googlePending, setGooglePending] = useState(false);
 
   type CustomerDefaultValues = z.infer<typeof customerRegistrationSchema>;
 
@@ -47,6 +50,8 @@ export function RegisterForm() {
 
   const { mutate: registration, isPending: registrationPending } =
     useRegistration();
+
+  const isSubmitting = registrationPending || googlePending;
 
   const form = useForm({
     defaultValues,
@@ -133,8 +138,8 @@ export function RegisterForm() {
                       onBlur={field.handleBlur}
                       onChange={(e) => field.handleChange(e.target.value)}
                       aria-invalid={isInvalid}
-                    autoComplete="name"
-                    className="pl-9"
+                      autoComplete="name"
+                      className="pl-9"
                     />
                   </div>
                   {isInvalid && <FieldError errors={field.state.meta.errors} />}
@@ -322,8 +327,8 @@ export function RegisterForm() {
             }}
           </form.Field>
 
-          <Button disabled={registrationPending} type="submit">
-            {registrationPending ? (
+          <Button disabled={isSubmitting} type="submit">
+            {isSubmitting ? (
               <>
                 <Spinner /> Submitting
               </>
@@ -336,7 +341,7 @@ export function RegisterForm() {
 
       <FieldSeparator>Or continue with</FieldSeparator>
 
-      <GoogleLoginComponent />
+      <GoogleLoginComponent onPendingChange={setGooglePending} />
 
       <div className="text-center text-sm text-muted-foreground">
         Already have an account?{" "}
