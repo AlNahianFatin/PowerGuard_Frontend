@@ -1,7 +1,9 @@
+import AdminAnalytics from "@/components/modules/admin-analytics/admin-analytics";
+
 export default function AdminDashboard() {
   return (
     <div>
-      <h1> This is admin dashboard </h1>
+      <AdminAnalytics />
     </div>
   );
 }

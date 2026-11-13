@@ -2,10 +2,10 @@ import TechnicianApprovalTabs from "@/components/modules/technician-approval/tec
 
 export default function page() {
   return (
-    <section className="p-5">
+    <section>
       <div>
         <h1 className="text-2xl"> Technician approval </h1>
-        <p>Review the technician application and approve or reject them.</p>
+        <p className="text-muted-foreground">Review the technician application and approve or reject them.</p>
       </div>
       <TechnicianApprovalTabs />
     </section>

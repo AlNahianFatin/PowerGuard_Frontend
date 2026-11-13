@@ -1,3 +1,4 @@
+export * from "./admin.type";
 export * from "./api.type";
 export * from "./area.type";
 export * from "./assignment.type";

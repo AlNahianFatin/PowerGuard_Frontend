@@ -56,7 +56,7 @@ export function usePublicTechnicianProfile(technicianId: string) {
 
 export function useSuspenseGetAllTechnicians(params: TechnicianParams) {
   return useSuspenseQuery({
-    queryKey: ["doctors", params],
+    queryKey: ["technicians", params],
     queryFn: () => getAllTechnicians(params),
   });
 }
