@@ -1,4 +1,3 @@
-import ForgotPasswordForm from "@/components/form/forgot-password-form";
 import ResetPasswordForm from "@/components/form/reset-password-form";
 import VerifyAccountLoader from "@/components/loader/verify-account-loader";
 import Image from "next/image";

@@ -20,6 +20,12 @@ export interface ResetPasswordPayload {
   otp: string;
 }
 
+export interface ChangePasswordPayload {
+  password: string;
+  newPassword: string;
+  confirmNewPassword: string;
+}
+
 export interface ResendOtpPayload {
   email: string;
 }

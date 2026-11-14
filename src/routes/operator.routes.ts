@@ -9,17 +9,17 @@ export const operatorRoutes = [
         url: `${prefix}`,
       },
       {
-        title: "Technician Approval",
+        title: "All Technicians",
         url: `${prefix}/approve-technician`,
       },
     ],
   },
   {
-    title: "App Settings",
+    title: "Account Settings",
     items: [
       {
-        title: "Routing",
-        url: "#",
+        title: "Change Password",
+        url: `${prefix}/change-password`,
       },
       {
         title: "Data Fetching",

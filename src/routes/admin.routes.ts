@@ -15,11 +15,11 @@ export const adminRoutes = [
     ],
   },
   {
-    title: "App Settings",
+    title: "Account Settings",
     items: [
       {
-        title: "Routing",
-        url: "#",
+        title: "Change Password",
+        url: `${prefix}/change-password`,
       },
       {
         title: "Data Fetching",
