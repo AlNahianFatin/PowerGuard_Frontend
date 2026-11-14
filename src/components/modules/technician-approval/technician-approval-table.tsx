@@ -15,7 +15,7 @@ import type { Role, Technician, TechnicianParams } from "@/types";
 import Link from "next/link";
 
 interface Props extends TechnicianParams {
-  role: Role;
+  role?: Role;
   handleReview: Dispatch<SetStateAction<string>>;
   handlePageChange: Dispatch<SetStateAction<number>>;
 }

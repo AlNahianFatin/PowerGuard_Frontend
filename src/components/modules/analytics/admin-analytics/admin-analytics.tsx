@@ -19,16 +19,17 @@ import {
 } from "lucide-react";
 
 import { useGetAdminAnalytics } from "@/hooks";
-import AnalyticsCard from "./analytics-card";
-import AnalyticsSection from "./analytics-section";
+import AnalyticsCard from "../analytics-card";
+import AnalyticsSection from "../analytics-section";
 import AdminAnalyticsLoading from "./admin-analytics-loading";
+import type { AdminAnalyticsResponse } from "@/types";
 
 export default function AdminAnalytics() {
   const { data, isLoading } = useGetAdminAnalytics();
 
   const results = data?.data;
 
-  const analytics = results ?? {
+  const analytics: AdminAnalyticsResponse = results ?? {
     totalAdmins: 0,
     totalOperators: 0,
     totalTechnicians: 0,

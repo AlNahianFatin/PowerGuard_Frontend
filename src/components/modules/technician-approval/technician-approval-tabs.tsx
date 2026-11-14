@@ -16,7 +16,7 @@ const verificationStatus: ["ALL" | TechnicianVerificationStatus, string][] = [
   ["ALL", "All"],
 ];
 
-export default function TechnicianApprovalTabs({ role = "OPERATOR" }: { role: Role }) {
+export default function TechnicianApprovalTabs({ role = "OPERATOR" }: { role?: Role }) {
   const [tab, setTab] = useState<"ALL" | TechnicianVerificationStatus>("ALL");
   const [selectedId, setSelectedId] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -67,6 +67,7 @@ export default function TechnicianApprovalTabs({ role = "OPERATOR" }: { role: Ro
       </Suspense>
 
       <TechnicianReviewSheet
+        role={role}
         selectedId={selectedId}
         onClose={() => setSelectedId("")}
         {...queryParams}

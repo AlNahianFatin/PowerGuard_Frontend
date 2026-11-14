@@ -8,7 +8,7 @@ export default function page() {
         <p>Review the technician application and approve or reject them.</p>
       </div>
       {/** biome-ignore lint/a11y/useValidAriaRole: <sdf> */}
-<TechnicianApprovalTabs role="OPERATOR" />
+      <TechnicianApprovalTabs role="OPERATOR" />
     </section>
   );
 }

@@ -19,17 +19,19 @@ import {
 } from "@/components/ui/sheet";
 import { Spinner } from "@/components/ui/spinner";
 import { Textarea } from "@/components/ui/textarea";
-import type { ApproveTechnicianPayload, TechnicianParams } from "@/types";
+import type { ApproveTechnicianPayload, Role, TechnicianParams } from "@/types";
 import { useApproveTechnician, useGetAllTechnicians } from "@/hooks";
 import { toast } from "@/components/ui/toast";
 
 
 interface Props extends TechnicianParams {
+  role?: Role;
   selectedId: string;
   onClose: () => void;
 }
 
 export default function TechnicianReviewSheet({
+  role = "OPERATOR",
   selectedId,
   onClose,
   ...params
@@ -78,6 +80,10 @@ export default function TechnicianReviewSheet({
   };
 
   if (!selectedTechnician) {
+    return null;
+  }
+
+  if (role !== "ADMIN") {
     return null;
   }
 

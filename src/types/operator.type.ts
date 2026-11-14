@@ -30,3 +30,19 @@ export interface OperatorParams {
   email?: string;
   searchTerm?: string;
 }
+
+export interface OperatorAnalyticsResponse {
+  publishedSchedules: number;
+  assignedAssignments: number;
+  totalTechnicians: number;
+  totalPendingTechnicianApplications: number;
+  totalApprovedTechnicians: number;
+  totalRejectedTechnicians: number;
+  totalCustomers: number;
+  totalAssignments: number;
+  totalOngoingAssignments: number;
+  totalCancelledAssignments: number;
+  totalRejectedAssignments: number;
+  totalFailedAssignments: number;
+  totalResolvedAssignments:number;
+}

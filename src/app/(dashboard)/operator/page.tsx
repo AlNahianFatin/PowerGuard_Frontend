@@ -1,7 +1,9 @@
+import OperatorAnalytics from "@/components/modules/analytics/operator-analytics/operator-analytics";
+
 export default function OperatorDashboard() {
   return (
     <div>
-      <h1> This is operator dashboard </h1>
+      <OperatorAnalytics />
     </div>
   );
 }

@@ -9,9 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Role } from "@/types";
+import type { Role } from "@/types";
 
-export default function TechnicianApprovalTableLoading({ role = "OPERATOR" }: { role: Role }) {
+export default function TechnicianApprovalTableLoading({ role = "OPERATOR" }: { role?: Role }) {
   return (
     <div className="border rounded-lg">
       <Table>
