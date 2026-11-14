@@ -68,7 +68,6 @@ export default function AdminAnalytics() {
           value={analytics.totalAdmins}
           description="Registered administrators"
           icon={ShieldCheck}
-          color="blue"
         />
 
         <AnalyticsCard
@@ -76,7 +75,7 @@ export default function AdminAnalytics() {
           value={analytics.totalOperators}
           description="Registered operators"
           icon={UserCog}
-          color="purple"
+        // color="purple"
         />
 
         <AnalyticsCard
@@ -84,7 +83,7 @@ export default function AdminAnalytics() {
           value={analytics.totalTechnicians}
           description="Registered technicians"
           icon={Wrench}
-          color="green"
+        // color="green"
         />
 
         <AnalyticsCard
@@ -92,7 +91,7 @@ export default function AdminAnalytics() {
           value={analytics.totalCustomers}
           description="Registered customers"
           icon={Users}
-          color="default"
+        // color="default"
         />
       </AnalyticsSection>
 
@@ -106,7 +105,7 @@ export default function AdminAnalytics() {
           value={analytics.totalPendingTechnicianApplications}
           description="Awaiting admin review"
           icon={Clock}
-          color="yellow"
+        // color="yellow"
         />
 
         <AnalyticsCard
@@ -114,7 +113,7 @@ export default function AdminAnalytics() {
           value={analytics.totalApprovedTechnicians}
           description="Successfully verified"
           icon={CheckCircle2}
-          color="green"
+        // color="green"
         />
 
         <AnalyticsCard
@@ -122,7 +121,7 @@ export default function AdminAnalytics() {
           value={analytics.totalRejectedTechnicians}
           description="Rejected applications"
           icon={XCircle}
-          color="red"
+        // color="red"
         />
       </AnalyticsSection>
 
@@ -136,7 +135,7 @@ export default function AdminAnalytics() {
           value={analytics.totalAssignments}
           description="All created assignments"
           icon={ClipboardList}
-          color="blue"
+        // color="blue"
         />
 
         <AnalyticsCard
@@ -144,7 +143,7 @@ export default function AdminAnalytics() {
           value={analytics.totalOngoingAssignments}
           description="Currently in progress"
           icon={Activity}
-          color="yellow"
+        // color="yellow"
         />
 
         <AnalyticsCard
@@ -152,7 +151,7 @@ export default function AdminAnalytics() {
           value={analytics.totalResolvedAssignments}
           description="Successfully completed"
           icon={CheckCheck}
-          color="green"
+        // color="green"
         />
 
         <AnalyticsCard
@@ -160,7 +159,7 @@ export default function AdminAnalytics() {
           value={analytics.totalCancelledAssignments}
           description="Cancelled assignments"
           icon={Ban}
-          color="red"
+        // color="red"
         />
 
         <AnalyticsCard
@@ -168,7 +167,7 @@ export default function AdminAnalytics() {
           value={analytics.totalRejectedAssignments}
           description="Rejected assignments"
           icon={ClipboardX}
-          color="red"
+        // color="red"
         />
 
         <AnalyticsCard
@@ -176,7 +175,7 @@ export default function AdminAnalytics() {
           value={analytics.totalFailedAssignments}
           description="Unsuccessful assignments"
           icon={CircleX}
-          color="red"
+        // color="red"
         />
       </AnalyticsSection>
 
@@ -190,7 +189,7 @@ export default function AdminAnalytics() {
           value={formatCurrency(analytics.totalRevenue)}
           description="Total recorded revenue"
           icon={Wallet}
-          color="green"
+        // color="green"
         />
 
         <AnalyticsCard
@@ -198,7 +197,7 @@ export default function AdminAnalytics() {
           value={formatCurrency(analytics.totalRefunded)}
           description="Total refunded amount"
           icon={RefreshCcw}
-          color="yellow"
+        // color="yellow"
         />
       </AnalyticsSection>
     </div>

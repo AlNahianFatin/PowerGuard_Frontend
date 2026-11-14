@@ -1,4 +1,4 @@
-import AdminAnalytics from "@/components/modules/admin-analytics/admin-analytics";
+import AdminAnalytics from "@/components/modules/analytics/admin-analytics";
 
 export default function AdminDashboard() {
   return (

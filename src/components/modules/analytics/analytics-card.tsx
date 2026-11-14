@@ -6,24 +6,24 @@ interface AnalyticsCardProps {
     value: number | string;
     description: string;
     icon: LucideIcon;
-    color?: "blue" | "green" | "yellow" | "red" | "purple" | "default";
+    // color?: "blue" | "green" | "yellow" | "red" | "purple" | "default";
 }
 
-const colorStyles = {
-    blue: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
-    green: "bg-green-500/10 text-green-600 dark:text-green-400",
-    yellow: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
-    red: "bg-red-500/10 text-red-600 dark:text-red-400",
-    purple: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
-    default: "bg-primary/10 text-primary",
-};
+// const colorStyles = {
+//     blue: "bg-blue-500/10 text-blue-600 dark:text-blue-400",
+//     green: "bg-green-500/10 text-green-600 dark:text-green-400",
+//     yellow: "bg-yellow-500/10 text-yellow-600 dark:text-yellow-400",
+//     red: "bg-red-500/10 text-red-600 dark:text-red-400",
+//     purple: "bg-purple-500/10 text-purple-600 dark:text-purple-400",
+//     default: "bg-primary/10 text-primary",
+// };
 
 export default function AnalyticsCard({
     title,
     value,
     description,
     icon: Icon,
-    color = "default",
+    // color = "default",
 }: AnalyticsCardProps) {
     return (
         <Card className="border-border/70 bg-card shadow-sm">
@@ -43,7 +43,7 @@ export default function AnalyticsCard({
                 </div>
 
                 <div
-                    className={`flex size-11 shrink-0 items-center justify-center rounded-xl ${colorStyles[color]}`}
+                    className={`flex size-11 shrink-0 items-center justify-center rounded-xl mt-5 mr-5`}
                 >
                     <Icon className="size-5" />
                 </div>

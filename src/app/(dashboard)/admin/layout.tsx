@@ -7,7 +7,7 @@ export default function layout({ children }: { children: ReactNode }) {
     <RoleGuard roles={["ADMIN"]}>
       {/** biome-ignore lint/a11y/useValidAriaRole: <ignore role error mistaking for aria-role> */}
       <DashboardShell role="ADMIN">
-        <div className="px-5">
+        <div className="px-5 mb-10">
           {children}
         </div>
       </DashboardShell>
