@@ -28,3 +28,13 @@ export interface CustomerParams {
   email?: string;
   searchTerm?: string;
 }
+
+export interface CustomerAnalyticsResponse {
+  totalServiceRequests: number;
+  cancelledServiceRequests: number;
+  rejectedServiceRequests: number;
+  failedServiceRequests: number;
+  resolvedServiceRequests: number;
+  totalAmountSpent: number;
+  totalRefunded: number;
+}
