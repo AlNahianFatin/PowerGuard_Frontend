@@ -2,7 +2,7 @@
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { type ChangeEvent, Suspense, useState } from "react";
-import type { TechnicianParams, TechnicianVerificationStatus } from "@/types";
+import type { Role, TechnicianParams, TechnicianVerificationStatus } from "@/types";
 import { Input } from "@/components/ui/input";
 import useDebounce from "@/hooks/debounce.hook";
 import TechnicianApprovalTableLoading from "./technician-approval-table-loading";
@@ -16,7 +16,7 @@ const verificationStatus: ["ALL" | TechnicianVerificationStatus, string][] = [
   ["ALL", "All"],
 ];
 
-export default function TechnicianApprovalTabs() {
+export default function TechnicianApprovalTabs({ role = "OPERATOR" }: { role: Role }) {
   const [tab, setTab] = useState<"ALL" | TechnicianVerificationStatus>("ALL");
   const [selectedId, setSelectedId] = useState("");
   const [searchInput, setSearchInput] = useState("");
@@ -58,8 +58,8 @@ export default function TechnicianApprovalTabs() {
         </Tabs>
       </div>
 
-      <Suspense fallback={<TechnicianApprovalTableLoading />}>
-        <TechnicianApprovalTable
+      <Suspense fallback={<TechnicianApprovalTableLoading role={role} />}>
+        <TechnicianApprovalTable role={role}
           {...queryParams}
           handleReview={setSelectedId}
           handlePageChange={setPage}

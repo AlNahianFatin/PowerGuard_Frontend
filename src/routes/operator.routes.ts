@@ -9,8 +9,8 @@ export const operatorRoutes = [
         url: `${prefix}`,
       },
       {
-        title: "Doctor Approval",
-        url: `${prefix}/approve-doctor`,
+        title: "Technician Approval",
+        url: `${prefix}/approve-technician`,
       },
     ],
   },

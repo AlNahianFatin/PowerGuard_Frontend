@@ -11,15 +11,17 @@ import {
 } from "@/components/ui/table";
 import TablePagination from "@/components/ui/table-pagination";
 import { useSuspenseGetAllTechnicians } from "@/hooks";
-import type { Technician, TechnicianParams } from "@/types";
+import type { Role, Technician, TechnicianParams } from "@/types";
 import Link from "next/link";
 
 interface Props extends TechnicianParams {
+  role: Role;
   handleReview: Dispatch<SetStateAction<string>>;
   handlePageChange: Dispatch<SetStateAction<number>>;
 }
 
 export default function TechnicianApprovalTable({
+  role = "OPERATOR",
   handleReview,
   handlePageChange,
   ...params
@@ -29,6 +31,7 @@ export default function TechnicianApprovalTable({
   const technicians = data?.data ?? [];
   const totalPages = data?.meta?.totalPages ?? 0;
   const isEmpty = technicians.length === 0;
+  console.log(technicians)
 
   return (
     <>
@@ -47,7 +50,10 @@ export default function TechnicianApprovalTable({
               <TableHead className="text-center min-w-40">Rejection Reason</TableHead>
               <TableHead className="text-center min-w-60">Reviewed By</TableHead>
               <TableHead className="text-center min-w-38">Reviewed on</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+              {
+                role === "ADMIN" &&
+                <TableHead className="text-right">Action</TableHead>
+              }
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -124,34 +130,38 @@ export default function TechnicianApprovalTable({
 
                   <TableCell className="text-muted-foreground">
                     {technician.reviewer ?
-                      <Link href={"/"}>technician.reviewer.name</Link> : "-"}
+                      <Link href={"/"} className="hover:text-primary hover:underline">{technician.reviewer.name}</Link> : "-"}
                   </TableCell>
 
                   <TableCell className="text-muted-foreground">
                     {technician.reviewedAt ?
                       new Date(technician.reviewedAt).toLocaleString() :
                       "-"
-                      }
-                  </TableCell>
-
-                  <TableCell className="text-right" >
-                    {
-                      technician.user.emailVerified ? (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleReview(technician.id)}
-                          disabled={technician.verificationStatus !== "PENDING"}
-                        >
-                          Review
-                        </Button>
-                      ) : (
-                        <Button disabled variant="outline" size="sm">
-                          Not Verified
-                        </Button>
-                      )
                     }
                   </TableCell>
+
+                  {
+                    role === "ADMIN" && (
+                      <TableCell className="text-right" >
+                        {
+                          technician.user.emailVerified ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => handleReview(technician.id)}
+                              disabled={technician.verificationStatus !== "PENDING"}
+                            >
+                              Review
+                            </Button>
+                          ) : (
+                            <Button disabled variant="outline" size="sm">
+                              Not Verified
+                            </Button>
+                          )
+                        }
+                      </TableCell>
+                    )
+                  }
                 </TableRow>
               ))
             )}

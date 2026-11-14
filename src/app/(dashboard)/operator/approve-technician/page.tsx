@@ -7,7 +7,8 @@ export default function page() {
         <h1 className="text-2xl"> Technician approval </h1>
         <p>Review the technician application and approve or reject them.</p>
       </div>
-      <TechnicianApprovalTabs />
+      {/** biome-ignore lint/a11y/useValidAriaRole: <sdf> */}
+<TechnicianApprovalTabs role="OPERATOR" />
     </section>
   );
 }

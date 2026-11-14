@@ -9,8 +9,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Role } from "@/types";
 
-export default function TechnicianApprovalTableLoading() {
+export default function TechnicianApprovalTableLoading({ role = "OPERATOR" }: { role: Role }) {
   return (
     <div className="border rounded-lg">
       <Table>
@@ -27,15 +28,24 @@ export default function TechnicianApprovalTableLoading() {
             <TableHead className="text-center min-w-40">Rejection Reason</TableHead>
             <TableHead className="text-center min-w-60">Reviewed By</TableHead>
             <TableHead className="text-center min-w-38">Reviewed on</TableHead>
-            <TableHead className="text-right">Action</TableHead>
+            {
+              role === "ADMIN" &&
+              <TableHead className="text-right">Action</TableHead>
+            }
           </TableRow>
         </TableHeader>
         <TableBody>
           {[1, 2, 3].map((item) => (
             <TableRow key={item}>
-              <TableCell colSpan={12}>
-                <Skeleton className="h-5 w-full" />
-              </TableCell>
+              {
+                role === "ADMIN" ?
+                  <TableCell colSpan={12}>
+                    <Skeleton className="h-5 w-full" />
+                  </TableCell> :
+                  <TableCell colSpan={11}>
+                    <Skeleton className="h-5 w-full" />
+                  </TableCell>
+              }
             </TableRow>
           ))}
         </TableBody>
