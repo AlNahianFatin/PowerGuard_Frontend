@@ -3,6 +3,7 @@ import {
   approveTechnician,
   getAllTechnicians,
   getPublicTechnicianProfile,
+  getTechnicianAnalytics,
   verifyTechnicianAccount,
 } from "@/api";
 import type { TechnicianParams } from "@/types";
@@ -82,3 +83,10 @@ export function useApproveTechnician() {
 //     queryFn: () => getTodayScheduleByDoctor(params),
 //   });
 // }
+
+export function useGetTechnicianAnalytics() {
+  return useQuery({
+    queryKey: ["technician-analytics"],
+    queryFn: () => getTechnicianAnalytics(),
+  });
+}

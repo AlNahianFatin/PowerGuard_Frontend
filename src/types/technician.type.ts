@@ -105,3 +105,13 @@ export interface PublicTechnicianProfile {
 //   sortBy?: string;
 //   sortOrder?: "desc" | "asc";
 // }
+
+export interface TechnicianAnalyticsResponse {
+  totalAssignments: number;
+  totalCancelledAssignments: number;
+  totalRejectedAssignments: number;
+  totalResolvedAssignments: number;
+  totalFailedAssignments: number;
+  totalTechnicianRefunded: number;
+  totalTechnicianEarnings: number;
+}

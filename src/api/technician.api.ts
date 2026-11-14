@@ -7,6 +7,7 @@ import type {
   TechnicianApplicationPayload,
   Technician,
   ApproveTechnicianPayload,
+  TechnicianAnalyticsResponse,
 } from "@/types";
 
 export function applyAsTechnician(payload: TechnicianApplicationPayload) {
@@ -69,3 +70,7 @@ export function getPublicTechnicianProfile(technicianId: string) {
 //     params,
 //   });
 // }
+
+export function getTechnicianAnalytics() {
+  return apiClient<ApiResponse<TechnicianAnalyticsResponse>>("/analytics/technician-analytics");
+}

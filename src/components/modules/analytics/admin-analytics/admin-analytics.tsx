@@ -23,6 +23,7 @@ import AnalyticsCard from "../analytics-card";
 import AnalyticsSection from "../analytics-section";
 import AdminAnalyticsLoading from "./admin-analytics-loading";
 import type { AdminAnalyticsResponse } from "@/types";
+import { formatCurrency } from "@/utils/currency-format.util";
 
 export default function AdminAnalytics() {
   const { data, isLoading } = useGetAdminAnalytics();
@@ -47,12 +48,12 @@ export default function AdminAnalytics() {
     totalRefunded: 0,
   };
 
-  const currencyFormatter = new Intl.NumberFormat("en-BD", {
-    maximumFractionDigits: 2,
-  });
+  // const currencyFormatter = new Intl.NumberFormat("en-BD", {
+  //   maximumFractionDigits: 2,
+  // });
 
-  const formatCurrency = (value: number) =>
-    `৳ ${currencyFormatter.format(value)}`;
+  // const formatCurrency = (value: number) =>
+  //   `৳ ${currencyFormatter.format(value)}`;
 
   if (isLoading) {
     return <AdminAnalyticsLoading />
@@ -158,7 +159,7 @@ export default function AdminAnalytics() {
         <AnalyticsCard
           title="Cancelled Assignments"
           value={analytics.totalCancelledAssignments}
-          description="Cancelled assignments"
+          description="Cancelled assignments by customer"
           icon={Ban}
         // color="red"
         />
@@ -166,7 +167,7 @@ export default function AdminAnalytics() {
         <AnalyticsCard
           title="Rejected Assignments"
           value={analytics.totalRejectedAssignments}
-          description="Rejected assignments"
+          description="Rejected assignments by admin/operator"
           icon={ClipboardX}
         // color="red"
         />
@@ -174,7 +175,7 @@ export default function AdminAnalytics() {
         <AnalyticsCard
           title="Failed Assignments"
           value={analytics.totalFailedAssignments}
-          description="Unsuccessful assignments"
+          description="Unsuccessful assignments by technician"
           icon={CircleX}
         // color="red"
         />

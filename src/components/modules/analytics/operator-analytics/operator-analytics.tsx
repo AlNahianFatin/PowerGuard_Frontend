@@ -138,7 +138,7 @@ export default function OperatorAnalytics() {
         <AnalyticsCard
           title="Cancelled Assignments"
           value={analytics.totalCancelledAssignments}
-          description="Cancelled assignments"
+          description="Cancelled assignments by customer"
           icon={Ban}
         // color="red"
         />
@@ -146,7 +146,7 @@ export default function OperatorAnalytics() {
         <AnalyticsCard
           title="Rejected Assignments"
           value={analytics.totalRejectedAssignments}
-          description="Rejected assignments"
+          description="Rejected assignments by admin/operator"
           icon={ClipboardX}
         // color="red"
         />
@@ -154,7 +154,7 @@ export default function OperatorAnalytics() {
         <AnalyticsCard
           title="Failed Assignments"
           value={analytics.totalFailedAssignments}
-          description="Unsuccessful assignments"
+          description="Unsuccessful assignments by technician"
           icon={CircleX}
         // color="red"
         />

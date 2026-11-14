@@ -130,7 +130,7 @@ export default function TechnicianApprovalTable({
 
                   <TableCell className="text-muted-foreground">
                     {technician.reviewer ?
-                      <Link href={"/"} className="hover:text-primary hover:underline">{technician.reviewer.name}</Link> : "-"}
+                      <Link href={"/"} className="hover:text-primary underline">{technician.reviewer.name}</Link> : "-"}
                   </TableCell>
 
                   <TableCell className="text-muted-foreground">
