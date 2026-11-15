@@ -47,18 +47,18 @@ export default function LoginForm() {
     //   email: "",
     //   password: "",
     // },
-    // defaultValues: {
-    //   email: "testeradmin@powergurard.com",
-    //   password: "Tester@admin12345",
-    // },
+    defaultValues: {
+      email: "testeradmin@powergurard.com",
+      password: "Tester@admin12345",
+    },
     // defaultValues: {
     //   email: "testeroperator@powergurard.com",
     //   password: "Tester@operator12345",
     // },
-    defaultValues: {
-      email: "testertechnician@powergurard.com",
-      password: "Tester@technician12345",
-    },
+    // defaultValues: {
+    //   email: "testertechnician@powergurard.com",
+    //   password: "Tester@technician12345",
+    // },
     // defaultValues: {
     //   email: "testercustomer@powergurard.com",
     //   password: "Tester@customer12345",

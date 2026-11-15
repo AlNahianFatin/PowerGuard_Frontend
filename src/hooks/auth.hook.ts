@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getMe,
   googleOAuth,
@@ -31,8 +31,13 @@ export function useResetPassword() {
 }
 
 export function useChangePassword() {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: userChangePassword,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    },
   });
 }
 

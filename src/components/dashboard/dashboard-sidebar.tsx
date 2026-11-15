@@ -58,6 +58,7 @@ export function DashboardSidebar({ role }: { role: Role }) {
                     <SidebarMenuButton
                       render={<Link href={item.url} />}
                       isActive={pathname === item.url}
+                      className="focus:text-primary focus:bg-gray-200"
                     >
                       {item.title}
                     </SidebarMenuButton>
