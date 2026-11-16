@@ -1,6 +1,6 @@
 import type { Area } from "./area.type";
 import type { Assignment } from "./assignment.type";
-import { Customer } from "./customer.type";
+import type { Customer } from "./customer.type";
 import type { User } from "./user.type";
 
 export type ServiceRequestStatus = "PENDING" | "ASSIGNED" | "INSPECTING" | "PAYMENTPENDING" | "INPROGRESS" | "RESOLVED" | "FAILED" | "REJECTED" | "CANCELLED";

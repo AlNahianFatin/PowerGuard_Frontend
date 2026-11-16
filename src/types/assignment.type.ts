@@ -1,7 +1,7 @@
 import type { Payment } from "./payment.type";
-import type { ServiceRequest } from "./service_request.type";
+import type { ServiceRequest } from "./service-request.type";
 import type { Technician } from "./technician.type";
-import { TechnicianReport } from "./technician_report.type";
+import type { TechnicianReport } from "./technician-report.type";
 import type { User } from "./user.type";
 
 export interface Assignment {

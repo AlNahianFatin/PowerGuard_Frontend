@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
 import { X } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 type NotificationImportance = "GENERAL" | "URGENT" | "WARNING";
 
@@ -15,12 +15,14 @@ interface NotificationProps {
 const importanceStyles: Record<
     NotificationImportance,
     {
+        rootContainer: string;
         container: string;
         button: string;
         icon: string;
     }
 > = {
     GENERAL: {
+        rootContainer: "",
         container:
             "bg-primary/10 border-primary text-primary",
         button:
@@ -29,6 +31,7 @@ const importanceStyles: Record<
             "text-primary",
     },
     URGENT: {
+        rootContainer: "animate-pulse",
         container:
             "bg-red-300/30 border-red-400 text-red-700",
         button:
@@ -37,6 +40,7 @@ const importanceStyles: Record<
             "text-red-600",
     },
     WARNING: {
+        rootContainer: "",
         container:
             "bg-amber-300/30 border-amber-400 text-amber-700",
         button:
@@ -58,7 +62,7 @@ export const DashboardNotification = ({
     const styles = importanceStyles[importance];
 
     return (
-        <div className="flex justify-end m-2 animate-pulse">
+        <div className={`flex justify-end m-2 ${styles.rootContainer}`}>
             <div
                 className={`relative flex items-center justify-center w-fit px-4 py-2 rounded-2xl border-2 ${styles.container}`}
             >

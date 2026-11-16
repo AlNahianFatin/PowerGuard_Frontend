@@ -1,4 +1,4 @@
-import type { DistributionZone } from "./distribution_zone.type";
+import type { DistributionZone } from "./distribution-zone.type";
 import type { Feeder } from "./feeder.type";
 import type { User } from "./user.type";
 

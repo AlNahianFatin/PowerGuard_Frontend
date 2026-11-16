@@ -1,4 +1,4 @@
-import type { ServiceRequest } from "./service_request.type";
+import type { ServiceRequest } from "./service-request.type";
 import type { User } from "./user.type";
 
 export interface Customer {

@@ -31,7 +31,6 @@ export default function TechnicianApprovalTable({
   const technicians = data?.data ?? [];
   const totalPages = data?.meta?.totalPages ?? 0;
   const isEmpty = technicians.length === 0;
-  console.log(technicians)
 
   return (
     <>

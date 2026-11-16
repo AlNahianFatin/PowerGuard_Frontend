@@ -13,6 +13,12 @@ export function createSchedule(payload: CreateSchedulePayload) {
   });
 }
 
+export function getAllSchedules(params: ScheduleParams) {
+  return apiClient<ApiResponse<Schedule[]>>("/schedule/all-schedules", {
+    params,
+  });
+}
+
 export function getMySchedules(params: ScheduleParams) {
   return apiClient<ApiResponse<Schedule[]>>("/schedule/my-schedules", {
     params,

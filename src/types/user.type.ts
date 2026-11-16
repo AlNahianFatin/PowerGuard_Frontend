@@ -1,14 +1,14 @@
 import type { Area } from "./area.type";
 import type { Assignment } from "./assignment.type";
 import type { Customer } from "./customer.type";
-import type { DistributionZone } from "./distribution_zone.type";
+import type { DistributionZone } from "./distribution-zone.type";
 import type { Feeder } from "./feeder.type";
 import type { Operator } from "./operator.type";
 import type { Schedule } from "./schedule.type";
-import type { ServiceRequest } from "./service_request.type";
+import type { ServiceRequest } from "./service-request.type";
 import type { Substation } from "./substation.type";
 import type { Technician } from "./technician.type";
-import type { TechnicianReport } from "./technician_report.type";
+import type { TechnicianReport } from "./technician-report.type";
 
 export type Role = "ADMIN" | "OPERATOR" | "TECHNICIAN" | "CUSTOMER";
 

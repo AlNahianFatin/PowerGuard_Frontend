@@ -1,4 +1,4 @@
-import ScheduleList from "@/components/modules/doctor-schedule/schedule-list";
+import ScheduleList from "@/components/modules/schedule/schedule-list";
 
 export default function page() {
   return (

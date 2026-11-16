@@ -1,10 +1,11 @@
 import {
   createSchedule,
   deleteSchedule,
+  getAllSchedules,
   getMySchedules,
   publishSchedule,
 } from "@/api";
-import { ScheduleParams } from "@/types";
+import type { ScheduleParams } from "@/types";
 import {
   useMutation,
   useQuery,
@@ -20,6 +21,20 @@ export function useCreateSchedule() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["schedules"] });
     },
+  });
+}
+
+export function useAllSchedules(params: ScheduleParams) {
+  return useQuery({
+    queryKey: ["schedules", params],
+    queryFn: () => getAllSchedules(params),
+  });
+}
+
+export function useSuspenseAllSchedules(params: ScheduleParams) {
+  return useSuspenseQuery({
+    queryKey: ["schedules", params],
+    queryFn: () => getAllSchedules(params),
   });
 }
 
