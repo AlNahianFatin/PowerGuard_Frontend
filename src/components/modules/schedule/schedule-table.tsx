@@ -48,12 +48,12 @@ export default function ScheduleTable({ handlePageChange,
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Starting Date & Time</TableHead>
-              <TableHead>Ending Date & Time</TableHead>
-              <TableHead>Reason</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Created On</TableHead>
-              <TableHead>Feeder</TableHead>
+              <TableHead className="text-center">Starting Date & Time</TableHead>
+              <TableHead className="text-center">Ending Date & Time</TableHead>
+              <TableHead className="text-center">Reason</TableHead>
+              <TableHead className="text-center">Status</TableHead>
+              {/* <TableHead>Created On</TableHead> */}
+              <TableHead className="text-center">Feeder</TableHead>
               <TableHead className="text-right">Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -94,9 +94,9 @@ export default function ScheduleTable({ handlePageChange,
                   </span>
                 </TableCell>
 
-                <TableCell className="text-center text-muted-foreground">
+                {/* <TableCell className="text-center text-muted-foreground">
                   {new Date(schedule.createdAt).toLocaleString()}
-                </TableCell>
+                </TableCell> */}
 
                 <TableCell className="text-center text-muted-foreground">
                   {schedule.feeder.name}

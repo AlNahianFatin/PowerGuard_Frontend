@@ -10,10 +10,10 @@ import TechnicianApprovalTable from "./technician-approval-table";
 import TechnicianReviewSheet from "./technician-review-sheet";
 
 const verificationStatus: ["ALL" | TechnicianVerificationStatus, string][] = [
+  ["ALL", "All"],
   ["PENDING", "Pending"],
   ["APPROVED", "Approved"],
   ["REJECTED", "Rejected"],
-  ["ALL", "All"],
 ];
 
 export default function TechnicianApprovalTabs({ role = "OPERATOR" }: { role?: Role }) {

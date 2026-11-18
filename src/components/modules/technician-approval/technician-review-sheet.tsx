@@ -23,7 +23,6 @@ import type { ApproveTechnicianPayload, Role, TechnicianParams } from "@/types";
 import { useApproveTechnician, useGetAllTechnicians } from "@/hooks";
 import { toast } from "@/components/ui/toast";
 
-
 interface Props extends TechnicianParams {
   role?: Role;
   selectedId: string;

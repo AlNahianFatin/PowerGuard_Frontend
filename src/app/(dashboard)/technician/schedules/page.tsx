@@ -1,6 +1,6 @@
 import ScheduleList from "@/components/modules/schedule/schedule-list";
 
-export default function page() {
+export default function SchedulesPage() {
   return (
     <section className="p-5">
       <div>

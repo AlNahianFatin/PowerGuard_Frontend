@@ -77,9 +77,21 @@ export default function TechnicianApprovalTable({
                 <TableRow key={technician.id} className="hover:bg-gray-300/30 shadow-lg text-center">
 
                   <TableCell className="font-medium max-w-60 overflow-x-auto">
-                    {technician.name}
+                    <Link href={"/"} className="hover:text-primary underline">{technician.name}</Link>
                   </TableCell>
 
+                  {/* <TableCell className="text-muted-foreground">
+                    {technician.reviewer ?
+                      <Link href={"/"} className="hover:text-primary underline">{technician.reviewer.name}</Link> : "-"}
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleReview(technician.id)}
+                      disabled={technician.verificationStatus !== "PENDING"}
+                    >
+                      Review
+                    </Button>
+                  </TableCell> */}
                   <TableCell className="max-w-60 overflow-x-auto text-muted-foreground">
                     {technician.email}
                   </TableCell>

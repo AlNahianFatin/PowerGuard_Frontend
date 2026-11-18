@@ -1,14 +1,15 @@
 "use client";
 
-import { type ChangeEvent, Suspense, useState } from "react";
+import { type ChangeEvent, Suspense, useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { ScheduleParams, ScheduleStatus } from "@/types";
 import ScheduleListLoading from "./schedule-list-loading";
 import ScheduleTable from "./schedule-table";
-import { Button } from "@/components/ui/button";
 import ScheduleCreateDialog from "./schedule-create-dialog";
 import useDebounce from "@/hooks/debounce.hook";
 import { Input } from "@/components/ui/input";
+import { useGetAllFeeders } from "@/hooks";
+import { toast } from "@/components/ui/toast";
 
 const statuses: ["ALL" | ScheduleStatus, string][] = [
   ["ALL", "All"],
@@ -19,6 +20,29 @@ const statuses: ["ALL" | ScheduleStatus, string][] = [
 ];
 
 export default function ScheduleList() {
+  const {
+    data,
+    isPending: feedersLoading,
+    isError: feedersError,
+  } = useGetAllFeeders();
+
+  const feeders = data?.data ?? [];
+
+  useEffect(() => {
+    if (feedersLoading)
+      return;
+  }, [feedersLoading]);
+
+  useEffect(() => {
+    if (feedersError) {
+      toast.add({
+        title: "Server Failure",
+        description: "Could not get available areas. Please try again.",
+        type: "error",
+      });
+    }
+  }, [feedersError]);
+
   const [tab, setTab] = useState<"ALL" | ScheduleStatus>("ALL");
   const [searchInput, setSearchInput] = useState("");
   const [page, setPage] = useState(1);
@@ -57,7 +81,7 @@ export default function ScheduleList() {
             ))}
           </TabsList>
         </Tabs>
-        <ScheduleCreateDialog />
+        <ScheduleCreateDialog feeders={feeders} />
       </div>
 
       <Suspense fallback={<ScheduleListLoading />}>

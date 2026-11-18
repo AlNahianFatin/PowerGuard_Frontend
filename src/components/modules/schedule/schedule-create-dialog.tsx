@@ -8,9 +8,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import type { Feeder } from "@/types";
 import { useState } from "react";
 
-export default function ScheduleCreateDialog() {
+export default function ScheduleCreateDialog({feeders}: {feeders: Feeder[]}) {
   const [open, setOpen] = useState(false);
 
   return (
@@ -22,10 +23,10 @@ export default function ScheduleCreateDialog() {
         <DialogHeader>
           <DialogTitle>Create Schedule</DialogTitle>
           <DialogDescription>
-            This schedule will be visible to patient
+            This schedule will be visible to everyone
           </DialogDescription>
         </DialogHeader>
-        <CreateScheduleForm handleClose={() => setOpen(false)} />
+        <CreateScheduleForm feeders={feeders} handleClose={() => setOpen(false)} />
       </DialogContent>
     </Dialog>
   );

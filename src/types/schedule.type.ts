@@ -5,7 +5,7 @@ export type ScheduleStatus = "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED";
 
 export interface Schedule {
   id: string;
-
+  
   startDateTime: string;
   endDateTime: string;
 
@@ -22,9 +22,11 @@ export interface Schedule {
 
   feederId: string;
   feeder: Feeder;
-
+  
   creatorId: string;
   createdByUser: User;
+
+  message: string | null;
 }
 
 export interface ScheduleParams {

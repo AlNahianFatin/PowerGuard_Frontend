@@ -10,7 +10,7 @@ export const operatorRoutes = [
       },
       {
         title: "All Technicians",
-        url: `${prefix}/approve-technician`,
+        url: `${prefix}/all-technicians`,
       },
       {
         title: "All Schedules",
