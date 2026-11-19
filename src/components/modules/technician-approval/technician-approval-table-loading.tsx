@@ -41,10 +41,10 @@ export default function TechnicianApprovalTableLoading({ role = "OPERATOR" }: { 
               {
                 role === "ADMIN" ?
                   <TableCell colSpan={12}>
-                    <Skeleton className="h-5 w-full" />
+                    <Skeleton className="h-7 w-full" />
                   </TableCell> :
                   <TableCell colSpan={11}>
-                    <Skeleton className="h-5 w-full" />
+                    <Skeleton className="h-7 w-full" />
                   </TableCell>
               }
             </TableRow>

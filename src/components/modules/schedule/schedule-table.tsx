@@ -13,6 +13,7 @@ import ScheduleActions from "./schedule-actions";
 import type { Dispatch, SetStateAction } from "react";
 import TablePagination from "@/components/ui/table-pagination";
 import { SearchX } from "lucide-react";
+import Link from "next/link";
 
 interface Props extends ScheduleParams {
   handlePageChange: Dispatch<SetStateAction<number>>;
@@ -49,9 +50,9 @@ export default function ScheduleTable({ handlePageChange,
             <TableRow className="bg-gray-200/70 hover:bg-transparent">
               <TableHead className="text-center min-w-38">Starting Date & Time</TableHead>
               <TableHead className="text-center min-w-38">Ending Date & Time</TableHead>
+              <TableHead className="text-center min-w-27">Created by</TableHead>
               <TableHead className="text-center min-w-10">Reason</TableHead>
               <TableHead className="text-center">Status</TableHead>
-              {/* <TableHead>Created On</TableHead> */}
               <TableHead className="text-center min-w-30">Feeder</TableHead>
               <TableHead className="text-center">Deleted</TableHead>
               <TableHead className="text-center min-w-27">Deleted by</TableHead>
@@ -97,6 +98,10 @@ export default function ScheduleTable({ handlePageChange,
                       {new Date(schedule.endDateTime).toLocaleString()}
                     </TableCell>
 
+                    <TableCell className="max-w-60 overflow-x-auto">
+                      <Link href={"/"} className="hover:text-primary underline">{schedule.createdByUser.name}</Link>
+                    </TableCell>
+
                     <TableCell className="overflow-x-auto max-w-60">
                       {schedule.reason}
                     </TableCell>
@@ -138,8 +143,12 @@ export default function ScheduleTable({ handlePageChange,
                       </span>
                     </TableCell>
 
-                    <TableCell>
-                      {schedule.deletedByUser?.name || "-"}
+                    <TableCell className="max-w-60 overflow-x-auto">
+                      {
+                        schedule.deletedByUser?.name ?
+                          <Link href={"/"} className="hover:text-primary underline">{schedule.deletedByUser.name}</Link> :
+                          "-"
+                      }
                     </TableCell>
 
                     <TableCell className="text-right">
@@ -153,7 +162,7 @@ export default function ScheduleTable({ handlePageChange,
 
         </Table>
       </div>
-      
+
       {
         totalPages > 1 && (
           <div className="my-5">
