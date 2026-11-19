@@ -2,7 +2,7 @@ const prefix = "/technician";
 
 export const technicianRoutes = [
   {
-    title: "Schedule",
+    title: "Service",
     items: [
       {
         title: "Overview",

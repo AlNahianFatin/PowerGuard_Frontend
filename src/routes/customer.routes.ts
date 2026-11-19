@@ -2,14 +2,14 @@ const prefix = "/customer";
 
 export const customerRoutes = [
   {
-    title: "Bookings",
+    title: "Service",
     items: [
       {
         title: "Overview",
         url: `${prefix}`,
       },
       {
-        title: "Submit Request",
+        title: "Submit Service Request",
         url: `${prefix}/submit-request`,
       },
     ],

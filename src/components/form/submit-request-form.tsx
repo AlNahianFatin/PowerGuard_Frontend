@@ -1,10 +1,8 @@
 "use client";
 
 import { useForm } from "@tanstack/react-form";
-import { MapPin, User } from "lucide-react";
 import { useEffect } from "react";
 import type z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -20,13 +18,13 @@ import { toast } from "../ui/toast";
 import { submitRequestValidationSchema } from "@/validation/service-request.validation";
 import { useSubmitRequest } from "@/hooks/service-request.hook";
 import { useGetAllAreas } from "@/hooks";
-import type { Area } from "@/types";
+import AreaSelector from "../modules/area/area-selector-table";
 
 export function SubmitRequestForm() {
   const {
     data,
     isPending: areasLoading,
-    isError: areasError,
+    isError: areasError
   } = useGetAllAreas();
 
   const areas = data?.data ?? [];
@@ -145,8 +143,6 @@ export function SubmitRequestForm() {
                   </FieldLabel>
 
                   <div className="relative">
-                    <User className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-
                     <Input
                       id={field.name}
                       name={field.name}
@@ -159,7 +155,6 @@ export function SubmitRequestForm() {
                       }
                       aria-invalid={isInvalid}
                       autoComplete="off"
-                      className="pl-9"
                     />
                   </div>
 
@@ -212,56 +207,19 @@ export function SubmitRequestForm() {
             }}
           </form.Field>
 
-          {/* Area Selection */}
           <form.Field name="areaId">
-            {(field) => {
-              const isInvalid =
-                field.state.meta.isTouched &&
-                !field.state.meta.isValid;
-
-              return (
-                <Field data-invalid={isInvalid}>
-                  <FieldLabel htmlFor={field.name}>
-                    Area
-                  </FieldLabel>
-
-                  <div className="relative">
-                    <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-
-                    <select
-                      id={field.name}
-                      name={field.name}
-                      value={field.state.value}
-                      onBlur={field.handleBlur}
-                      onChange={(event) =>
-                        field.handleChange(event.target.value)
-                      }
-                      disabled={areasLoading || areas.length === 0}
-                      aria-invalid={isInvalid}
-                      className="flex h-9 w-full rounded-md border border-input bg-transparent py-1 pl-9 pr-3 text-sm shadow-xs outline-none transition-colors focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50"
-                    >
-                      <option value="" disabled>
-                        {areasLoading
-                          ? "Loading areas..."
-                          : areas.length === 0
-                            ? "No areas available"
-                            : "Select your area"}
-                      </option>
-
-                      {areas.map((area: Area) => (
-                        <option key={area.id} value={area.id}>
-                          {area.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  {isInvalid && (
-                    <FieldError errors={field.state.meta.errors} />
-                  )}
-                </Field>
-              );
-            }}
+            {(field) => (
+              <AreaSelector
+                areas={areas}
+                value={field.state.value}
+                onSelect={field.handleChange}
+                onBlur={field.handleBlur}
+                errors={field.state.meta.errors.map((error) => ({
+                  message:
+                    typeof error === "string" ? error : error?.message,
+                }))}
+              />
+            )}
           </form.Field>
 
           <Button

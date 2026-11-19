@@ -268,36 +268,6 @@ export default function CreateScheduleForm({
           }}
         </form.Field>
 
-        {/* <form.Field name="feederId">
-          {(field) => {
-            const isInvalid =
-              field.state.meta.isTouched && !field.state.meta.isValid;
-
-            return (
-              <Field data-invalid={isInvalid}>
-                <FieldLabel htmlFor={field.name}>
-                  Feeder ID
-                </FieldLabel>
-
-                <Input
-                  id={field.name}
-                  name={field.name}
-                  value={field.state.value}
-                  onChange={(event) =>
-                    field.handleChange(event.target.value)
-                  }
-                  onBlur={field.handleBlur}
-                  autoComplete="off"
-                  aria-invalid={isInvalid}
-                />
-
-                {isInvalid && (
-                  <FieldError errors={field.state.meta.errors} />
-                )}
-              </Field>
-            );
-          }}
-        </form.Field> */}
         <form.Field name="feederId">
           {(field) => (
             <FeederSelector

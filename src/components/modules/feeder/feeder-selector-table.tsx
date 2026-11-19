@@ -13,7 +13,6 @@ import {
 } from "@/components/ui/table";
 import { useState } from "react";
 import type { Feeder } from "@/types";
-// import { Field } from "@tanstack/react-form";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -137,7 +136,7 @@ export default function FeederSelector({
                   colSpan={3}
                   className="h-24 text-center text-muted-foreground"
                 >
-                  No feeders found.
+                  No feeder found.
                 </TableCell>
               </TableRow>
             )}
