@@ -10,10 +10,10 @@ import {
 import { useSuspenseAllSchedules } from "@/hooks";
 import type { ScheduleParams } from "@/types";
 import ScheduleActions from "./schedule-actions";
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
 import TablePagination from "@/components/ui/table-pagination";
 import { SearchX } from "lucide-react";
-import Link from "next/link";
+import ScheduleUserDetailSheet from "./schedule-user-detail-sheet";
 
 interface Props extends ScheduleParams {
   handlePageChange: Dispatch<SetStateAction<number>>;
@@ -28,6 +28,9 @@ interface Props extends ScheduleParams {
 
 export default function ScheduleTable({ handlePageChange,
   ...params }: Props) {
+  const [userDetailOpen, setUserDetailOpen] = useState(false);
+  const [isCreator, setIsCreator] = useState(false);
+
   const { data } = useSuspenseAllSchedules(params);
 
   const schedules = data?.data || [];
@@ -99,7 +102,11 @@ export default function ScheduleTable({ handlePageChange,
                     </TableCell>
 
                     <TableCell className="max-w-60 overflow-x-auto">
-                      <Link href={"/"} className="hover:text-primary underline">{schedule.createdByUser.name}</Link>
+                      <Button className="font-normal p-0 m-0 bg-transparent text-muted-foreground underline hover:bg-transparent" onClick={() => {
+                        setIsCreator(true); setUserDetailOpen(true);
+                      }}>
+                        {schedule.createdByUser.name}
+                      </Button>
                     </TableCell>
 
                     <TableCell className="overflow-x-auto max-w-60">
@@ -146,7 +153,11 @@ export default function ScheduleTable({ handlePageChange,
                     <TableCell className="max-w-60 overflow-x-auto">
                       {
                         schedule.deletedByUser?.name ?
-                          <Link href={"/"} className="hover:text-primary underline">{schedule.deletedByUser.name}</Link> :
+                          <Button className="font-normal p-0 m-0 bg-transparent text-muted-foreground underline hover:bg-transparent" onClick={() => {
+                            setIsCreator(false); setUserDetailOpen(true);
+                          }}>
+                            {schedule.createdByUser.name}
+                          </Button> :
                           "-"
                       }
                     </TableCell>
@@ -154,6 +165,13 @@ export default function ScheduleTable({ handlePageChange,
                     <TableCell className="text-right">
                       <ScheduleActions schedule={schedule} />
                     </TableCell>
+
+                    <ScheduleUserDetailSheet
+                      user={!isCreator && schedule.deletedByUser ? schedule.deletedByUser : schedule.createdByUser}
+                      isCreator={isCreator}
+                      open={userDetailOpen}
+                      onClose={() => setUserDetailOpen(false)}
+                    />
                   </TableRow>
                 ))
               )

@@ -117,7 +117,7 @@ export default function TechnicianApprovalTable({
                   </TableCell>
 
                   <TableCell className="text-center text-muted-foreground">
-                    {technician.contactNumber ?? "-"}
+                    {technician.contactNumber || "-"}
                   </TableCell>
 
                   <TableCell className="text-center text-muted-foreground">
@@ -137,7 +137,7 @@ export default function TechnicianApprovalTable({
                   </TableCell>
 
                   <TableCell className="text-muted-foreground overflow-auto">
-                    {technician.rejectionReason ?? "-"}
+                    {technician.rejectionReason || "-"}
                   </TableCell>
 
                   <TableCell className="text-muted-foreground">

@@ -8,7 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import type { Role, Schedule } from "@/types";
+import type { Schedule } from "@/types";
 
 interface Props {
   schedule: Schedule;
