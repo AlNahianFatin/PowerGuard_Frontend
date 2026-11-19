@@ -300,7 +300,7 @@ export default function TechnicianApplyForm() {
                                             id={field.name}
                                             name={field.name}
                                             rows={4}
-                                            placeholder="Share your background, areas of interest and patient care philosophy..."
+                                            placeholder="Share your background, areas of interest or anything you want to share publicly..."
                                             value={field.state.value}
                                             onBlur={field.handleBlur}
                                             onChange={(e) => field.handleChange(e.target.value)}

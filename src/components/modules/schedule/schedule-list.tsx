@@ -3,13 +3,13 @@
 import { type ChangeEvent, Suspense, useEffect, useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { ScheduleParams, ScheduleStatus } from "@/types";
-import ScheduleListLoading from "./schedule-list-loading";
 import ScheduleTable from "./schedule-table";
 import ScheduleCreateDialog from "./schedule-create-dialog";
 import useDebounce from "@/hooks/debounce.hook";
 import { Input } from "@/components/ui/input";
 import { useGetAllFeeders } from "@/hooks";
 import { toast } from "@/components/ui/toast";
+import ScheduleTableLoading from "./schedule-table-loading";
 
 const statuses: ["ALL" | ScheduleStatus, string][] = [
   ["ALL", "All"],
@@ -84,7 +84,7 @@ export default function ScheduleList() {
         <ScheduleCreateDialog feeders={feeders} />
       </div>
 
-      <Suspense fallback={<ScheduleListLoading />}>
+      <Suspense fallback={<ScheduleTableLoading />}>
         <ScheduleTable {...queryParams} handlePageChange={setPage} />
       </Suspense>
     </>

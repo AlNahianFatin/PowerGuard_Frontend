@@ -1,5 +1,8 @@
+"use client";
+
 import { SearchX } from "lucide-react";
-import type { Dispatch, SetStateAction } from "react";
+import { useState, type Dispatch, type SetStateAction } from "react";
+
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -11,8 +14,8 @@ import {
 } from "@/components/ui/table";
 import TablePagination from "@/components/ui/table-pagination";
 import { useSuspenseGetAllTechnicians } from "@/hooks";
-import type { Role, Technician, TechnicianParams } from "@/types";
-import Link from "next/link";
+import type { Role, Technician, TechnicianParams, User } from "@/types";
+import TechnicianApprovalUserDetailSheet from "./technician-approval-user-detail-sheet";
 
 interface Props extends TechnicianParams {
   role?: Role;
@@ -26,11 +29,19 @@ export default function TechnicianApprovalTable({
   handlePageChange,
   ...params
 }: Props) {
+  const [userDetailOpen, setUserDetailOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+
   const { data } = useSuspenseGetAllTechnicians(params);
 
   const technicians = data?.data ?? [];
   const totalPages = data?.meta?.totalPages ?? 0;
   const isEmpty = technicians.length === 0;
+
+  const handleUserClick = (user: User) => {
+    setSelectedUser(user);
+    setUserDetailOpen(true);
+  };
 
   return (
     <>
@@ -38,61 +49,53 @@ export default function TechnicianApprovalTable({
         <Table>
           <TableHeader>
             <TableRow className="bg-gray-200/70 hover:bg-transparent">
-              <TableHead className="text-center min-w-60">Name</TableHead>
-              <TableHead className="text-center min-w-60">Email</TableHead>
-              <TableHead className="text-center min-w-20">Address</TableHead>
+              <TableHead className="min-w-60 text-center">Name</TableHead>
+              <TableHead className="min-w-60 text-center">Email</TableHead>
+              <TableHead className="min-w-20 text-center">Address</TableHead>
               <TableHead className="text-center">Availability</TableHead>
               <TableHead className="text-center">Experience (in years)</TableHead>
-              <TableHead className="text-center min-w-25">Contact No.</TableHead>
-              <TableHead className="text-center min-w-38">Applied on</TableHead>
+              <TableHead className="min-w-25 text-center">Contact No.</TableHead>
+              <TableHead className="min-w-38 text-center">Applied on</TableHead>
               <TableHead className="text-center">Verification Status</TableHead>
-              <TableHead className="text-center min-w-40">Rejection Reason</TableHead>
-              <TableHead className="text-center min-w-60">Reviewed By</TableHead>
-              <TableHead className="text-center min-w-38">Reviewed on</TableHead>
-              {
-                role === "ADMIN" &&
+              <TableHead className="min-w-40 text-center">Rejection Reason</TableHead>
+              <TableHead className="min-w-60 text-center">Reviewed By</TableHead>
+              <TableHead className="min-w-38 text-center">Reviewed on</TableHead>
+
+              {role === "ADMIN" && (
                 <TableHead className="text-right">Action</TableHead>
-              }
+              )}
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {isEmpty ? (
               <TableRow className="hover:bg-transparent">
-                <TableCell colSpan={60}>
+                <TableCell colSpan={role === "ADMIN" ? 12 : 11}>
                   <div className="flex flex-col items-center justify-center gap-2 px-6 py-12 text-center">
                     <span className="rounded-full bg-muted p-3">
                       <SearchX className="size-5 text-muted-foreground" />
                     </span>
+
                     <p className="font-medium">No technician found</p>
+
                     <p className="max-w-sm text-sm text-muted-foreground">
                       {params.searchTerm
                         ? `No results for "${params.searchTerm}". Try a different name or email`
-                        : "There are no matching technician for this category yet"}
+                        : "There are no matching technicians for this category yet"}
                     </p>
                   </div>
                 </TableCell>
               </TableRow>
             ) : (
               technicians.map((technician: Technician) => (
-                <TableRow key={technician.id} className="hover:bg-gray-300/30 shadow-lg text-center">
-
-                  <TableCell className="font-medium max-w-60 overflow-x-auto">
-                    <Link href={"/"} className="hover:text-primary underline">{technician.name}</Link>
+                <TableRow
+                  key={technician.id}
+                  className="shadow-lg text-center hover:bg-gray-300/30"
+                >
+                  <TableCell className="max-w-60 overflow-x-auto font-medium">
+                    {technician.name}
                   </TableCell>
 
-                  {/* <TableCell className="text-muted-foreground">
-                    {technician.reviewer ?
-                      <Link href={"/"} className="hover:text-primary underline">{technician.reviewer.name}</Link> : "-"}
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleReview(technician.id)}
-                      disabled={technician.verificationStatus !== "PENDING"}
-                    >
-                      Review
-                    </Button>
-                  </TableCell> */}
                   <TableCell className="max-w-60 overflow-x-auto text-muted-foreground">
                     {technician.email}
                   </TableCell>
@@ -102,12 +105,12 @@ export default function TechnicianApprovalTable({
                   </TableCell>
 
                   <TableCell>
-                    <div className={`outline-2 text-center rounded-4xl p-1
-                    ${technician.status === "AVAILABLE" ?
-                        "outline-emerald-500 text-emerald-800 bg-emerald-500/30" :
-                        "outline-red-400 text-red-700 bg-red-400/30"
-                      }`
-                    }>
+                    <div
+                      className={`rounded-4xl p-1 text-center outline-2 ${technician.status === "AVAILABLE"
+                        ? "outline-emerald-500 bg-emerald-500/30 text-emerald-800"
+                        : "outline-red-400 bg-red-400/30 text-red-700"
+                        }`}
+                    >
                       {technician.status}
                     </div>
                   </TableCell>
@@ -125,62 +128,70 @@ export default function TechnicianApprovalTable({
                   </TableCell>
 
                   <TableCell>
-                    <div className={`outline-2 text-center rounded-4xl p-1
-                    ${technician.verificationStatus === "APPROVED" ?
-                        "outline-emerald-500 text-emerald-800 bg-emerald-500/30" :
-                        technician.verificationStatus === "REJECTED" ?
-                          "outline-red-400 text-red-700 bg-red-400/30" :
-                          "outline-amber-500 text-amber-900 bg-amber-500/30"
-                      }`
-                    }>{technician.verificationStatus}
+                    <div
+                      className={`rounded-4xl p-1 text-center outline-2 ${technician.verificationStatus === "APPROVED"
+                        ? "outline-emerald-500 bg-emerald-500/30 text-emerald-800"
+                        : technician.verificationStatus === "REJECTED"
+                          ? "outline-red-400 bg-red-400/30 text-red-700"
+                          : "outline-amber-500 bg-amber-500/30 text-amber-900"
+                        }`}
+                    >
+                      {technician.verificationStatus}
                     </div>
                   </TableCell>
 
-                  <TableCell className="text-muted-foreground overflow-auto">
+                  <TableCell className="overflow-auto text-muted-foreground">
                     {technician.rejectionReason || "-"}
                   </TableCell>
 
                   <TableCell className="text-muted-foreground">
-                    {technician.reviewer ?
-                      <Link href={"/"} className="hover:text-primary underline">{technician.reviewer.name}</Link> : "-"}
+                    {technician.reviewer ? (
+                      <Button
+                        variant="link"
+                        className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
+                        onClick={() =>
+                          handleUserClick(technician.reviewer as User)
+                        }
+                      >
+                        {technician.reviewer.name}
+                      </Button>
+                    ) : (
+                      "-"
+                    )}
                   </TableCell>
 
                   <TableCell className="text-muted-foreground">
-                    {technician.reviewedAt ?
-                      new Date(technician.reviewedAt).toLocaleString() :
-                      "-"
-                    }
+                    {technician.reviewedAt
+                      ? new Date(technician.reviewedAt).toLocaleString()
+                      : "-"}
                   </TableCell>
 
-                  {
-                    role === "ADMIN" && (
-                      <TableCell className="text-right" >
-                        {
-                          technician.user.emailVerified ? (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleReview(technician.id)}
-                              disabled={technician.verificationStatus !== "PENDING"}
-                            >
-                              Review
-                            </Button>
-                          ) : (
-                            <Button disabled variant="outline" size="sm">
-                              Not Verified
-                            </Button>
-                          )
-                        }
-                      </TableCell>
-                    )
-                  }
+                  {role === "ADMIN" && (
+                    <TableCell className="text-right">
+                      {technician.user.emailVerified ? (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleReview(technician.id)}
+                          disabled={
+                            technician.verificationStatus !== "PENDING"
+                          }
+                        >
+                          Review
+                        </Button>
+                      ) : (
+                        <Button disabled variant="outline" size="sm">
+                          Not Verified
+                        </Button>
+                      )}
+                    </TableCell>
+                  )}
                 </TableRow>
               ))
             )}
           </TableBody>
-
-        </Table >
-      </div >
+        </Table>
+      </div>
 
       {totalPages > 1 && (
         <div className="my-5">
@@ -189,10 +200,17 @@ export default function TechnicianApprovalTable({
             totalPages={totalPages}
             handlePageChange={handlePageChange}
           />
-
         </div>
-      )
-      }
+      )}
+
+      {/* Render one sheet for the selected user */}
+      {selectedUser && (
+        <TechnicianApprovalUserDetailSheet
+          user={selectedUser}
+          open={userDetailOpen}
+          onClose={() => setUserDetailOpen(false)}
+        />
+      )}
     </>
   );
 }

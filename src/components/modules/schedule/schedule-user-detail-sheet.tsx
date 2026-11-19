@@ -29,7 +29,7 @@ export default function ScheduleUserDetailSheet({
         <SheetHeader>
           <SheetTitle className="text-center">
             {
-              isCreator ? "Schedule Creator Details" : "Schedule Deletor Details"
+              isCreator ? "Schedule Creator Details" : "Schedule Deleter Details"
             }
           </SheetTitle>
           {/* <SheetDescription className="text-center">

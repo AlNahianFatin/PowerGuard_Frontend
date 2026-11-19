@@ -1,7 +1,9 @@
 import {
   BadgeCheck,
   Briefcase,
+  FileText,
   Mail,
+  MapPin,
   Phone,
   ShieldCheck,
   User,
@@ -59,6 +61,13 @@ export default function TechnicianReviewSheet({
     verify(reviewData, {
       // biome-ignore lint/suspicious/noExplicitAny: <sdf>
       onSuccess: (res: any) => {
+        if (!res.success) {
+          toast.add({
+            title: "Technician application management failure",
+            description: res.data?.message || res?.message || "Something went wrong. Please try again",
+            type: "failure",
+          });
+        }
         toast.add({
           title: "Technician application managed",
           description: res?.message || `Application ${status.toLowerCase()} successfully`,
@@ -86,17 +95,17 @@ export default function TechnicianReviewSheet({
     return null;
   }
 
-  const detailRow = (label: string, value?: string | number | null, children?: ReactNode) => (
-    <div className="flex items-start justify-between gap-4 text-sm">
-      <div className="flex shrink-0 text-muted-foreground gap-3">
-        {children}
-        <span className="text-muted-foreground">{label}</span>
-      </div>
-      <span className="text-right font-medium wrap-break-words">
-        {value || <span className="font-normal text-muted-foreground">—</span>}
-      </span>
-    </div>
-  );
+  // const detailRow = (label: string, value?: string | number | null, children?: ReactNode) => (
+  //   <div className="flex items-start justify-between gap-4 text-sm">
+  //     <div className="flex shrink-0 text-muted-foreground gap-3">
+  //       {children}
+  //       <span className="text-muted-foreground">{label}</span>
+  //     </div>
+  //     <span className="text-right font-medium wrap-break-words">
+  //       {value || <span className="font-normal text-muted-foreground">—</span>}
+  //     </span>
+  //   </div>
+  // );
 
   return (
     <Sheet open={!!selectedId} onOpenChange={handleClose}>
@@ -137,6 +146,11 @@ export default function TechnicianReviewSheet({
             </div>
 
             <div className="flex items-center gap-2 text-sm">
+              <MapPin className="size-4 shrink-0 text-muted-foreground" />
+              <span>{selectedTechnician.address || "—"}</span>
+            </div>
+
+            <div className="flex items-center gap-2 text-sm">
               <Phone className="size-4 shrink-0 text-muted-foreground" />
               <span>{selectedTechnician.contactNumber || "—"}</span>
             </div>
@@ -150,19 +164,10 @@ export default function TechnicianReviewSheet({
             </p>
             {/* {detailRow("License no.", selectedTechnician.licenseNumber)}
             {detailRow("Qualifications", selectedTechnician.qualifications)} */}
-            {detailRow(
-              "Experience",
-              selectedTechnician.experienceYears != null
-                ? `${selectedTechnician.experienceYears} years`
-                : 0,
-              <Briefcase className="size-5" />
-            )}
-            {/* {detailRow(
-              "Bio",
-              selectedTechnician.bio != null
-                ? `${selectedTechnician.bio}`
-                : "—",
-            )} */}
+            <div className="flex items-center gap-2 text-sm">
+              <Briefcase className="size-4 shrink-0 text-muted-foreground" />
+              <span>{selectedTechnician.experienceYears || 0}&nbsp;years</span>
+            </div>
           </div>
 
           {selectedTechnician.bio && (
@@ -172,9 +177,12 @@ export default function TechnicianReviewSheet({
                 <p className="text-xs font-semibold tracking-wide uppercase">
                   Bio
                 </p>
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  {selectedTechnician.bio}
-                </p>
+
+                <div className="flex items-center gap-1 text-sm overflow-visible">
+                  <FileText className="size-4 shrink-0 text-muted-foreground" />
+                  <span title={selectedTechnician.bio}></span>
+                  <dd>{selectedTechnician.bio || "—"}</dd>
+                </div>
               </div>
             </>
           )}

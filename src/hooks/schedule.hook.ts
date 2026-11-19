@@ -40,14 +40,14 @@ export function useSuspenseAllSchedules(params: ScheduleParams) {
 
 export function useMySchedules(params: ScheduleParams) {
   return useQuery({
-    queryKey: ["schedules", params],
+    queryKey: ["my-schedules", params],
     queryFn: () => getMySchedules(params),
   });
 }
 
 export function useSuspenseMySchedules(params: ScheduleParams) {
   return useSuspenseQuery({
-    queryKey: ["schedules", params],
+    queryKey: ["my-schedules", params],
     queryFn: () => getMySchedules(params),
   });
 }
