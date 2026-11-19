@@ -14,14 +14,12 @@ interface Props {
   schedule: Schedule;
   open: boolean;
   onClose: () => void;
-  role?: Role;
 }
 
 export default function ScheduleDetailSheet({
   schedule,
   open,
   onClose,
-  role = "OPERATOR"
 }: Props) {
   return (
     <Sheet open={open} onOpenChange={onClose}>
@@ -94,10 +92,10 @@ export default function ScheduleDetailSheet({
           </div>
 
           {
-            role === "ADMIN" && schedule.isDeleted &&
+            schedule.isDeleted &&
             <>
               <FieldSeparator />
-              
+
               <div className="flex justify-between gap-4">
                 <dt className="text-muted-foreground">Deleted by</dt>
                 <dd className="truncate">

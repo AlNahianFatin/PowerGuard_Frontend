@@ -1,11 +1,35 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function ScheduleListLoading() {
   return (
-    <div className="flex flex-col gap-2">
-      {[1, 2, 3, 4, 5].map((item) => (
-        <Skeleton key={item} className="h-14 w-full" />
-      ))}
+    <div className="overflow-hidden rounded-lg border bg-card">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-gray-200/70 hover:bg-transparent">
+            <TableHead className="text-center min-w-38">Starting Date & Time</TableHead>
+            <TableHead className="text-center min-w-38">Ending Date & Time</TableHead>
+            <TableHead className="text-center min-w-10">Reason</TableHead>
+            <TableHead className="text-center">Status</TableHead>
+            {/* <TableHead>Created On</TableHead> */}
+            <TableHead className="text-center min-w-30">Feeder</TableHead>
+            <TableHead className="text-center">Deleted</TableHead>
+            <TableHead className="text-center min-w-27">Deleted by</TableHead>
+            <TableHead className="text-right">Action</TableHead>
+          </TableRow>
+        </TableHeader>
+
+        <TableBody>
+          {[1, 2, 3].map((item) => (
+            <TableRow key={item}>
+              <TableCell colSpan={8}>
+                <Skeleton className="h-5 w-full" />
+              </TableCell> 
+            </TableRow>
+          ))}
+        </TableBody>
+
+      </Table>
     </div>
   );
 }

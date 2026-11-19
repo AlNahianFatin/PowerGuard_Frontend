@@ -84,7 +84,7 @@ export function RegisterForm() {
 
           toast.add({
             title: "Registration Successful",
-            description: res.data?.message || res.message || "Please verify your account",
+            description: res.message || "Please verify your account",
             type: "success",
           });
           const params = new URLSearchParams({ email: registrationData.email });

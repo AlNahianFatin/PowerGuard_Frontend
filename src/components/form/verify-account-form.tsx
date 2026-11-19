@@ -110,7 +110,7 @@ export default function VerifyAccountForm({
       verifyMutation(verifyData, {
         // biome-ignore lint/suspicious/noExplicitAny: API response
         onSuccess: (res: any) => {
-          if (res?.success === false) {
+          if (!res?.success) {
             toast.add({
               title: "Verification Failed",
               description:

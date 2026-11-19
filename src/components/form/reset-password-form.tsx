@@ -113,7 +113,7 @@ export default function ResetPasswordForm() {
         {
           // biome-ignore lint/suspicious/noExplicitAny: <f>
           onSuccess: (res: any) => {
-            if (res?.success === false) {
+            if (!res?.success) {
               toast.add({
                 title: "Password Reset Failed",
                 description:

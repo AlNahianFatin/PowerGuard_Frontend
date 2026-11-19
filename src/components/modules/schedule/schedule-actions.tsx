@@ -14,7 +14,7 @@ export default function ScheduleActions({ schedule }: { schedule: Schedule }) {
   const { mutate: publish, isPending: publishPending } = usePublishSchedule();
   const { mutate: remove, isPending: deletePending } = useDeleteSchedule();
 
-  const locked = schedule.status === "PUBLISHED";
+  const locked = schedule.status === "PUBLISHED" || schedule.isDeleted;
 
   const handlePublish = () => {
     publish(schedule.id, {
@@ -22,21 +22,22 @@ export default function ScheduleActions({ schedule }: { schedule: Schedule }) {
         if (!res.success) {
           toast.add({
             title: "Server Failure",
-            description: "Something went wrong. Please try again",
+            description: res.data?.message || res.message || "Something went wrong. Please try again",
             type: "error",
           });
           return;
         }
         toast.add({
           title: "Schedule Published",
-          description: "Patients can now book slots",
+          description: res.message || "Officially published the outage schedule",
           type: "success",
         });
       },
-      onError: (err) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <fg>
+      onError: (err: any) => {
         toast.add({
           title: "Publish failed",
-          description: err.message || "Something went wrong. Please try again",
+          description: err.data?.message || "Something went wrong. Please try again",
           type: "error",
         });
       },
@@ -49,22 +50,24 @@ export default function ScheduleActions({ schedule }: { schedule: Schedule }) {
         if (!res.success) {
           toast.add({
             title: "Server Failure",
-            description: "Something went wrong. Please try again",
+            description: res.data?.message || res.message || "Something went wrong. Please try again",
             type: "error",
           });
           return;
         }
         toast.add({
           title: "Schedule Deleted",
-          description: "Schedule removed successfully",
+          description: res.message || "Schedule removed successfully",
           type: "success",
         });
         setConfirmDelete(false);
       },
-      onError: (err) => {
+
+      // biome-ignore lint/suspicious/noExplicitAny: <dfg>
+      onError: (err: any) => {
         toast.add({
           title: "Delete failed",
-          description: err.message || "Something went wrong. Please try again",
+          description: err.data?.message || "Something went wrong. Please try again",
           type: "error",
         });
       },
@@ -81,6 +84,7 @@ export default function ScheduleActions({ schedule }: { schedule: Schedule }) {
         >
           Cancel
         </Button>
+
         <Button
           variant="destructive"
           size="sm"
@@ -99,11 +103,13 @@ export default function ScheduleActions({ schedule }: { schedule: Schedule }) {
         <Button variant="outline" size="sm" onClick={() => setDetailOpen(true)}>
           View
         </Button>
-        {schedule.status === "DRAFT" && (
+
+        {schedule.status === "DRAFT" && !schedule.isDeleted && (
           <Button size="sm" onClick={handlePublish} disabled={publishPending}>
             Publish
           </Button>
         )}
+
         {!locked && (
           <Button
             variant="destructive"
@@ -114,6 +120,7 @@ export default function ScheduleActions({ schedule }: { schedule: Schedule }) {
           </Button>
         )}
       </div>
+
       <ScheduleDetailSheet
         schedule={schedule}
         open={detailOpen}

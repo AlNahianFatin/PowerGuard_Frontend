@@ -78,7 +78,6 @@ export function SubmitRequestForm() {
             toast.add({
               title: "Submit Successful",
               description:
-                res.data?.message ||
                 res.message ||
                 "Successfully submitted your service request.",
               type: "success",
@@ -93,7 +92,6 @@ export function SubmitRequestForm() {
               title: "Submit Failure",
               description:
                 err.data?.message ||
-                err.message ||
                 "Something went wrong. Please try again.",
               type: "error",
             });

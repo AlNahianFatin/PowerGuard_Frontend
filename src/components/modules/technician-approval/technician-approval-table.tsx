@@ -55,6 +55,7 @@ export default function TechnicianApprovalTable({
               }
             </TableRow>
           </TableHeader>
+
           <TableBody>
             {isEmpty ? (
               <TableRow className="hover:bg-transparent">
@@ -177,8 +178,10 @@ export default function TechnicianApprovalTable({
               ))
             )}
           </TableBody>
+
         </Table >
       </div >
+
       {totalPages > 1 && (
         <div className="my-5">
           <TablePagination
@@ -186,6 +189,7 @@ export default function TechnicianApprovalTable({
             totalPages={totalPages}
             handlePageChange={handlePageChange}
           />
+
         </div>
       )
       }

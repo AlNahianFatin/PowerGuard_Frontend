@@ -96,7 +96,6 @@ export default function TechnicianApplyForm() {
                 {
                     // biome-ignore lint/suspicious/noExplicitAny: <asf>
                     onSuccess: (res: any) => {
-                        console.log("---------------------", res)
                         if (!res.success) {
                             toast.add({
                                 title: "Server Failure",

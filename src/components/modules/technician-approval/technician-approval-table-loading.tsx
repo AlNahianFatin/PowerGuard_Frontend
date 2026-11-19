@@ -13,7 +13,7 @@ import type { Role } from "@/types";
 
 export default function TechnicianApprovalTableLoading({ role = "OPERATOR" }: { role?: Role }) {
   return (
-    <div className="border rounded-lg">
+    <div className="overflow-hidden rounded-lg border bg-card">
       <Table>
         <TableHeader>
           <TableRow className="bg-gray-200/70 hover:bg-transparent">
@@ -34,6 +34,7 @@ export default function TechnicianApprovalTableLoading({ role = "OPERATOR" }: { 
             }
           </TableRow>
         </TableHeader>
+
         <TableBody>
           {[1, 2, 3].map((item) => (
             <TableRow key={item}>
@@ -49,6 +50,7 @@ export default function TechnicianApprovalTableLoading({ role = "OPERATOR" }: { 
             </TableRow>
           ))}
         </TableBody>
+        
       </Table>
     </div>
   );
