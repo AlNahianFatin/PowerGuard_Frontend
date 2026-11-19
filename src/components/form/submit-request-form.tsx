@@ -15,7 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "../ui/toast";
 
-import { submitRequestValidationSchema } from "@/validation/service-request.validation";
+import { submitRequestSchema } from "@/validation/service-request.validation";
 import { useSubmitRequest } from "@/hooks/service-request.hook";
 import { useGetAllAreas } from "@/hooks";
 import AreaSelector from "../modules/area/area-selector-table";
@@ -39,7 +39,7 @@ export function SubmitRequestForm() {
     isPending: submitRequestPending,
   } = useSubmitRequest();
 
-  const defaultValues: z.infer<typeof submitRequestValidationSchema> = {
+  const defaultValues: z.infer<typeof submitRequestSchema> = {
     title: "",
     areaId: "",
     description: "",
@@ -48,8 +48,8 @@ export function SubmitRequestForm() {
   const form = useForm({
     defaultValues,
     validators: {
-      onChange: submitRequestValidationSchema,
-      onSubmit: submitRequestValidationSchema,
+      onChange: submitRequestSchema,
+      onSubmit: submitRequestSchema,
     },
     onSubmit: async ({ value }) => {
       submitRequest(
