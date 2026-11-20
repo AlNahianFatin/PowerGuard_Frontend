@@ -2,6 +2,7 @@ import {
   applyAsTechnician,
   approveTechnician,
   getAllTechnicians,
+  getAvailableTechnicianToday,
   getPublicTechnicianProfile,
   getTechnicianAnalytics,
   verifyTechnicianAccount,
@@ -83,6 +84,20 @@ export function useApproveTechnician() {
 //     queryFn: () => getTodayScheduleByDoctor(params),
 //   });
 // }
+
+export function useGetAvailableTechnicianToday() {
+  return useQuery({
+    queryKey: ["available-technicians"],
+    queryFn: () => getAvailableTechnicianToday(),
+  });
+}
+
+export function useSuspenseGetAvailableTechnicianToday() {
+  return useQuery({
+    queryKey: ["available-technicians"],
+    queryFn: () => getAvailableTechnicianToday(),
+  });
+}
 
 export function useGetTechnicianAnalytics() {
   return useQuery({

@@ -1,14 +1,14 @@
-import MyServiceRequestList from "@/components/modules/my-service-request/my-service-request-list";
+import ServiceRequestList from "@/components/modules/service-request/service-request-list";
 
 export default function SchedulesPage() {
   
   return (
     <section>
       <div>
-        <h1 className="text-2xl">My Service Requests</h1>
+        <h1 className="text-2xl">Service Requests</h1>
         <p>View and manage records of service requests</p>
       </div>
-      {/* <MyServiceRequestList /> */}
+      <ServiceRequestList />
     </section>
   );
 }

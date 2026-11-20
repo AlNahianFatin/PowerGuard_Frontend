@@ -13,7 +13,7 @@ export const adminRoutes = [
         url: `${prefix}/approve-technician`,
       },
       {
-        title: "All Schedules",
+        title: "Schedules",
         url: `${prefix}/schedules`,
       },
       {
@@ -21,7 +21,7 @@ export const adminRoutes = [
         url: `${prefix}/service-requests`,
       },
       {
-        title: "All Assignments",
+        title: "Assignments",
         url: `${prefix}/assignments`,
       },
       {

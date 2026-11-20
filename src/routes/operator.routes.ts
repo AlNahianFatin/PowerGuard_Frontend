@@ -13,7 +13,7 @@ export const operatorRoutes = [
         url: `${prefix}/all-technicians`,
       },
       {
-        title: "All Schedules",
+        title: "Schedules",
         url: `${prefix}/schedules`,
       },
       {
@@ -21,7 +21,7 @@ export const operatorRoutes = [
         url: `${prefix}/service-requests`,
       },
       {
-        title: "All Assignments",
+        title: "Assignments",
         url: `${prefix}/assignments`,
       },
       {

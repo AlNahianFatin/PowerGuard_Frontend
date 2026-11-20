@@ -1,3 +1,4 @@
+export * from "./assignment.validation";
 export * from "./auth.validation";
 export * from "./schedule.validation";
 export * from "./service-request.validation";

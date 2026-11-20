@@ -1,0 +1,96 @@
+"use client";
+
+import { type ChangeEvent, Suspense, useEffect, useState } from "react";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { ServiceRequestParams, ServiceRequestStatus } from "@/types";
+import useDebounce from "@/hooks/debounce.hook";
+import { Input } from "@/components/ui/input";
+import ServiceRequestTable from "./service-request-table";
+import ServiceRequestTableLoading from "./service-request-table-loading";
+import { useSuspenseGetAvailableTechnicianToday } from "@/hooks";
+import { toast } from "@/components/ui/toast";
+
+const statuses: ["ALL" | ServiceRequestStatus, string][] = [
+  ["ALL", "All"], //lime emerald teal cyan sky indigo fuchsia rose slate stone mauve olive
+  ["PENDING", "Pending"],
+  ["ASSIGNED", "Assigned"],
+  ["INSPECTING", "Inspecting"],
+  ["PAYMENTPENDING", "Payment Pending"],
+  ["INPROGRESS", "Inprogress"],
+  ["RESOLVED", "Resolved"],
+  ["FAILED", "Failed"],
+  ["REJECTED", "Rejected"],
+  ["CANCELLED", "Cancelled"],
+];
+
+export default function ServiceRequestList() {
+  const {
+    data,
+    isPending: techniciansLoading,
+    isError: techniciansError,
+  } = useSuspenseGetAvailableTechnicianToday();
+
+  const technicians = data?.data ?? [];
+
+  useEffect(() => {
+    if (techniciansLoading)
+      return;
+  }, [techniciansLoading]);
+
+  useEffect(() => {
+    if (techniciansError) {
+      toast.add({
+        title: "Server Failure",
+        description: "Could not get available areas. Please try again.",
+        type: "error",
+      });
+    }
+  }, [techniciansError]);
+
+  const [tab, setTab] = useState<"ALL" | ServiceRequestStatus>("ALL");
+  const [searchInput, setSearchInput] = useState("");
+  const [page, setPage] = useState(1);
+
+  const debouncedSearch = useDebounce(searchInput);
+
+  const handleSearch = (e: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
+    setSearchInput(e.target.value);
+    setPage(1);
+  };
+
+  const queryParams: ServiceRequestParams = {
+    page,
+    limit: 10,
+    sortBy: "createdAt",
+    sortOrder: "asc",
+    ...(tab === "ALL" ? {} : { status: tab }),
+    ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
+  };
+
+  return (
+    <>
+      <div className="my-5 flex justify-between gap-3">
+        <Input
+          onChange={(e) => handleSearch(e)}
+          type="search"
+          placeholder="Search by title, area or technician name"
+          className="w-70"
+        />
+        <Tabs value={tab} onValueChange={(value) => setTab(value)}>
+          <TabsList>
+            {statuses.map(([value, label]) => (
+              <TabsTrigger key={value} value={value}>
+                {label}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+        </Tabs>
+        {/* <RequestSubmitDialog /> */}
+      </div>
+
+      <Suspense fallback={<ServiceRequestTableLoading />}>
+        <ServiceRequestTable technicians={technicians} {...queryParams} handlePageChange={setPage} />
+      </Suspense>
+    </>
+  );
+}

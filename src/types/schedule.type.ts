@@ -1,7 +1,7 @@
 import type { Feeder } from "./feeder.type";
 import type { User } from "./user.type";
 
-export type ScheduleStatus = "DRAFT" | "PUBLISHED" | "CANCELLED" | "COMPLETED";
+export type ScheduleStatus = "DRAFT" | "PUBLISHED" | "COMPLETED";
 
 export interface Schedule {
   id: string;

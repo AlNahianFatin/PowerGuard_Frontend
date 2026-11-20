@@ -15,7 +15,6 @@ const statuses: ["ALL" | ScheduleStatus, string][] = [
   ["ALL", "All"],
   ["DRAFT", "Draft"],
   ["PUBLISHED", "Published"],
-  ["CANCELLED", "Cancelled"],
   ["COMPLETED", "Completed"]
 ];
 

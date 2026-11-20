@@ -14,7 +14,7 @@ export default function ScheduleActions({ schedule }: { schedule: Schedule }) {
   const { mutate: publish, isPending: publishPending } = usePublishSchedule();
   const { mutate: remove, isPending: deletePending } = useDeleteSchedule();
 
-  const locked = schedule.status === "PUBLISHED" || schedule.isDeleted;
+  const locked = schedule.status === "PUBLISHED" || schedule.status === "COMPLETED" || schedule.isDeleted;
 
   const handlePublish = () => {
     publish(schedule.id, {
@@ -33,6 +33,7 @@ export default function ScheduleActions({ schedule }: { schedule: Schedule }) {
           type: "success",
         });
       },
+      
       // biome-ignore lint/suspicious/noExplicitAny: <fg>
       onError: (err: any) => {
         toast.add({

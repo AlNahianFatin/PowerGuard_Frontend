@@ -1,6 +1,6 @@
 export * from "./admin.hook";
-export * from "./appointment.hook";
 export * from "./area.hook";
+export * from "./assignment.hook";
 export * from "./auth.hook";
 export * from "./customer.hook";
 export * from "./debounce.hook";

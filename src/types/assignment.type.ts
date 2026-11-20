@@ -56,12 +56,28 @@ export interface AssignTechnicianPayload {
   notes?: string;
 }
 
+export interface AssignTechnicianResponse {
+  id: string;
+  notes: string;
+  reportUrl: string;
+  reportPublicId: string;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+  deletedBy: string;
+  deletedAt: string;
+  assigneeId: string;
+  technicianId: string;
+  serviceRequestId: string;
+  technician: Technician;
+}
+
 export interface UpdateAssignmentPayload {
-	technicianId?: string;
-	notes?: string;
+  technicianId?: string;
+  notes?: string;
 }
 
 export interface UpdateAssignmentStatusPayload {
-	status: "INSPECTING" | "RESOLVED" | "FAILED";
-	failureNote?: string;
+  status: "INSPECTING" | "RESOLVED" | "FAILED";
+  failureNote?: string;
 }

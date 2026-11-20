@@ -74,3 +74,9 @@ export function getPublicTechnicianProfile(technicianId: string) {
 export function getTechnicianAnalytics() {
   return apiClient<ApiResponse<TechnicianAnalyticsResponse>>("/analytics/technician-analytics");
 }
+
+export function getAvailableTechnicianToday() {
+  return apiClient<ApiResponse<Technician[]>>(
+    `/technician/available-today`,
+  );
+}

@@ -1,6 +1,6 @@
 export * from "./admin.api";
-export * from "./appointment.api";
 export * from "./area.api";
+export * from "./assignment.api";
 export * from "./auth.api";
 export * from "./customer.api";
 export * from "./feeder.api";
