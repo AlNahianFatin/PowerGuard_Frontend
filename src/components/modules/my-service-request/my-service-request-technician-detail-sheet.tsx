@@ -1,26 +1,22 @@
 "use client";
 
-import { FieldSeparator } from "@/components/ui/field";
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import type { User } from "@/types";
-import { Mail, UserRound, UserShield } from "lucide-react";
+import type { Technician } from "@/types";
+import { Mail, Phone, UserRound } from "lucide-react";
 
 interface Props {
-  user: User;
-  isCreator?: boolean;
+  technician: Technician;
   open: boolean;
   onClose: () => void;
 }
 
-export default function ScheduleUserDetailSheet({
-  user,
-  isCreator = false,
+export default function MyServiceRequestTechnicianDetailSheet({
+  technician,
   open,
   onClose,
 }: Props) {
@@ -29,9 +25,7 @@ export default function ScheduleUserDetailSheet({
       <SheetContent side="right" className="p-3">
         <SheetHeader>
           <SheetTitle className="text-center">
-            {
-              isCreator ? "Schedule Creator Details" : "Schedule Deleter Details"
-            }
+            Technician Details
           </SheetTitle>
           {/* <SheetDescription className="text-center">
             {schedule.reason}
@@ -43,7 +37,7 @@ export default function ScheduleUserDetailSheet({
               <UserRound className="size-5 text-primary" />
             </span>
             <div className="min-w-0">
-              <dd className="truncate font-semibold mt-2">{user.name}</dd>
+              <dd className="truncate font-semibold mt-2">{technician.name}</dd>
               {/* <p className="text-sm text-muted-foreground">
                 {selectedTechnician.specialization}
               </p> */}
@@ -52,14 +46,14 @@ export default function ScheduleUserDetailSheet({
 
           <div className="flex items-center gap-2 text-sm">
             <Mail className="size-4 shrink-0 text-muted-foreground" />
-            <dd className="truncate" title={user.email}>
-              {user.email}
+            <dd className="truncate" title={technician.email}>
+              {technician.email}
             </dd>
           </div>
 
           <div className="flex items-center gap-2 text-sm">
-            <UserShield className="size-4 shrink-0 text-muted-foreground" />
-            <span>{user.role || "—"}</span>
+            <Phone className="size-4 shrink-0 text-muted-foreground" />
+            <span>{technician.contactNumber || "—"}</span>
           </div>
 
         </dl>

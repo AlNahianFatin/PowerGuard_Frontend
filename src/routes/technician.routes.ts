@@ -8,10 +8,10 @@ export const technicianRoutes = [
         title: "Overview",
         url: `${prefix}`,
       },
-      {
-        title: "Create Schedule",
-        url: `${prefix}/schedules`,
-      },
+      // {
+      //   title: "Create Schedule",
+      //   url: `${prefix}/schedules`,
+      // },
       {
         title: "My Assignments",
         url: `${prefix}/my-assignments`,

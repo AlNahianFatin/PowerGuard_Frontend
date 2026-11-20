@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/table";
 import TablePagination from "@/components/ui/table-pagination";
 import { useSuspenseGetMyServiceRequest } from "@/hooks";
-import type { ServiceRequestParams, User } from "@/types";
-// import ScheduleUserDetailSheet from "./schedule-user-detail-sheet";
+import type { ServiceRequestParams, Technician } from "@/types";
 import MyServiceRequestActions from "./my-service-request-actions";
+import MyServiceRequestTechnicianDetailSheet from "./my-service-request-technician-detail-sheet";
+import { Button } from "@/components/ui/button";
 
 interface Props extends ServiceRequestParams {
   handlePageChange: Dispatch<SetStateAction<number>>;
@@ -24,9 +25,8 @@ export default function MyServiceRequestTable({
   handlePageChange,
   ...params
 }: Props) {
-  const [userDetailOpen, setUserDetailOpen] = useState(false);
-  const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  const [isCreator, setIsCreator] = useState(false);
+  const [technicianDetailOpen, setTechnicianDetailOpen] = useState(false);
+  const [selectedTechnician, setSelectedTechnician] = useState<Technician | null>(null);
 
   const { data } = useSuspenseGetMyServiceRequest(params);
 
@@ -34,10 +34,9 @@ export default function MyServiceRequestTable({
   const totalPages = data?.meta?.totalPages ?? 0;
   const isEmpty = requests.length === 0;
 
-  const handleUserClick = (user: User, creator: boolean) => {
-    setSelectedUser(user);
-    setIsCreator(creator);
-    setUserDetailOpen(true);
+  const handleTechnicianClick = (technician: Technician) => {
+    setSelectedTechnician(technician);
+    setTechnicianDetailOpen(true);
   };
 
   return (
@@ -150,7 +149,23 @@ export default function MyServiceRequestTable({
 
                   <TableCell>{request.area.name}</TableCell>
 
-                  <TableCell>{request.assignment?.technician?.name || "-"}</TableCell>
+                  <TableCell>
+                    {(() => {
+                      const technician = request.assignment?.technician;
+
+                      if (!technician) return "-";
+
+                      return (
+                        <Button
+                          variant="link"
+                          className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
+                          onClick={() => handleTechnicianClick(technician)}
+                        >
+                          {technician.name}
+                        </Button>
+                      );
+                    })()}
+                  </TableCell>
 
                   <TableCell className="text-right">
                     <MyServiceRequestActions request={request} />
@@ -172,14 +187,13 @@ export default function MyServiceRequestTable({
         </div>
       )}
 
-      {/* {selectedUser && (
-        <ScheduleUserDetailSheet
-          user={selectedUser}
-          isCreator={isCreator}
-          open={userDetailOpen}
-          onClose={() => setUserDetailOpen(false)}
+      {selectedTechnician && (
+        <MyServiceRequestTechnicianDetailSheet
+          technician={selectedTechnician}
+          open={technicianDetailOpen}
+          onClose={() => setTechnicianDetailOpen(false)}
         />
-      )} */}
+      )}
     </>
   );
 }

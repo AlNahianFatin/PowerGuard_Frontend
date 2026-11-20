@@ -203,7 +203,6 @@ export default function TechnicianApprovalTable({
         </div>
       )}
 
-      {/* Render one sheet for the selected user */}
       {selectedUser && (
         <TechnicianApprovalUserDetailSheet
           user={selectedUser}

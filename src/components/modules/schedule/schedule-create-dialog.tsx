@@ -9,15 +9,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import type { Feeder } from "@/types";
+import { PlusCircle } from "lucide-react";
 import { useState } from "react";
 
-export default function ScheduleCreateDialog({feeders}: {feeders: Feeder[]}) {
+export default function ScheduleCreateDialog({ feeders }: { feeders: Feeder[] }) {
   const [open, setOpen] = useState(false);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger render={<Button size="lg" />}>
-        Create Schedule
+        <PlusCircle />
+        <span>Create Schedule</span>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
