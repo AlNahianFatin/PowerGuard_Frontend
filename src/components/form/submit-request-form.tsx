@@ -20,7 +20,7 @@ import { useSubmitRequest } from "@/hooks/service-request.hook";
 import { useGetAllAreas } from "@/hooks";
 import AreaSelector from "../modules/area/area-selector-table";
 
-export function SubmitRequestForm() {
+export function SubmitRequestForm({ handleClose }: { handleClose: () => void; }) {
   const {
     data,
     isPending: areasLoading,
@@ -33,6 +33,16 @@ export function SubmitRequestForm() {
     if (areasLoading)
       return;
   }, [areasLoading]);
+
+  useEffect(() => {
+    if (areasError) {
+      toast.add({
+        title: "Server Failure",
+        description: "Could not get available areas. Please try again.",
+        type: "error",
+      });
+    }
+  }, [areasError]);
 
   const {
     mutate: submitRequest,
@@ -81,7 +91,7 @@ export function SubmitRequestForm() {
               type: "success",
             });
 
-            form.reset();
+            handleClose();
           },
 
           // biome-ignore lint/suspicious/noExplicitAny: API error
@@ -90,7 +100,7 @@ export function SubmitRequestForm() {
               title: "Submit Failure",
               description:
                 err.data?.message ||
-                "Something went wrong. Please try again.",
+                "Something went wrong. Please try again",
               type: "error",
             });
           },
@@ -98,16 +108,6 @@ export function SubmitRequestForm() {
       );
     },
   });
-
-  useEffect(() => {
-    if (areasError) {
-      toast.add({
-        title: "Server Failure",
-        description: "Could not get available areas. Please try again.",
-        type: "error",
-      });
-    }
-  }, [areasError]);
 
   return (
     <div className="flex flex-col gap-6">

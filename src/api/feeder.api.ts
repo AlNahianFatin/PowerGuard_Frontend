@@ -1,20 +1,14 @@
 import apiClient from "@/lib/apiClient";
 import type {
   ApiResponse,
-  ChangePasswordPayload,
-  ForgotPasswordPayload,
-  LoginPayload,
-  RegistrationPayload,
-  ResendOtpPayload,
-  ResetPasswordPayload,
-  VerifyAccountPayload,
+  Feeder,
 } from "@/types";
 
 // export function getAllAreas() {
 //   return apiClient("/area/all-areas", { method: "POST", body: payload });
 // }
 export function getAllFeeders() {
-  return apiClient<ApiResponse<any>>("/feeder/all-feeders");
+  return apiClient<ApiResponse<Feeder[]>>("/feeder/all-feeders");
 }
 
 // export function userForgotPassword(payload: ForgotPasswordPayload) {

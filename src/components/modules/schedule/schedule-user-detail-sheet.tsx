@@ -9,6 +9,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import type { User } from "@/types";
+import { Mail, UserRound, UserShield } from "lucide-react";
 
 interface Props {
   user: User;
@@ -37,25 +38,28 @@ export default function ScheduleUserDetailSheet({
           </SheetDescription> */}
         </SheetHeader>
         <dl className="mt-4 flex flex-col gap-3 text-sm">
-          <div className="flex justify-between">
-            <dt className="text-muted-foreground">Name</dt>
-            <dd>
-              {user.name}
-            </dd>
+          <div className="flex items-start gap-3">
+            <span className="rounded-full bg-primary/10 p-2.5">
+              <UserRound className="size-5 text-primary" />
+            </span>
+            <div className="min-w-0">
+              <dd className="truncate font-semibold mt-2">{user.name}</dd>
+              {/* <p className="text-sm text-muted-foreground">
+                {selectedTechnician.specialization}
+              </p> */}
+            </div>
           </div>
 
-          <div className="flex justify-between">
-            <dt className="text-muted-foreground">Email</dt>
-            <dd>
+          <div className="flex items-center gap-2 text-sm">
+            <Mail className="size-4 shrink-0 text-muted-foreground" />
+            <dd className="truncate" title={user.email}>
               {user.email}
             </dd>
           </div>
 
-          <div className="flex justify-between">
-            <dt className="text-muted-foreground">Role</dt>
-            <dd>
-              {user.role}
-            </dd>
+          <div className="flex items-center gap-2 text-sm">
+            <UserShield className="size-4 shrink-0 text-muted-foreground" />
+            <span>{user.role || "—"}</span>
           </div>
 
         </dl>

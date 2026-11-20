@@ -9,8 +9,8 @@ export const customerRoutes = [
         url: `${prefix}`,
       },
       {
-        title: "Submit Service Request",
-        url: `${prefix}/submit-request`,
+        title: "My Service Requests",
+        url: `${prefix}/my-service-requests`,
       },
     ],
   },

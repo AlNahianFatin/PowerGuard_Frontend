@@ -18,6 +18,7 @@ export interface Payment {
   payerReference?: string;
   paidAt?: string;
 
+  // biome-ignore lint/suspicious/noExplicitAny: <sdf>
   gatewayResponse?: any;
 
   refundTrxId?: string;

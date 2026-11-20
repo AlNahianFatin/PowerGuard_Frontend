@@ -16,6 +16,18 @@ export const operatorRoutes = [
         title: "All Schedules",
         url: `${prefix}/schedules`,
       },
+      {
+        title: "Service Requests",
+        url: `${prefix}/service-requests`,
+      },
+      {
+        title: "All Assignments",
+        url: `${prefix}/assignments`,
+      },
+      {
+        title: "My Assignments",
+        url: `${prefix}/my-assignments`,
+      },
     ],
   },
   {

@@ -1,18 +1,6 @@
-import {
-  applyAsTechnician,
-  approveTechnician,
-  getAllTechnicians,
-  getPublicTechnicianProfile,
-  getTechnicianAnalytics,
-  verifyTechnicianAccount,
-} from "@/api";
 import { getAllAreas } from "@/api/area.api";
-import type { TechnicianParams } from "@/types";
 import {
-  useMutation,
   useQuery,
-  useQueryClient,
-  useSuspenseQuery,
 } from "@tanstack/react-query";
 
 export function useGetAllAreas() {

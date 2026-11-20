@@ -183,6 +183,7 @@ export default function CreateScheduleForm({
 
           handleClose();
         },
+        
         // biome-ignore lint/suspicious/noExplicitAny: <sdf>
         onError: (err: any) => {
           toast.add({

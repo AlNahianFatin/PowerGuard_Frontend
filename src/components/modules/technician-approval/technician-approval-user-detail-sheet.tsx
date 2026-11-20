@@ -41,7 +41,9 @@ export default function TechnicianApprovalUserDetailSheet({
             <UserRound className="size-5 text-primary" />
           </span>
           <div className="min-w-0">
-            <p className="truncate font-semibold mt-2">{user.name}</p>
+            <dd className="truncate  font-semibold mt-2" title={user.name}>
+              {user.name}
+            </dd>
           </div>
         </div>
 
@@ -51,11 +53,12 @@ export default function TechnicianApprovalUserDetailSheet({
             <dd>{user.role}</dd>
           </div>
 
-          <div className="flex justify-between">
-            <dt className="text-muted-foreground">Email</dt>
-            <dd>{user.email}</dd>
+          <div className="flex items-center gap-2 text-sm">
+            <Mail className="size-4 shrink-0 text-muted-foreground" />
+            <dd className="truncate" title={user.email}>
+              {user.email}
+            </dd>
           </div>
-
         </dl>
       </SheetContent>
     </Sheet>

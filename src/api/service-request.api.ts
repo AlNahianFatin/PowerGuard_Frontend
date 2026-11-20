@@ -1,5 +1,5 @@
 import apiClient from "@/lib/apiClient";
-import type { SubmitRequestPayload } from "@/types";
+import type { ApiResponse, CancelRequestParams, ServiceRequest, ServiceRequestParams, SubmitRequestPayload } from "@/types";
 
 export function submitRequest(payload: SubmitRequestPayload) {
   return apiClient("/request/submit-request", {
@@ -15,11 +15,17 @@ export function submitRequest(payload: SubmitRequestPayload) {
 //   });
 // }
 
-// export function getAllTechnicians(params: TechnicianParams) {
-//   return apiClient<ApiResponse<Technician[]>>("/technician/all-technicians", {
-//     params,
-//   });
-// }
+export function getMyServiceRequests(params: ServiceRequestParams) {
+  return apiClient<ApiResponse<ServiceRequest[]>>("/request/my-requests", {
+    params,
+  });
+}
+
+export function cancelRequest({ requestId }: CancelRequestParams) {
+  return apiClient(`/request/cancel-request/${requestId}`, {
+    method: "PATCH",
+  });
+}
 
 // export function approveTechnician(payload: ApproveTechnicianPayload) {
 //   return apiClient("/technician/approve-technician", {

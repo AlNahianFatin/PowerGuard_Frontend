@@ -63,6 +63,10 @@ export interface UpdateRequestPayload {
   description?: string;
 }
 
+export interface CancelRequestParams {
+  requestId: string;
+}
+
 export interface RejectRequestPayload {
   rejectionReason: string;
 }

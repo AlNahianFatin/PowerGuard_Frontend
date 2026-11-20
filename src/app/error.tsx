@@ -22,8 +22,8 @@ export default function ErrorPage({ error }: ErrorProps) {
           ? `Error ID: ${error.digest}`
           : "An unexpected error occurred"}
       </p>
-      <p className="mt-5 text-red-500 text-md max-w-2xl">
-        {error.message ?? "An unexpected error occurred"}
+      <p className="mt-5 text-red-500 text-md max-w-2xl">Error:&nbsp;
+        {error.name ?? "An unexpected error occurred"}
       </p>
       <Button
         onClick={() => window.location.reload()}
