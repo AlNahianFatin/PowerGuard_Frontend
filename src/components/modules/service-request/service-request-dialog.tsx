@@ -84,7 +84,7 @@ export default function ServiceRequestActionDialog({
               <AssignTechnicianForm
                 key={`${action}-${request.id}`}
                 action={action}
-                requestId={request.id}
+                request={request}
                 technicians={technicians}
                 handleClose={onClose}
               />

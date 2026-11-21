@@ -3,6 +3,8 @@ import type {
   ApiResponse,
   AssignTechnicianPayload,
   AssignTechnicianResponse,
+  UpdateAssignmentPayload,
+  UpdateAssignmentResponse,
 } from "@/types";
 
 export function assignTechnician(requestId: string, payload: AssignTechnicianPayload) {
@@ -10,6 +12,16 @@ export function assignTechnician(requestId: string, payload: AssignTechnicianPay
     `/assignment/assign-technician/${requestId}`,
     {
       method: "POST",
+      body: payload,
+    },
+  );
+}
+
+export function updateAssignment(assignmentId: string, payload: UpdateAssignmentPayload) {
+  return apiClient<ApiResponse<UpdateAssignmentResponse>>(
+    `/assignment/update-assignment/${assignmentId}`,
+    {
+      method: "PATCH",
       body: payload,
     },
   );

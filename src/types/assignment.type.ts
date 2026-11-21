@@ -77,7 +77,27 @@ export interface UpdateAssignmentPayload {
   notes?: string;
 }
 
+export interface UpdateAssignmentResponse {
+  id: string;
+  notes: string;
+  reportUrl: string | null;
+  reportPublicId: string | null;
+  createdAt: string;
+  updatedAt: string;
+  isDeleted: boolean;
+  deletedBy: string | null;
+  deletedAt: string | null;
+  assigneeId: string;
+  technicianId: string;
+  serviceRequestId: string;
+}
+
 export interface UpdateAssignmentStatusPayload {
+  status: "INSPECTING" | "RESOLVED" | "FAILED";
+  failureNote?: string;
+}
+
+export interface UpdateAssignmentStatusResponse {
   status: "INSPECTING" | "RESOLVED" | "FAILED";
   failureNote?: string;
 }

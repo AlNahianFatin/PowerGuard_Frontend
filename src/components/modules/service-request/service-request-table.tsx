@@ -12,10 +12,11 @@ import {
 } from "@/components/ui/table";
 import TablePagination from "@/components/ui/table-pagination";
 import { useSuspenseGetServiceRequest } from "@/hooks";
-import type { ServiceRequestParams, Technician } from "@/types";
+import type { Customer, ServiceRequestParams, Technician } from "@/types";
 import MyServiceRequestActions from "./service-request-actions";
-import MyServiceRequestTechnicianDetailSheet from "./service-request-technician-detail-sheet";
+import MyServiceRequestTechnicianDetailSheet from "./service-request-user-detail-sheet";
 import { Button } from "@/components/ui/button";
+import ServiceRequestUserDetailSheet from "./service-request-user-detail-sheet";
 
 interface Props extends ServiceRequestParams {
   technicians: Technician[];
@@ -27,8 +28,12 @@ export default function ServiceRequestTable({
   handlePageChange,
   ...params
 }: Props) {
-  const [technicianDetailOpen, setTechnicianDetailOpen] = useState(false);
-  const [selectedTechnician, setSelectedTechnician] = useState<Technician | null>(null);
+  const [isTechnician, setIsTechnician] = useState(false);
+  const [userDetailOpen, setUserDetailOpen] = useState(false);
+  const [selectedUser, setSelectedUser] = useState<Customer | Technician | null>(null);
+
+  // const [technicianDetailOpen, setTechnicianDetailOpen] = useState(false);
+  // const [selectedTechnician, setSelectedTechnician] = useState<Technician | null>(null);
 
   const { data } = useSuspenseGetServiceRequest(params);
 
@@ -36,9 +41,16 @@ export default function ServiceRequestTable({
   const totalPages = data?.meta?.totalPages ?? 0;
   const isEmpty = requests.length === 0;
 
+  const handleCustomerClick = (customer: Customer) => {
+    setIsTechnician(false);
+    setSelectedUser(customer);
+    setUserDetailOpen(true);
+  };
+
   const handleTechnicianClick = (technician: Technician) => {
-    setSelectedTechnician(technician);
-    setTechnicianDetailOpen(true);
+    setIsTechnician(true);
+    setSelectedUser(technician);
+    setUserDetailOpen(true);
   };
 
   return (
@@ -103,7 +115,14 @@ export default function ServiceRequestTable({
                   className="shadow-lg text-center text-muted-foreground hover:bg-gray-300/30"
                 >
                   <TableCell>
-                    {request.customer.name}
+                    {/* {request.customer.name} */}
+                    <Button
+                      variant="link"
+                      className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
+                      onClick={() => handleCustomerClick(request.customer)}
+                    >
+                      {request.customer.name}
+                    </Button>
                   </TableCell>
 
                   <TableCell>
@@ -196,13 +215,22 @@ export default function ServiceRequestTable({
         </div>
       )}
 
-      {selectedTechnician && (
-        <MyServiceRequestTechnicianDetailSheet
-          technician={selectedTechnician}
+      {selectedUser && (
+        <ServiceRequestUserDetailSheet
+          isTechnician={isTechnician}
+          user={selectedUser}
+          open={userDetailOpen}
+          onClose={() => setUserDetailOpen(false)}
+        />
+      )}
+
+      {/* {selectedTechnician && (
+        <ServiceRequestUserDetailSheet
+          user={selectedTechnician}
           open={technicianDetailOpen}
           onClose={() => setTechnicianDetailOpen(false)}
         />
-      )}
+      )} */}
     </>
   );
 }

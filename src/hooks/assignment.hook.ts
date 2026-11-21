@@ -1,5 +1,5 @@
-import { assignTechnician } from "@/api";
-import { AssignTechnicianPayload } from "@/types";
+import { assignTechnician, updateAssignment } from "@/api";
+import { AssignTechnicianPayload, UpdateAssignmentPayload } from "@/types";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface AssignTechnicianVariables {
@@ -13,6 +13,29 @@ export function useAssignTechnician() {
   return useMutation({
     mutationFn: ({ requestId, payload }: AssignTechnicianVariables) =>
       assignTechnician(requestId, payload),
+
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["service-requests"] });
+      queryClient.invalidateQueries({ queryKey: ["my-service-requests"] });
+      queryClient.invalidateQueries({ queryKey: ["assignments"] });
+      queryClient.invalidateQueries({ queryKey: ["my-assignments"] });
+      queryClient.invalidateQueries({ queryKey: ["technicians"] });
+      queryClient.invalidateQueries({ queryKey: ["available-technicians"] });
+    },
+  });
+}
+
+interface UpdateAssignmentVariables {
+  assignmentId: string;
+  payload: UpdateAssignmentPayload;
+}
+
+export function useUpdateTechnician() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ assignmentId, payload }: UpdateAssignmentVariables) =>
+      updateAssignment(assignmentId, payload),
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["service-requests"] });
