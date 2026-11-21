@@ -161,8 +161,8 @@ export default function TechnicianSelector({
             ? `Showing ${(currentPage - 1) * PAGE_SIZE + 1}–${Math.min(
               currentPage * PAGE_SIZE,
               filteredTechnicians.length,
-            )} of ${filteredTechnicians.length} feeders`
-            : "Showing 0 feeders"}
+            )} of ${filteredTechnicians.length} technicians`
+            : "Showing 0 technician"}
         </p>
 
         <div className="flex items-center gap-2">

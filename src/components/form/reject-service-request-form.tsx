@@ -86,7 +86,7 @@ export default function RejectServiceRequestForm({
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>
-                  Reject reason
+                  Rejection reason
                 </FieldLabel>
 
                 <Input

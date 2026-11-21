@@ -7,79 +7,107 @@ import { Button } from "../ui/button";
 import { Spinner } from "../ui/spinner";
 import { toast } from "../ui/toast";
 import { useAssignTechnician } from "@/hooks";
-import { AssignTechnicianSchema } from "@/validation";
-import type z from "zod";
+import {
+  AssignTechnicianSchema,
+  UpdateAssignmentSchema,
+} from "@/validation";
 import type { Technician } from "@/types";
+import type { z } from "zod";
 import TechnicianSelector from "../modules/technician/technician-selector-table";
 
 interface Props {
+  action: "ASSIGN" | "UPDATE";
   requestId: string;
   technicians: Technician[];
-  open: boolean;
   handleClose: () => void;
 }
 
+type FormValues = {
+  technicianId: string;
+  notes?: string;
+};
+
 export default function AssignTechnicianForm({
+  action,
   requestId,
   technicians,
-  open,
   handleClose,
 }: Props) {
   const { mutate: assign, isPending } = useAssignTechnician();
 
-  type AssignTechnicianDefaultValues = z.input<typeof AssignTechnicianSchema>;
+  const isAssign = action === "ASSIGN";
 
-  const defaultValues: AssignTechnicianDefaultValues = {
+  const defaultValues: FormValues = {
     technicianId: "",
     notes: "",
+  };
+
+  const validate = (value: FormValues) => {
+    const result = isAssign
+      ? AssignTechnicianSchema.safeParse(value)
+      : UpdateAssignmentSchema.safeParse(value);
+
+    return result.success ? undefined : result.error;
   };
 
   const form = useForm({
     defaultValues,
     validators: {
-      onChange: AssignTechnicianSchema,
-      onSubmit: AssignTechnicianSchema,
+      onChange: ({ value }) => validate(value),
+      onSubmit: ({ value }) => validate(value),
     },
     onSubmit: ({ value }) => {
-      const data = {
-        requestId,
-        payload: {
-          technicianId: value.technicianId,
-          notes: value.notes,
-        }
-      };
+      assign(
+        {
+          requestId,
+          payload: {
+            technicianId: value.technicianId,
+            notes: value.notes,
+          },
+        },
+        {
+          // biome-ignore lint/suspicious/noExplicitAny: <df>
+          onSuccess: (res: any) => {
+            if (!res.success) {
+              toast.add({
+                title: "Server Failure",
+                description:
+                  res.data?.message ||
+                  res.message ||
+                  "Something went wrong. Please try again",
+                type: "error",
+              });
+              return;
+            }
 
-      assign(data, {
-        // biome-ignore lint/suspicious/noExplicitAny: <sd>
-        onSuccess: (res: any) => {
-          if (!res.success) {
             toast.add({
-              title: "Server Failure",
-              description: res.data?.message || res.message || "Something went wrong. Please try again",
+              title: isAssign
+                ? "Assignment successful"
+                : "Assignment updated",
+              description:
+                res.message ||
+                (isAssign
+                  ? "Technician assigned successfully"
+                  : "Assignment updated successfully"),
+              type: "success",
+            });
+
+            handleClose();
+          },
+
+          // biome-ignore lint/suspicious/noExplicitAny: <gh>
+          onError: (err: any) => {
+            toast.add({
+              title: isAssign
+                ? "Assignment failed"
+                : "Assignment update failed",
+              description:
+                err.data?.message || "Something went wrong. Please try again",
               type: "error",
             });
-            return;
-          }
-
-          toast.add({
-            title: "Assignment successful",
-            description: res.message || "Technician assigned successfully",
-            type: "success",
-          });
-
-          handleClose();
+          },
         },
-
-        // biome-ignore lint/suspicious/noExplicitAny: <sdf>
-        onError: (err: any) => {
-          toast.add({
-            title: "Schedule creation failed",
-            description:
-              err.data?.message || "Something went wrong. Please try again",
-            type: "error",
-          });
-        },
-      });
+      );
     },
   });
 
@@ -109,7 +137,7 @@ export default function AssignTechnicianForm({
                 <Input
                   id={field.name}
                   name={field.name}
-                  value={field.state.value}
+                  value={field.state.value ?? ""}
                   onChange={(event) =>
                     field.handleChange(event.target.value)
                   }
@@ -126,29 +154,33 @@ export default function AssignTechnicianForm({
           }}
         </form.Field>
 
-        <form.Field name="technicianId">
-          {(field) => (
-            <TechnicianSelector
-              technicians={technicians}
-              value={field.state.value}
-              onSelect={field.handleChange}
-              onBlur={field.handleBlur}
-              errors={field.state.meta.errors.map((error) => ({
-                message:
-                  typeof error === "string" ? error : error?.message,
-              }))}
-            />
-          )}
-        </form.Field>
+        {
+          isAssign &&
+          <form.Field name="technicianId">
+            {(field) => (
+              <TechnicianSelector
+                technicians={technicians}
+                value={field.state.value}
+                onSelect={field.handleChange}
+                onBlur={field.handleBlur}
+                errors={field.state.meta.errors.map((error) => ({
+                  message: String(error),
+                }))}
+              />
+            )}
+          </form.Field>
+        }
 
         <Button type="submit" disabled={isPending}>
           {isPending ? (
             <>
               <Spinner />
-              Assigning
+              {isAssign ? "Assigning..." : "Updating..."}
             </>
-          ) : (
+          ) : isAssign ? (
             "Assign"
+          ) : (
+            "Update"
           )}
         </Button>
       </FieldGroup>

@@ -2,25 +2,34 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/toast";
-import { useAssignTechnician } from "@/hooks";
 import type { ServiceRequest, Technician } from "@/types";
-import ServiceRequestDetailSheet from "./service-request-detail-sheet";
-import AssignTechnicianForm from "@/components/form/assign-technician-form";
-import RejectServiceRequestForm from "@/components/form/reject-service-request-form";
-// import MyServiceRequestDetailSheet from "./my-service-request-detail-sheet";
-
-export default function ServiceRequestActions({ technicians, request }: { technicians: Technician[], request: ServiceRequest }) {
-  const [detailOpen, setDetailOpen] = useState(false);
-  const [rejectOpen, setRejectOpen] = useState(false);
-  const [assignOpen, setAssignOpen] = useState(false);
+import ServiceRequestActionDialog, { type ServiceRequestAction } from "./service-request-dialog";
 
 
+interface Props {
+  technicians: Technician[];
+  request: ServiceRequest;
+}
+
+export default function ServiceRequestActions({
+  technicians,
+  request,
+}: Props) {
+  const [selectedAction, setSelectedAction] =
+    useState<ServiceRequestAction | null>(null);
+
+  const handleClose = () => {
+    setSelectedAction(null);
+  };
 
   return (
     <>
       <div className="flex justify-end gap-2">
-        <Button variant="outline" size="sm" onClick={() => setDetailOpen(true)}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setSelectedAction("VIEW")}
+        >
           View
         </Button>
 
@@ -29,54 +38,49 @@ export default function ServiceRequestActions({ technicians, request }: { techni
             <Button
               variant="destructive"
               size="sm"
-              onClick={() => setRejectOpen(true)}
+              onClick={() => setSelectedAction("REJECT")}
             >
               Reject
             </Button>
           )
         }
 
-        {
-          request.status === "PENDING" && !request.isDeleted && (
+        {/* {
+          !request.isDeleted && (
             <Button
               size="sm"
-              onClick={() => setAssignOpen(true)}
+              onClick={() => setSelectedAction("ASSIGN")}
             >
               {
-                request.assignment ? "Assign" : "Update"
+                request.status === "PENDING" && !request.assignment ?
+                  "Assign" :
+                  (request.status !== "CANCELLED" || "REJECTED" || "FAILED" || "RESOLVED") && request.assignment ?
+                    "Update" : null
               }
             </Button>
           )
-        }
-
-        {/* {!locked && (
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setConfirmCancel(true)}
-          >
-            Cancel
-          </Button>
-        )} */}
+        } */}
+        {!request.isDeleted &&
+          request.status !== "CANCELLED" &&
+          request.status !== "REJECTED" &&
+          request.status !== "FAILED" &&
+          request.status !== "RESOLVED" && (
+            <Button
+              size="sm"
+              onClick={() =>
+                setSelectedAction(request.assignment ? "UPDATE" : "ASSIGN")
+              }
+            >
+              {request.assignment ? "Update" : "Assign"}
+            </Button>
+          )}
       </div>
 
-      <ServiceRequestDetailSheet
+      <ServiceRequestActionDialog
+        action={selectedAction}
         request={request}
-        open={detailOpen}
-        onClose={() => setDetailOpen(false)}
-      />
-
-      <AssignTechnicianForm
-        requestId={request.id}
         technicians={technicians}
-        open={assignOpen}
-        onClose={() => setAssignOpen(false)}
-      />
-
-      <RejectServiceRequestForm
-        requestId={request.id}
-        open={rejectOpen}
-        onClose={() => setRejectOpen(false)}
+        onClose={handleClose}
       />
     </>
   );

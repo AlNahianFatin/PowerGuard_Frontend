@@ -13,19 +13,23 @@ export enum ServiceRequestStatus {
 }
 
 export const AssignTechnicianSchema = z.object({
-    technicianId: z.string("Must include the technician ID"),
+    technicianId: z
+        .string("Must include the technician ID")
+        .min(1, "Must select a technician to assign to the service request"),
+
     notes: z
         .string("Must include a valid note for the technician or customer")
-        .min(1, "Note is required")
         .max(255, "Note must be within 255 characters")
         .optional(),
 });
 
 export const UpdateAssignmentSchema = z.object({
-    technicianId: z.string("Must include the technician ID").optional(),
+    technicianId: z
+        .string("Must include the technician ID")
+        .optional(),
+
     notes: z
         .string("Must include a valid note for the technician or customer")
-        .min(1, "Note is required")
         .max(255, "Note must be within 255 characters")
         .optional(),
 });

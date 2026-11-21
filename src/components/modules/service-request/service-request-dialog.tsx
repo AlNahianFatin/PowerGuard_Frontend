@@ -1,58 +1,97 @@
-import CreateScheduleForm from "@/components/form/create-schedule-form";
-import { Button } from "@/components/ui/button";
+"use client";
+
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
-import type { Feeder } from "@/types";
-import { PlusCircle } from "lucide-react";
-import { useState } from "react";
+import type { ServiceRequest, Technician } from "@/types";
+import ServiceRequestDetailSheet from "./service-request-detail-sheet";
+import AssignTechnicianForm from "@/components/form/assign-technician-form";
+import RejectServiceRequestForm from "@/components/form/reject-service-request-form";
 
-export default function ServiceRequestDialog({ feeders }: { feeders: Feeder[] }) {
-  const [open, setOpen] = useState(false);
+export type ServiceRequestAction = "VIEW" | "REJECT" | "ASSIGN" | "UPDATE";
 
-  // return (
-  //   <Dialog open={open} onOpenChange={setOpen}>
-  //     <DialogTrigger render={<Button size="lg" />}>
-  //       <PlusCircle />
-  //       <span>Assign Technician</span>
-  //     </DialogTrigger>
-  //     <DialogContent>
-  //       <DialogHeader>
-  //         <DialogTitle>Create Schedule</DialogTitle>
-  //         <DialogDescription>
-  //           This schedule will be visible to everyone
-  //         </DialogDescription>
-  //       </DialogHeader>
-  //       <CreateScheduleForm feeders={feeders} handleClose={() => setOpen(false)} />
-  //     </DialogContent>
-  //   </Dialog>
-  // );
+interface Props {
+  action: ServiceRequestAction | null;
+  request: ServiceRequest;
+  technicians: Technician[];
+  onClose: () => void;
+}
+
+export default function ServiceRequestActionDialog({
+  action,
+  request,
+  technicians,
+  onClose,
+}: Props) {
+  const isDialogOpen = action === "REJECT" || action === "ASSIGN" || action === "UPDATE";
 
   return (
-    <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Assign Technician</DialogTitle>
-          <DialogDescription>
-            Select a technician and provide optional assignment notes.
-          </DialogDescription>
-        </DialogHeader>
+    <>
+      <ServiceRequestDetailSheet
+        request={request}
+        open={action === "VIEW"}
+        onClose={onClose}
+      />
 
-        <form
-          onSubmit={(event) => {
-            event.preventDefault();
-            form.handleSubmit();
-          }}
-          className="min-w-fit"
-        >
-          {/* Keep your existing FieldGroup and form fields here */}
-        </form>
-      </DialogContent>
-    </Dialog>
+      <Dialog
+        open={isDialogOpen}
+        onOpenChange={(open) => {
+          if (!open) onClose();
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              {
+                action === "REJECT"
+                  ? "Reject Service Request"
+                  : action === "ASSIGN"
+                    ? "Assign Technician"
+                    : action === "UPDATE"
+                      ? "Update Assignment"
+                      : ""
+              }
+            </DialogTitle>
+
+            <DialogDescription>
+              {
+                action === "REJECT"
+                  ? "Provide a reason for rejecting this service request."
+                  : action === "ASSIGN"
+                    ? "Select a technician and provide optional assignment notes."
+                    : action === "UPDATE"
+                      ? "Update notes for the technician."
+                      : ""
+              }
+            </DialogDescription>
+          </DialogHeader>
+
+          {
+            action === "REJECT" && (
+              <RejectServiceRequestForm
+                requestId={request.id}
+                handleClose={onClose}
+              />
+            )
+          }
+
+          {
+            (action === "ASSIGN" || action === "UPDATE") && (
+              <AssignTechnicianForm
+                key={`${action}-${request.id}`}
+                action={action}
+                requestId={request.id}
+                technicians={technicians}
+                handleClose={onClose}
+              />
+            )
+          }
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
