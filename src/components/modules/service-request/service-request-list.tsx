@@ -10,8 +10,8 @@ import ServiceRequestTableLoading from "./service-request-table-loading";
 import { useSuspenseGetAvailableTechnicianToday } from "@/hooks";
 import { toast } from "@/components/ui/toast";
 
-const statuses: ["ALL" | ServiceRequestStatus, string][] = [
-  ["ALL", "All"], //lime emerald teal cyan sky indigo fuchsia rose slate stone mauve olive
+const statuses: ["ALL" | "isDeleted" | ServiceRequestStatus, string][] = [
+  ["ALL", "All"],
   ["PENDING", "Pending"],
   ["ASSIGNED", "Assigned"],
   ["INSPECTING", "Inspecting"],
@@ -21,6 +21,7 @@ const statuses: ["ALL" | ServiceRequestStatus, string][] = [
   ["FAILED", "Failed"],
   ["REJECTED", "Rejected"],
   ["CANCELLED", "Cancelled"],
+  ["isDeleted", "Deleted"],
 ];
 
 export default function ServiceRequestList() {
@@ -47,7 +48,7 @@ export default function ServiceRequestList() {
     }
   }, [techniciansError]);
 
-  const [tab, setTab] = useState<"ALL" | ServiceRequestStatus>("ALL");
+  const [tab, setTab] = useState<"ALL" | "isDeleted" | ServiceRequestStatus>("ALL");
   const [searchInput, setSearchInput] = useState("");
   const [page, setPage] = useState(1);
 
@@ -63,7 +64,8 @@ export default function ServiceRequestList() {
     limit: 10,
     sortBy: "createdAt",
     sortOrder: "asc",
-    ...(tab === "ALL" ? {} : { status: tab }),
+    ...(tab === "ALL" ? {} : tab === "isDeleted" ? { isDeleted: true } : { status: tab }),
+    // ...(tab === "isDeleted" ? { isDeleted=true } : { status: tab }),
     ...(debouncedSearch ? { searchTerm: debouncedSearch } : {}),
   };
 

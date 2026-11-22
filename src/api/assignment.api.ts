@@ -1,8 +1,10 @@
 import apiClient from "@/lib/apiClient";
 import type {
   ApiResponse,
+  Assignment,
   AssignTechnicianPayload,
   AssignTechnicianResponse,
+  MyAssignmentParams,
   UpdateAssignmentPayload,
   UpdateAssignmentResponse,
 } from "@/types";
@@ -23,6 +25,15 @@ export function updateAssignment(assignmentId: string, payload: UpdateAssignment
     {
       method: "PATCH",
       body: payload,
+    },
+  );
+}
+
+export function getMyAssignment(params: MyAssignmentParams) {
+  return apiClient<ApiResponse<Assignment[]>>(
+    `/assignment/my-assignments`,
+    {
+      params
     },
   );
 }

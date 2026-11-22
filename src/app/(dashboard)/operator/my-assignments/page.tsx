@@ -1,4 +1,4 @@
-import React from 'react'
+import MyAssignmentList from '../../../../components/modules/my-assignment/my-assignment-list';
 
 const MyAssignmentsPage = () => {
   return (
@@ -7,7 +7,7 @@ const MyAssignmentsPage = () => {
         <h1 className="text-2xl">My Service Requests</h1>
         <p>View and manage records of service requests</p>
       </div>
-      {/* <MyServiceRequestList /> */}
+      <MyAssignmentList />
     </section>
   );
 }

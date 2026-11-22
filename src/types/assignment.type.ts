@@ -3,6 +3,7 @@ import type { ServiceRequest } from "./service-request.type";
 import type { Technician } from "./technician.type";
 import type { TechnicianReport } from "./technician-report.type";
 import type { User } from "./user.type";
+import { Area } from "./area.type";
 
 export interface Assignment {
   id: string;
@@ -35,6 +36,15 @@ export interface Assignment {
 }
 
 export interface AssignmentParams {
+  page?: number;
+  limit?: number;
+  sortBy?: string;
+  sortOrder?: "desc" | "asc";
+  isDeleted?: boolean;
+  searchTerm?: string;
+}
+
+export interface AssignmentResponse {
   page?: number;
   limit?: number;
   sortBy?: string;
