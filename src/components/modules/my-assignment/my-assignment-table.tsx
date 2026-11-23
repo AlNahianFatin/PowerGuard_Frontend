@@ -13,9 +13,9 @@ import {
 import TablePagination from "@/components/ui/table-pagination";
 import { useSuspenseGetMyAssignment } from "@/hooks";
 import type { Customer, MyAssignmentParams, Technician, User } from "@/types";
-import MyServiceRequestActions from "./my-service-request-actions";
-import MyServiceRequestTechnicianDetailSheet from "./my-service-request-technician-detail-sheet";
 import { Button } from "@/components/ui/button";
+import MyAssignmentUserDetailSheet from "./my-assignment-user-detail-sheet";
+import MyAssignmentActions from "./my-assignment-actions";
 
 interface Props extends MyAssignmentParams {
   handlePageChange: Dispatch<SetStateAction<number>>;
@@ -25,8 +25,13 @@ export default function MyAssignmentTable({
   handlePageChange,
   ...params
 }: Props) {
-  const [userDetailOpen, setUserDetailOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Technician | Customer | User | null>(null);
+  const [userDetailOpen, setUserDetailOpen] = useState(false);
+
+  const [isCustomer, setIsCustomer] = useState(false);
+  const [isTechnician, setIsTechnician] = useState(false);
+
+  const [reportDetailOpen, setReportDetailOpen] = useState(false);
 
   const { data } = useSuspenseGetMyAssignment(params);
 
@@ -34,7 +39,23 @@ export default function MyAssignmentTable({
   const totalPages = data?.meta?.totalPages ?? 0;
   const isEmpty = assignments.length === 0;
 
-  const handleUserClick = (user: Technician | Customer | User) => {
+  const handleCustomerClick = (user: Technician | Customer | User) => {
+    setIsCustomer(true);
+    setIsTechnician(false);
+    setSelectedUser(user);
+    setUserDetailOpen(true);
+  };
+
+  const handleAssigneeClick = (user: Technician | Customer | User) => {
+    setIsCustomer(false);
+    setIsTechnician(false);
+    setSelectedUser(user);
+    setUserDetailOpen(true);
+  };
+
+  const handleTechnicianClick = (user: Technician | Customer | User) => {
+    setIsCustomer(false);
+    setIsTechnician(true);
     setSelectedUser(user);
     setUserDetailOpen(true);
   };
@@ -112,7 +133,7 @@ export default function MyAssignmentTable({
                       variant="link"
                       className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
                       onClick={() =>
-                        handleUserClick(assignment.serviceRequest.customer)
+                        handleCustomerClick(assignment.serviceRequest.customer)
                       }
                     >
                       {assignment.serviceRequest.customer.name}
@@ -124,7 +145,7 @@ export default function MyAssignmentTable({
                       variant="link"
                       className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
                       onClick={() =>
-                        handleUserClick(assignment.assignedByUser)
+                        handleAssigneeClick(assignment.assignedByUser)
                       }
                     >
                       {assignment.assignedByUser.name}
@@ -149,17 +170,15 @@ export default function MyAssignmentTable({
 
                   <TableCell>
                     {
-                      // assignment.technicianReport ?
-                      //   <Button
-                      //     variant="link"
-                      //     className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
-                      //     onClick={() =>
-                      //       handleUserClick(assignment.assignedByUser)
-                      //     }
-                      //   >
-                      //     {assignment.assignedByUser.name}
-                      //   </Button> :
-                      //   "-"
+                      assignment.technicianReport ?
+                        <Button
+                          variant="link"
+                          className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
+                          onClick={() => setReportDetailOpen(true)}
+                        >
+                          "View report"
+                        </Button> :
+                        "-"
                     }
                   </TableCell>
 
@@ -189,7 +208,7 @@ export default function MyAssignmentTable({
                   </TableCell>
 
                   <TableCell className="text-right">
-                    {/* <MyServiceRequestActions request={assignment} /> */} --------
+                    <MyAssignmentActions assignment={assignment} /> 
                   </TableCell>
                 </TableRow>
               ))
@@ -208,13 +227,15 @@ export default function MyAssignmentTable({
         </div>
       )}
 
-      {/* {selectedUser && (
-        <MyServiceRequestTechnicianDetailSheet
-          technician={selectedUser}
+      {selectedUser && (
+        <MyAssignmentUserDetailSheet
+          isCustomer={isCustomer}
+          isTechnician={isTechnician}
+          user={selectedUser}
           open={userDetailOpen}
           onClose={() => setUserDetailOpen(false)}
         />
-      )} */}
+      )}
     </>
   );
 }

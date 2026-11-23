@@ -7,7 +7,8 @@ const MyAssignmentsPage = () => {
         <h1 className="text-2xl">My Service Requests</h1>
         <p>View and manage records of service requests</p>
       </div>
-      <MyAssignmentList />
+      {/** biome-ignore lint/a11y/useValidAriaRole: <fgf> */}
+      <MyAssignmentList role="OPERATOR" />
     </section>
   );
 }

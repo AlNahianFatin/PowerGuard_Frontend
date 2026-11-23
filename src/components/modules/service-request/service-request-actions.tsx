@@ -3,8 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { ServiceRequest, Technician } from "@/types";
-import ServiceRequestActionDialog, { type ServiceRequestAction } from "./service-request-dialog";
-
+import ServiceRequestActionDialog, { type ServiceRequestAction } from "./service-request-action-dialog";
 
 interface Props {
   technicians: Technician[];

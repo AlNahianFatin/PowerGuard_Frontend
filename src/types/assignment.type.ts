@@ -103,7 +103,12 @@ export interface UpdateAssignmentResponse {
 }
 
 export interface UpdateAssignmentStatusPayload {
-  status: "INSPECTING" | "RESOLVED" | "FAILED";
+  technicianId?: string;
+  notes?: string;
+}
+
+export interface UpdateAssignmentStatusPayload {
+  status: "" | "INSPECTING" | "RESOLVED" | "FAILED";
   failureNote?: string;
 }
 

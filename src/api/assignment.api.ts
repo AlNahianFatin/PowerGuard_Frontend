@@ -7,6 +7,7 @@ import type {
   MyAssignmentParams,
   UpdateAssignmentPayload,
   UpdateAssignmentResponse,
+  UpdateAssignmentStatusPayload,
 } from "@/types";
 
 export function assignTechnician(requestId: string, payload: AssignTechnicianPayload) {
@@ -34,6 +35,17 @@ export function getMyAssignment(params: MyAssignmentParams) {
     `/assignment/my-assignments`,
     {
       params
+    },
+  );
+}
+
+export function updateAssignmentStatus(assignmentId: string, payload: UpdateAssignmentStatusPayload) {
+  // biome-ignore lint/suspicious/noExplicitAny: <sd>
+  return apiClient<ApiResponse<any>>(
+    `/assignment/update-assignment-status-technician/${assignmentId}`,
+    {
+      method: "PATCH",
+      body: payload,
     },
   );
 }

@@ -11,38 +11,7 @@ export default function MyServiceRequestActions({ request }: { request: ServiceR
   const [detailOpen, setDetailOpen] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
 
-  // const { mutate: publish, isPending: publishPending } = usePublishSchedule();
   const { mutate: cancel, isPending: cancelPending } = useCancelRequest();
-
-  // const locked = schedule.status === "PUBLISHED" || schedule.isDeleted;
-
-  // const handlePublish = () => {
-  //   publish(schedule.id, {
-  //     onSuccess: (res) => {
-  //       if (!res.success) {
-  //         toast.add({
-  //           title: "Server Failure",
-  //           description: res.data?.message || res.message || "Something went wrong. Please try again",
-  //           type: "error",
-  //         });
-  //         return;
-  //       }
-  //       toast.add({
-  //         title: "Schedule Published",
-  //         description: res.message || "Officially published the outage schedule",
-  //         type: "success",
-  //       });
-  //     },
-  //     // biome-ignore lint/suspicious/noExplicitAny: <fg>
-  //     onError: (err: any) => {
-  //       toast.add({
-  //         title: "Publish failed",
-  //         description: err.data?.message || "Something went wrong. Please try again",
-  //         type: "error",
-  //       });
-  //     },
-  //   });
-  // };
 
   const handleCancel = () => {
     cancel(
@@ -118,16 +87,6 @@ export default function MyServiceRequestActions({ request }: { request: ServiceR
             Cancel
           </Button>
         )}
-
-        {/* {!locked && (
-          <Button
-            variant="destructive"
-            size="sm"
-            onClick={() => setConfirmCancel(true)}
-          >
-            Cancel
-          </Button>
-        )} */}
       </div>
 
       <MyServiceRequestDetailSheet
