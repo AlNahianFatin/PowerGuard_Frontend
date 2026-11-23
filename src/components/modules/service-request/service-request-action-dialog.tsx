@@ -17,14 +17,13 @@ export type ServiceRequestAction = "VIEW" | "REJECT" | "ASSIGN" | "UPDATE";
 interface Props {
   action: ServiceRequestAction | null;
   request: ServiceRequest;
-  technicians: Technician[];
+  // technicians: Technician[];
   onClose: () => void;
 }
 
 export default function ServiceRequestActionDialog({
   action,
   request,
-  technicians,
   onClose,
 }: Props) {
   const isDialogOpen = action === "REJECT" || action === "ASSIGN" || action === "UPDATE";
@@ -85,7 +84,6 @@ export default function ServiceRequestActionDialog({
                 key={`${action}-${request.id}`}
                 action={action}
                 request={request}
-                technicians={technicians}
                 handleClose={onClose}
               />
             )

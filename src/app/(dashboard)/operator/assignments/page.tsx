@@ -1,11 +1,9 @@
-import React from 'react'
-
 const AssignmentsPage = () => {
   return (
     <section>
       <div>
-        <h1 className="text-2xl">My Assignments</h1>
-        <p>View and manage all the assignments appointed by you</p>
+        <h1 className="text-2xl">All Assignments</h1>
+        <p>View and manage all the assignments for all the service requests</p>
       </div>
       {/* <MyServiceRequestList /> */}
     </section>

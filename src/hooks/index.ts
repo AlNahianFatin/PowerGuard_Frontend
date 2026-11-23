@@ -9,4 +9,5 @@ export * from "./operator.hook";
 export * from "./schedule.hook";
 export * from "./service-request.hook";
 export * from "./technician.hook";
+export * from "./technician-report.hook";
 export * from "./use-mobile";

@@ -2,16 +2,14 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import type { ServiceRequest, Technician } from "@/types";
+import type { ServiceRequest } from "@/types";
 import ServiceRequestActionDialog, { type ServiceRequestAction } from "./service-request-action-dialog";
 
 interface Props {
-  technicians: Technician[];
   request: ServiceRequest;
 }
 
 export default function ServiceRequestActions({
-  technicians,
   request,
 }: Props) {
   const [selectedAction, setSelectedAction] =
@@ -44,21 +42,6 @@ export default function ServiceRequestActions({
           )
         }
 
-        {/* {
-          !request.isDeleted && (
-            <Button
-              size="sm"
-              onClick={() => setSelectedAction("ASSIGN")}
-            >
-              {
-                request.status === "PENDING" && !request.assignment ?
-                  "Assign" :
-                  (request.status !== "CANCELLED" || "REJECTED" || "FAILED" || "RESOLVED") && request.assignment ?
-                    "Update" : null
-              }
-            </Button>
-          )
-        } */}
         {!request.isDeleted &&
           request.status !== "CANCELLED" &&
           request.status !== "REJECTED" &&
@@ -78,7 +61,6 @@ export default function ServiceRequestActions({
       <ServiceRequestActionDialog
         action={selectedAction}
         request={request}
-        technicians={technicians}
         onClose={handleClose}
       />
     </>

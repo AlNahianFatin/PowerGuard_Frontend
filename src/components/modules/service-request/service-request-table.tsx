@@ -14,26 +14,20 @@ import TablePagination from "@/components/ui/table-pagination";
 import { useSuspenseGetServiceRequest } from "@/hooks";
 import type { Customer, ServiceRequestParams, Technician } from "@/types";
 import MyServiceRequestActions from "./service-request-actions";
-import MyServiceRequestTechnicianDetailSheet from "./service-request-user-detail-sheet";
 import { Button } from "@/components/ui/button";
 import ServiceRequestUserDetailSheet from "./service-request-user-detail-sheet";
 
 interface Props extends ServiceRequestParams {
-  technicians: Technician[];
   handlePageChange: Dispatch<SetStateAction<number>>;
 }
 
 export default function ServiceRequestTable({
-  technicians,
   handlePageChange,
   ...params
 }: Props) {
   const [isTechnician, setIsTechnician] = useState(false);
   const [userDetailOpen, setUserDetailOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState<Customer | Technician | null>(null);
-
-  // const [technicianDetailOpen, setTechnicianDetailOpen] = useState(false);
-  // const [selectedTechnician, setSelectedTechnician] = useState<Technician | null>(null);
 
   const { data } = useSuspenseGetServiceRequest(params);
 
@@ -196,7 +190,7 @@ export default function ServiceRequestTable({
                   </TableCell>
 
                   <TableCell className="text-right">
-                    <MyServiceRequestActions request={request} technicians={technicians} />
+                    <MyServiceRequestActions request={request} />
                   </TableCell>
                 </TableRow>
               ))
@@ -223,14 +217,6 @@ export default function ServiceRequestTable({
           onClose={() => setUserDetailOpen(false)}
         />
       )}
-
-      {/* {selectedTechnician && (
-        <ServiceRequestUserDetailSheet
-          user={selectedTechnician}
-          open={technicianDetailOpen}
-          onClose={() => setTechnicianDetailOpen(false)}
-        />
-      )} */}
     </>
   );
 }

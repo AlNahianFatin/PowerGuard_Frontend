@@ -128,6 +128,20 @@ export default function ServiceRequestDetailSheet({
                   Assignment
                 </p>
 
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Technician</dt>
+                  <dd>
+                    {request.assignment?.technician?.name}
+                  </dd>
+                </div>
+
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Assignee notes</dt>
+                  <dd>
+                    {request.assignment?.notes}
+                  </dd>
+                </div>
+
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Assigned at</dt>
                   <dd className="truncate">
@@ -140,12 +154,6 @@ export default function ServiceRequestDetailSheet({
                   </dd>
                 </div>
 
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Technician</dt>
-                  <dd>
-                    {request.assignment?.technician?.name}
-                  </dd>
-                </div>
               </div>
             </>
           }
@@ -172,12 +180,6 @@ export default function ServiceRequestDetailSheet({
                   </dd>
                 </div>
 
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Technician notes</dt>
-                  <dd>
-                    {request.assignment?.notes}
-                  </dd>
-                </div>
               </div>
             </>
           }

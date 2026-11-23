@@ -33,7 +33,17 @@ export interface SubmitTechnicianReportPayload {
   charge: number;
 }
 
+export interface SubmitTechnicianReportResponse {
+  diagnosis: string;
+  charge: number;
+}
+
 export interface UpdateTechnicianReportPayload {
+  diagnosis?: string;
+  charge?: number;
+}
+
+export interface UpdateTechnicianReportResponse {
   diagnosis?: string;
   charge?: number;
 }

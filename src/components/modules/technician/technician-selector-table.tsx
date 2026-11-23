@@ -107,7 +107,7 @@ export default function TechnicianSelector({
                       {technician.name}
                     </TableCell>
 
-                    <TableCell>{technician.email}</TableCell>
+                    <TableCell className="max-w-35 overflow-x-auto">{technician.email}</TableCell>
 
                     <TableCell className="text-right">
                       <Button

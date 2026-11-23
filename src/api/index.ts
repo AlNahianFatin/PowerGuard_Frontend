@@ -8,3 +8,4 @@ export * from "./operator.api";
 export * from "./schedule.api";
 export * from "./service-request.api";
 export * from "./technician.api";
+export * from "./technician-report.api";

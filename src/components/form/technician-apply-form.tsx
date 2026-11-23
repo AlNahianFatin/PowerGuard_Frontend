@@ -339,7 +339,7 @@ export default function TechnicianApplyForm() {
                                             id={field.name}
                                             name={field.name}
                                             type="tel"
-                                            placeholder="+880 1712 345678"
+                                            placeholder="+880 1*** ******"
                                             value={field.state.value}
                                             onBlur={field.handleBlur}
                                             onChange={(e) => field.handleChange(e.target.value)}

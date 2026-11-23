@@ -12,16 +12,18 @@ import {
 } from "@/components/ui/table";
 import TablePagination from "@/components/ui/table-pagination";
 import { useSuspenseGetMyAssignment } from "@/hooks";
-import type { Customer, MyAssignmentParams, Technician, User } from "@/types";
+import type { Customer, MyAssignmentParams, Role, Technician, User } from "@/types";
 import { Button } from "@/components/ui/button";
 import MyAssignmentUserDetailSheet from "./my-assignment-user-detail-sheet";
 import MyAssignmentActions from "./my-assignment-actions";
 
 interface Props extends MyAssignmentParams {
+  role: Role;
   handlePageChange: Dispatch<SetStateAction<number>>;
 }
 
 export default function MyAssignmentTable({
+  role,
   handlePageChange,
   ...params
 }: Props) {
@@ -39,21 +41,21 @@ export default function MyAssignmentTable({
   const totalPages = data?.meta?.totalPages ?? 0;
   const isEmpty = assignments.length === 0;
 
-  const handleCustomerClick = (user: Technician | Customer | User) => {
+  const handleCustomerClick = (user: Customer) => {
     setIsCustomer(true);
     setIsTechnician(false);
     setSelectedUser(user);
     setUserDetailOpen(true);
   };
 
-  const handleAssigneeClick = (user: Technician | Customer | User) => {
+  const handleAssigneeClick = (user: User) => {
     setIsCustomer(false);
     setIsTechnician(false);
     setSelectedUser(user);
     setUserDetailOpen(true);
   };
 
-  const handleTechnicianClick = (user: Technician | Customer | User) => {
+  const handleTechnicianClick = (user: Technician) => {
     setIsCustomer(false);
     setIsTechnician(true);
     setSelectedUser(user);
@@ -67,17 +69,32 @@ export default function MyAssignmentTable({
           <TableHeader>
             <TableRow className="bg-gray-200/70 hover:bg-transparent">
               <TableHead className="min-w-38 text-center">
-                Service Request Title
-              </TableHead>
-              <TableHead className="min-w-38 text-center">
                 Customer
               </TableHead>
-              <TableHead className="min-w-30 text-center">
-                Assignee
+              <TableHead className="min-w-38 text-center">
+                Service Request Title
               </TableHead>
-              <TableHead className="min-w-30 text-center">
-                Assignee Notes
-              </TableHead>
+              {
+                role === "TECHNICIAN" &&
+                <TableHead className="min-w-30 text-center">
+                  Assignee
+                </TableHead>
+              }
+              {
+                role === "TECHNICIAN" ?
+                  <TableHead className="min-w-30 text-center">
+                    Assignee Notes
+                  </TableHead> :
+                  <TableHead className="min-w-30 text-center">
+                    Your Notes
+                  </TableHead>
+              }
+              {
+                role !== "TECHNICIAN" &&
+                <TableHead className="min-w-30 text-center">
+                  Technician
+                </TableHead>
+              }
               <TableHead className="min-w-30 text-center">
                 Assigned on
               </TableHead>
@@ -87,9 +104,15 @@ export default function MyAssignmentTable({
               <TableHead className="min-w-10 text-center">
                 Feeder
               </TableHead>
-              <TableHead className="min-w-60 text-center">
-                Your Report
-              </TableHead>
+              {
+                role === "TECHNICIAN" ?
+                  <TableHead className="min-w-60 text-center">
+                    Your Report
+                  </TableHead> :
+                  <TableHead className="min-w-60 text-center">
+                    Technician Report
+                  </TableHead>
+              }
               <TableHead className="text-center">
                 Status
               </TableHead>
@@ -124,9 +147,6 @@ export default function MyAssignmentTable({
                   key={assignment.id}
                   className="shadow-lg text-center text-muted-foreground hover:bg-gray-300/30"
                 >
-                  <TableCell>
-                    {assignment.serviceRequest.title}
-                  </TableCell>
 
                   <TableCell>
                     <Button
@@ -138,23 +158,46 @@ export default function MyAssignmentTable({
                     >
                       {assignment.serviceRequest.customer.name}
                     </Button>
+
+                  </TableCell>
+                  <TableCell>
+                    {assignment.serviceRequest.title}
                   </TableCell>
 
-                  <TableCell>
-                    <Button
-                      variant="link"
-                      className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
-                      onClick={() =>
-                        handleAssigneeClick(assignment.assignedByUser)
-                      }
-                    >
-                      {assignment.assignedByUser.name}
-                    </Button>
-                  </TableCell>
+                  {
+                    role === "TECHNICIAN" &&
+                    <TableCell>
+                      <Button
+                        variant="link"
+                        className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
+                        onClick={() =>
+                          handleAssigneeClick(assignment.assignedByUser)
+                        }
+                      >
+                        {assignment.assignedByUser.name}
+                      </Button>
+                    </TableCell>
+                  }
 
                   <TableCell>
                     {assignment.notes || "-"}
                   </TableCell>
+
+                  {
+                    role !== "TECHNICIAN" && assignment.technician &&
+                    <TableCell>
+                      <Button
+                        variant="link"
+                        className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
+                        onClick={() =>
+                          // biome-ignore lint/style/noNonNullAssertion: <sdf>
+                          handleTechnicianClick(assignment.technician!)
+                        }
+                      >
+                        {assignment.technician.name}
+                      </Button>
+                    </TableCell>
+                  }
 
                   <TableCell>
                     {new Date(assignment.createdAt).toLocaleString()}
@@ -208,7 +251,7 @@ export default function MyAssignmentTable({
                   </TableCell>
 
                   <TableCell className="text-right">
-                    <MyAssignmentActions assignment={assignment} /> 
+                    <MyAssignmentActions role={role} assignment={assignment} />
                   </TableCell>
                 </TableRow>
               ))

@@ -4,8 +4,8 @@ const MyAssignmentsPage = () => {
   return (
     <section>
       <div>
-        <h1 className="text-2xl">My Service Requests</h1>
-        <p>View and manage records of service requests</p>
+        <h1 className="text-2xl">My Assignments</h1>
+        <p>View and manage all the assignments appointed by you</p>
       </div>
       {/** biome-ignore lint/a11y/useValidAriaRole: <fgf> */}
       <MyAssignmentList role="OPERATOR" />

@@ -1,6 +1,6 @@
 import MyServiceRequestList from "@/components/modules/my-service-request/my-service-request-list";
 
-export default function SchedulesPage() {
+export default function MyServiceARequestsPage() {
   
   return (
     <section>

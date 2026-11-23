@@ -2,23 +2,23 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/toast";
-import type { Assignment } from "@/types";
+import type { Assignment, Role } from "@/types";
 import MyAssignmentDetailSheet from "./my-assignment-detail-sheet";
 import MyAssignmentActionDialog from "./my-assignment-action-dialog";
 
-export default function MyAssignmentActions({ assignment }: { assignment: Assignment }) {
+export type MyAssignmentAction = "UPDATE STATUS" | "SUBMIT REPORT" | "UPDATE REPORT" | "ASSIGN" | "UPDATE";
+
+export default function MyAssignmentActions({ role, assignment }: { role: Role, assignment: Assignment }) {
   const [detailOpen, setDetailOpen] = useState(false);
-  // const [confirmCancel, setConfirmCancel] = useState(false);
+  const [actionOpen, setActionOpen] = useState(false);
 
-  const [updateOpen, setUpdateOpen] = useState(false);
-  // const { mutate: updateStatus, isPending: updateStatusPending } = useUpdateStatusTechnician();
+  const [selectedAction, setSelectedAction] =
+    useState<MyAssignmentAction | null>(null);
 
-
-
-  // const { mutate: cancel, isPending: cancelPending } = useCancelRequest();
-
-  // const locked = schedule.status === "PUBLISHED" || schedule.isDeleted;
+  const handleClose = () => {
+    setActionOpen(false);
+    setSelectedAction(null);
+  };
 
   return (
     <>
@@ -28,14 +28,56 @@ export default function MyAssignmentActions({ assignment }: { assignment: Assign
         </Button>
 
         {
-          (assignment.serviceRequest.status === "ASSIGNED" ||
+          role === "TECHNICIAN" && (assignment.serviceRequest.status === "ASSIGNED" ||
             assignment.serviceRequest.status === "INPROGRESS") && !assignment.serviceRequest.isDeleted &&
           <Button
             size="sm"
-            onClick={() => setUpdateOpen(true)}
+            onClick={() => {
+              setActionOpen(true);
+              setSelectedAction("UPDATE STATUS");
+            }
+            }
           >
             Update Status
           </Button>
+        }
+
+        {
+          role === "TECHNICIAN" && (assignment.serviceRequest.status === "INSPECTING" || "PAYMENTPENDING") && !assignment.serviceRequest.isDeleted &&
+          <Button
+            size="sm"
+            onClick={() => {
+              setActionOpen(true);
+              if (assignment.technicianReport) {
+                setSelectedAction("UPDATE REPORT");
+              }
+              else {
+                setSelectedAction("SUBMIT REPORT");
+              }
+            }
+            }
+          >
+            {assignment.technicianReport ? "Update Report" : "Submit Report"}
+          </Button>
+        }
+
+        {
+          role !== "TECHNICIAN" && !assignment.serviceRequest.isDeleted &&
+          assignment.serviceRequest.status !== "CANCELLED" &&
+          assignment.serviceRequest.status !== "REJECTED" &&
+          assignment.serviceRequest.status !== "FAILED" &&
+          assignment.serviceRequest.status !== "RESOLVED" && (
+            <Button
+              size="sm"
+              onClick={() => {
+                setActionOpen(true);
+                setSelectedAction("UPDATE");
+              }
+              }
+            >
+              Update
+            </Button>
+          )
         }
       </div>
 
@@ -46,9 +88,10 @@ export default function MyAssignmentActions({ assignment }: { assignment: Assign
       />
 
       <MyAssignmentActionDialog
+        action={selectedAction}
         assignment={assignment}
-        open={updateOpen}
-        onClose={() => setUpdateOpen(false)}
+        open={actionOpen}
+        onClose={handleClose}
       />
     </>
   );

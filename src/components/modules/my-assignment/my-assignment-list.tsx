@@ -60,11 +60,10 @@ export default function MyAssignmentList({ role }: { role: Role }) {
             ))}
           </TabsList>
         </Tabs>
-        {/* <RequestSubmitDialog /> */}
       </div>
 
       <Suspense fallback={<MyAssignmentTableLoading />}>
-        <MyAssignmentTable {...queryParams} handlePageChange={setPage} />
+        <MyAssignmentTable role={role} {...queryParams} handlePageChange={setPage} />
       </Suspense>
     </>
   );

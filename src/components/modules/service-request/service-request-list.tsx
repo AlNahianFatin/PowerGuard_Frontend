@@ -25,29 +25,6 @@ const statuses: ["ALL" | "isDeleted" | ServiceRequestStatus, string][] = [
 ];
 
 export default function ServiceRequestList() {
-  const {
-    data,
-    isPending: techniciansLoading,
-    isError: techniciansError,
-  } = useSuspenseGetAvailableTechnicianToday();
-
-  const technicians = data?.data ?? [];
-
-  useEffect(() => {
-    if (techniciansLoading)
-      return;
-  }, [techniciansLoading]);
-
-  useEffect(() => {
-    if (techniciansError) {
-      toast.add({
-        title: "Server Failure",
-        description: "Could not get available areas. Please try again.",
-        type: "error",
-      });
-    }
-  }, [techniciansError]);
-
   const [tab, setTab] = useState<"ALL" | "isDeleted" | ServiceRequestStatus>("ALL");
   const [searchInput, setSearchInput] = useState("");
   const [page, setPage] = useState(1);
@@ -91,7 +68,7 @@ export default function ServiceRequestList() {
       </div>
 
       <Suspense fallback={<ServiceRequestTableLoading />}>
-        <ServiceRequestTable technicians={technicians} {...queryParams} handlePageChange={setPage} />
+        <ServiceRequestTable {...queryParams} handlePageChange={setPage} />
       </Suspense>
     </>
   );

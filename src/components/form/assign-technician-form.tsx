@@ -6,18 +6,18 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { Spinner } from "../ui/spinner";
 import { toast } from "../ui/toast";
-import { useAssignTechnician, useUpdateTechnician } from "@/hooks";
+import { useAssignTechnician, useSuspenseGetAvailableTechnicianToday, useUpdateTechnician } from "@/hooks";
 import {
   AssignTechnicianSchema,
   UpdateAssignmentSchema,
 } from "@/validation";
-import type { ServiceRequest, Technician } from "@/types";
+import type { ServiceRequest } from "@/types";
 import TechnicianSelector from "../modules/technician/technician-selector-table";
+import { useEffect } from "react";
 
 interface Props {
   action: "ASSIGN" | "UPDATE";
   request: ServiceRequest;
-  technicians: Technician[];
   handleClose: () => void;
 }
 
@@ -29,9 +29,31 @@ type FormValues = {
 export default function AssignTechnicianForm({
   action,
   request,
-  technicians,
   handleClose,
 }: Props) {
+  const {
+    data,
+    isPending: techniciansLoading,
+    isError: techniciansError,
+  } = useSuspenseGetAvailableTechnicianToday();
+
+  const technicians = data?.data ?? [];
+
+  useEffect(() => {
+    if (techniciansLoading)
+      return;
+  }, [techniciansLoading]);
+
+  useEffect(() => {
+    if (techniciansError) {
+      toast.add({
+        title: "Server Failure",
+        description: "Could not get available areas. Please try again.",
+        type: "error",
+      });
+    }
+  }, [techniciansError]);
+
   const { mutate: assign, isPending: isAssignPending } = useAssignTechnician();
   const { mutate: update, isPending: isUpdatePending } = useUpdateTechnician();
 
@@ -183,7 +205,7 @@ export default function AssignTechnicianForm({
             return (
               <Field data-invalid={isInvalid}>
                 <FieldLabel htmlFor={field.name}>
-                  Notes for technician{" "}
+                  Note for technician{" "}
                   <span className="font-normal text-muted-foreground">
                     (optional)
                   </span>

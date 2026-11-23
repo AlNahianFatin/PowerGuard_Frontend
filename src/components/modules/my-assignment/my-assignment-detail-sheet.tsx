@@ -128,6 +128,20 @@ export default function MyAssignmentDetailSheet({
                   Assignment
                 </p>
 
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Technician</dt>
+                  <dd>
+                    {assignment.technician?.name}
+                  </dd>
+                </div>
+
+                <div className="flex justify-between">
+                  <dt className="text-muted-foreground">Assignee notes</dt>
+                  <dd>
+                    {assignment.notes || "-"}
+                  </dd>
+                </div>
+
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Assigned at</dt>
                   <dd className="truncate">
@@ -140,12 +154,6 @@ export default function MyAssignmentDetailSheet({
                   </dd>
                 </div>
 
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Technician</dt>
-                  <dd>
-                    {assignment.technician?.name}
-                  </dd>
-                </div>
               </div>
             </>
           }
@@ -172,12 +180,6 @@ export default function MyAssignmentDetailSheet({
                   </dd>
                 </div>
 
-                <div className="flex justify-between">
-                  <dt className="text-muted-foreground">Technician notes</dt>
-                  <dd>
-                    {assignment.notes || "-"}
-                  </dd>
-                </div>
               </div>
             </>
           }
