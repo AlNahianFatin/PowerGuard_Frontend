@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type Dispatch, type SetStateAction } from "react";
+import { Fragment, useState, type Dispatch, type SetStateAction } from "react";
 import { SearchX } from "lucide-react";
 import {
   Table,
@@ -144,7 +144,7 @@ export default function MyAssignmentTable({
               </TableRow>
             ) : (
               assignments.map((assignment) => (
-                <>
+                <Fragment key={assignment.id}>
                   <TableRow
                     key={assignment.id}
                     className="shadow-lg text-center text-muted-foreground hover:bg-gray-300/30"
@@ -265,7 +265,7 @@ export default function MyAssignmentTable({
                       onClose={() => setReportDetailOpen(false)}
                     />
                   }
-                </>
+                </Fragment>
               ))
             )}
           </TableBody>

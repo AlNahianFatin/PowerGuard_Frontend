@@ -48,8 +48,8 @@ export default function MyAssignmentList({ role }: { role: Role }) {
         <Input
           onChange={(e) => handleSearch(e)}
           type="search"
-          placeholder={`Search by service request title, customer, area or ${role === "TECHNICIAN" ? "assignee" : "technician"}`}
-          className="w-70"
+          placeholder={`Search by request, customer, area or ${role === "TECHNICIAN" ? "assignee" : "technician"}`}
+          className="w-85"
         />
         <Tabs value={tab} onValueChange={(value) => setTab(value)}>
           <TabsList>

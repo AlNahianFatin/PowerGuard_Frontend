@@ -1,12 +1,6 @@
 import apiClient from "@/lib/apiClient";
 import type {
   ApiResponse,
-  TechnicianParams,
-  PublicTechnicianProfile,
-  VerifyAccountPayload,
-  TechnicianApplicationPayload,
-  Technician,
-  ApproveTechnicianPayload,
   AdminAnalyticsResponse,
 } from "@/types";
 

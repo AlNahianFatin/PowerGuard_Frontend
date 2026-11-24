@@ -2,6 +2,7 @@ import apiClient from "@/lib/apiClient";
 import type {
   ApiResponse,
   Assignment,
+  AssignmentParams,
   AssignTechnicianPayload,
   AssignTechnicianResponse,
   MyAssignmentParams,
@@ -32,11 +33,9 @@ export function updateAssignment(assignmentId: string, payload: UpdateAssignment
 
 export function getMyAssignment(params: MyAssignmentParams) {
   return apiClient<ApiResponse<Assignment[]>>(
-    `/assignment/my-assignments`,
-    {
-      params
-    },
-  );
+    `/assignment/my-assignments`, {
+    params
+  });
 }
 
 export function updateAssignmentStatus(assignmentId: string, payload: UpdateAssignmentStatusPayload) {
@@ -50,8 +49,9 @@ export function updateAssignmentStatus(assignmentId: string, payload: UpdateAssi
   );
 }
 
-// export function getMyAppointments(params: { page?: number; limit?: number }) {
-//   return apiClient<ApiResponse<{ doctor: PublicDoctorProfile; status: string; id: string }[]>>("/appointment/my-appointments", {
-//     params,
-//   });
-// }
+export function getAssignment(params: AssignmentParams) {
+  return apiClient<ApiResponse<Assignment[]>>(
+    `/assignment/all-assignments`, {
+    params
+  });
+}

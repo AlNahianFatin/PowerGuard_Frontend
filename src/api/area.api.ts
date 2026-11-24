@@ -1,19 +1,13 @@
 import apiClient from "@/lib/apiClient";
 import type {
   ApiResponse,
-  ChangePasswordPayload,
-  ForgotPasswordPayload,
-  LoginPayload,
-  RegistrationPayload,
-  ResendOtpPayload,
-  ResetPasswordPayload,
-  VerifyAccountPayload,
 } from "@/types";
 
 // export function getAllAreas() {
 //   return apiClient("/area/all-areas", { method: "POST", body: payload });
 // }
 export function getAllAreas() {
+  // biome-ignore lint/suspicious/noExplicitAny: <f>
   return apiClient<ApiResponse<any>>("/area/all-areas");
 }
 

@@ -1,5 +1,5 @@
-import { assignTechnician, getMyAssignment, updateAssignment, updateAssignmentStatus } from "@/api";
-import type { AssignTechnicianPayload, MyAssignmentParams, UpdateAssignmentPayload, UpdateAssignmentStatusPayload } from "@/types";
+import { assignTechnician, getAssignment, getMyAssignment, updateAssignment, updateAssignmentStatus } from "@/api";
+import type { AssignmentParams, AssignTechnicianPayload, MyAssignmentParams, UpdateAssignmentPayload, UpdateAssignmentStatusPayload } from "@/types";
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery } from "@tanstack/react-query";
 
 interface AssignTechnicianVariables {
@@ -59,6 +59,20 @@ export function useGetMyAssignment(params: MyAssignmentParams) {
   return useQuery({
     queryKey: ["my-assignments", params],
     queryFn: () => getMyAssignment(params),
+  });
+}
+
+export function useSuspenseGetAssignment(params: AssignmentParams) {
+  return useSuspenseQuery({
+    queryKey: ["assignments", params],
+    queryFn: () => getAssignment(params),
+  });
+}
+
+export function useGetAssignment(params: AssignmentParams) {
+  return useQuery({
+    queryKey: ["assignments", params],
+    queryFn: () => getAssignment(params),
   });
 }
 
