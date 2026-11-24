@@ -95,18 +95,6 @@ export default function TechnicianReviewSheet({
     return null;
   }
 
-  // const detailRow = (label: string, value?: string | number | null, children?: ReactNode) => (
-  //   <div className="flex items-start justify-between gap-4 text-sm">
-  //     <div className="flex shrink-0 text-muted-foreground gap-3">
-  //       {children}
-  //       <span className="text-muted-foreground">{label}</span>
-  //     </div>
-  //     <span className="text-right font-medium wrap-break-words">
-  //       {value || <span className="font-normal text-muted-foreground">—</span>}
-  //     </span>
-  //   </div>
-  // );
-
   return (
     <Sheet open={!!selectedId} onOpenChange={handleClose}>
       <SheetContent side="bottom" className="gap-0  w-full">

@@ -1,6 +1,5 @@
 "use client";
 
-import { Separator } from "@/components/ui/separator";
 import {
   Sheet,
   SheetContent,
@@ -9,7 +8,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import type { User } from "@/types";
-import { Briefcase, FileText, Mail, MapPin, Phone, UserRound } from "lucide-react";
+import { Mail, UserRound } from "lucide-react";
 
 interface Props {
   user: User;

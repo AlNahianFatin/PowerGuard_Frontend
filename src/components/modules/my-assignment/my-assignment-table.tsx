@@ -16,6 +16,7 @@ import type { Customer, MyAssignmentParams, Role, Technician, User } from "@/typ
 import { Button } from "@/components/ui/button";
 import MyAssignmentUserDetailSheet from "./my-assignment-user-detail-sheet";
 import MyAssignmentActions from "./my-assignment-actions";
+import MyAssignmentReportDetailSheet from "./my-assignment-report-detail-sheet";
 
 interface Props extends MyAssignmentParams {
   role: Role;
@@ -143,117 +144,128 @@ export default function MyAssignmentTable({
               </TableRow>
             ) : (
               assignments.map((assignment) => (
-                <TableRow
-                  key={assignment.id}
-                  className="shadow-lg text-center text-muted-foreground hover:bg-gray-300/30"
-                >
+                <>
+                  <TableRow
+                    key={assignment.id}
+                    className="shadow-lg text-center text-muted-foreground hover:bg-gray-300/30"
+                  >
 
-                  <TableCell>
-                    <Button
-                      variant="link"
-                      className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
-                      onClick={() =>
-                        handleCustomerClick(assignment.serviceRequest.customer)
-                      }
-                    >
-                      {assignment.serviceRequest.customer.name}
-                    </Button>
-
-                  </TableCell>
-                  <TableCell>
-                    {assignment.serviceRequest.title}
-                  </TableCell>
-
-                  {
-                    role === "TECHNICIAN" &&
                     <TableCell>
                       <Button
                         variant="link"
                         className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
                         onClick={() =>
-                          handleAssigneeClick(assignment.assignedByUser)
+                          handleCustomerClick(assignment.serviceRequest.customer)
                         }
                       >
-                        {assignment.assignedByUser.name}
+                        {assignment.serviceRequest.customer.name}
                       </Button>
+
                     </TableCell>
-                  }
-
-                  <TableCell>
-                    {assignment.notes || "-"}
-                  </TableCell>
-
-                  {
-                    role !== "TECHNICIAN" && assignment.technician &&
                     <TableCell>
-                      <Button
-                        variant="link"
-                        className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
-                        onClick={() =>
-                          // biome-ignore lint/style/noNonNullAssertion: <sdf>
-                          handleTechnicianClick(assignment.technician!)
-                        }
-                      >
-                        {assignment.technician.name}
-                      </Button>
+                      {assignment.serviceRequest.title}
                     </TableCell>
-                  }
 
-                  <TableCell>
-                    {new Date(assignment.createdAt).toLocaleString()}
-                  </TableCell>
-
-                  <TableCell>
-                    {assignment.serviceRequest.area.name}
-                  </TableCell>
-
-                  <TableCell>
-                    {assignment.serviceRequest.area.feeder.name}
-                  </TableCell>
-
-                  <TableCell>
                     {
-                      assignment.technicianReport ?
+                      role === "TECHNICIAN" &&
+                      <TableCell>
                         <Button
                           variant="link"
                           className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
-                          onClick={() => setReportDetailOpen(true)}
+                          onClick={() =>
+                            handleAssigneeClick(assignment.assignedByUser)
+                          }
                         >
-                          "View report"
-                        </Button> :
-                        "-"
+                          {assignment.assignedByUser.name}
+                        </Button>
+                      </TableCell>
                     }
-                  </TableCell>
 
-                  <TableCell className="max-w-60 overflow-x-auto">
-                    <div
-                      className={`rounded-4xl py-1 px-2 text-center outline-2 ${assignment.serviceRequest.status === "PENDING"
-                        ? "outline-stone-500 bg-stone-500/30 text-stone-800"
-                        : assignment.serviceRequest.status === "ASSIGNED"
-                          ? "outline-teal-500 bg-teal-500/30 text-teal-800"
-                          : assignment.serviceRequest.status === "INSPECTING"
-                            ? "outline-cyan-500 bg-cyan-500/30 text-cyan-800"
-                            : assignment.serviceRequest.status === "PAYMENTPENDING"
-                              ? "outline-mist-500 bg-mist-500/30 text-mist-800"
-                              : assignment.serviceRequest.status === "INPROGRESS"
-                                ? "outline-olive-500 bg-olive-500/30 text-olive-800"
-                                : assignment.serviceRequest.status === "RESOLVED"
-                                  ? "outline-emerald-500 bg-emerald-500/30 text-emerald-800"
-                                  : assignment.serviceRequest.status === "FAILED"
-                                    ? "outline-mauve-500 bg-mauve-500/30 text-mauve-800"
-                                    : assignment.serviceRequest.status === "REJECTED"
-                                      ? "outline-red-400 bg-red-400/30 text-red-700"
-                                      : "outline-orange-500 bg-orange-500/30 text-orange-800"
-                        }`}
-                    >
-                      {assignment.serviceRequest.status}
-                    </div>
-                  </TableCell>
+                    <TableCell>
+                      {assignment.notes || "-"}
+                    </TableCell>
 
-                  <TableCell className="text-right">
-                    <MyAssignmentActions role={role} assignment={assignment} />
-                  </TableCell>
-                </TableRow>
+                    {
+                      role !== "TECHNICIAN" && assignment.technician &&
+                      <TableCell>
+                        <Button
+                          variant="link"
+                          className="h-auto p-0 font-normal text-muted-foreground underline hover:text-primary"
+                          onClick={() =>
+                            // biome-ignore lint/style/noNonNullAssertion: <sdf>
+                            handleTechnicianClick(assignment.technician!)
+                          }
+                        >
+                          {assignment.technician.name}
+                        </Button>
+                      </TableCell>
+                    }
+
+                    <TableCell>
+                      {new Date(assignment.createdAt).toLocaleString()}
+                    </TableCell>
+
+                    <TableCell>
+                      {assignment.serviceRequest.area.name}
+                    </TableCell>
+
+                    <TableCell>
+                      {assignment.serviceRequest.area.feeder.name}
+                    </TableCell>
+
+                    <TableCell>
+                      {
+                        assignment.technicianReport ?
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => setReportDetailOpen(true)}
+                          >
+                            View report
+                          </Button> :
+                          "-"
+                      }
+                    </TableCell>
+
+                    <TableCell className="max-w-60 overflow-x-auto">
+                      <div
+                        className={`rounded-4xl py-1 px-2 text-center outline-2 ${assignment.serviceRequest.status === "PENDING"
+                          ? "outline-stone-500 bg-stone-500/30 text-stone-800"
+                          : assignment.serviceRequest.status === "ASSIGNED"
+                            ? "outline-teal-500 bg-teal-500/30 text-teal-800"
+                            : assignment.serviceRequest.status === "INSPECTING"
+                              ? "outline-cyan-500 bg-cyan-500/30 text-cyan-800"
+                              : assignment.serviceRequest.status === "PAYMENTPENDING"
+                                ? "outline-mist-500 bg-mist-500/30 text-mist-800"
+                                : assignment.serviceRequest.status === "INPROGRESS"
+                                  ? "outline-olive-500 bg-olive-500/30 text-olive-800"
+                                  : assignment.serviceRequest.status === "RESOLVED"
+                                    ? "outline-emerald-500 bg-emerald-500/30 text-emerald-800"
+                                    : assignment.serviceRequest.status === "FAILED"
+                                      ? "outline-mauve-500 bg-mauve-500/30 text-mauve-800"
+                                      : assignment.serviceRequest.status === "REJECTED"
+                                        ? "outline-red-400 bg-red-400/30 text-red-700"
+                                        : "outline-orange-500 bg-orange-500/30 text-orange-800"
+                          }`}
+                      >
+                        {assignment.serviceRequest.status}
+                      </div>
+                    </TableCell>
+
+                    <TableCell className="text-right">
+                      <MyAssignmentActions role={role} assignment={assignment} />
+                    </TableCell>
+                  </TableRow>
+
+                  {
+                    assignment.technicianReport &&
+                    <MyAssignmentReportDetailSheet
+                      assignment={assignment}
+                      open={reportDetailOpen}
+                      onClose={() => setReportDetailOpen(false)}
+                    />
+                  }
+                </>
               ))
             )}
           </TableBody>

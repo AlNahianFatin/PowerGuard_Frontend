@@ -262,26 +262,12 @@ export default function ServiceRequestDetailSheet({
 
                 {
                   request.assignment?.payment &&
-                  <>
-                    <div className="flex justify-between">
-                      <dt className="text-muted-foreground">Paid amount</dt>
-                      <dd>
-                        {request.assignment.payment.amount}
-                      </dd>
-                    </div>
-
-                    <div className="flex justify-between gap-4">
-                      <dt className="text-muted-foreground">Resolved at</dt>
-                      <dd className="truncate">
-                        {new Date(request.resolvedAt).toLocaleString(undefined, {
-                          dateStyle: "full",
-                        })},&nbsp;
-                        {new Date(request.resolvedAt).toLocaleTimeString(undefined, {
-                          timeStyle: "short",
-                        })}
-                      </dd>
-                    </div>
-                  </>
+                  <div className="flex justify-between">
+                    <dt className="text-muted-foreground">Paid amount</dt>
+                    <dd>
+                      {request.assignment.payment.amount}
+                    </dd>
+                  </div>
                 }
               </div>
             </>
