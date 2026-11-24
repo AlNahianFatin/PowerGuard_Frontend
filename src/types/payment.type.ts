@@ -54,3 +54,7 @@ export interface MyPaymentParams {
 export interface PayServiceRequestPayload {
   requestId: string;
 }
+
+export interface PayServiceRequestResponse {
+  paymentUrl: string;
+}
