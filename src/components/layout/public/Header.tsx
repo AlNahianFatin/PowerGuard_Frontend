@@ -8,11 +8,12 @@ import type { Role } from "@/types";
 import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const routes = [
     { name: "Home", url: "/" },
-    { name: "Schedules", url: "/schedules" },
+    // { name: "Schedules", url: "/schedules" },
     { name: "About us", url: "/about-us" },
     // { name: "Apply for technician", url: "/apply" },
   ];
@@ -24,6 +25,8 @@ export default function Header() {
     CUSTOMER: "/customer",
   };
 
+  const router = useRouter();
+
   const queryClient = useQueryClient();
   const { data, isLoading } = useGetMe();
   const { mutate: logout, isPending: isLogoutPending } = useLogout();
@@ -33,17 +36,30 @@ export default function Header() {
   const handleLogout = () => {
     logout(undefined, {
       onSuccess: (res) => {
+        if (!res.success) {
+          toast.add({
+            title: "Logout failed",
+            description: res.data?.message || res.message || "Something Went Wrong",
+            type: "error",
+          });
+
+          return;
+        }
         toast.add({
           title: "See you soon!",
-          description: res.message ?? "Logged out successfully",
+          description: res.message || "Logged out successfully",
           type: "success",
         });
+
         queryClient.removeQueries({ queryKey: ["user"] });
+
+        router.push("/login");
       },
-      onError: (error) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <sd>
+      onError: (error: any) => {
         toast.add({
           title: "Logout failed",
-          description: error.message ?? "Something Went Wrong",
+          description: error.data?.message || "Something Went Wrong",
           type: "error",
         });
       },

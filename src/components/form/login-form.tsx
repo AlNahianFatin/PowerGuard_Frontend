@@ -39,14 +39,15 @@ export default function LoginForm() {
 
   const isSubmitting = loginPending || googlePending;
 
-  const { data } = useGetMe();
-  const role: Role = !!data?.data && data?.data.role;
+  // const { data } = useGetMe();
+  // const role: Role = !!data?.data && data?.data.role;
+  const { refetch: refetchMe } = useGetMe();
 
   const form = useForm({
-    // defaultValues: {
-    //   email: "",
-    //   password: "",
-    // },
+    defaultValues: {
+      email: "",
+      password: "",
+    },
     // defaultValues: {
     //   email: "testeradmin@powergurard.com",
     //   password: "Tester@admin12345",
@@ -59,14 +60,55 @@ export default function LoginForm() {
     //   email: "testertechnician@powergurard.com",
     //   password: "Tester@technician12345",
     // },
-    defaultValues: {
-      email: "testercustomer@powergurard.com",
-      password: "Tester@customer12345",
-    },
+    // defaultValues: {
+    //   email: "testercustomer@powergurard.com",
+    //   password: "Tester@customer12345",
+    // },
     validators: {
       onChange: loginSchema,
       onSubmit: loginSchema,
     },
+    // onSubmit: ({ value }) => {
+    //   const loginData = {
+    //     email: value.email,
+    //     password: value.password,
+    //   };
+
+    //   login(loginData, {
+    //     onSuccess: (res) => {
+    //       toast.add({
+    //         title: "Login Success",
+    //         description: res.message ?? "Welcome back",
+    //         type: "success",
+    //       });
+
+    //       if (role) {
+    //         router.push(`${dashboardRoute[role]}`);
+    //         return;
+    //       }
+
+    //       toast.add({
+    //         title: "Authorization failure",
+    //         description:
+    //           res.data?.message ||
+    //           res.message ||
+    //           "Could not identify your authorization. Please login again",
+    //         type: "error",
+    //       });
+    //       router.push("/login");
+    //     },
+    //     // biome-ignore lint/suspicious/noExplicitAny: <sd>
+    //     onError: (err: any) => {
+    //       toast.add({
+    //         title: "Authorization failure",
+    //         description:
+    //           err.data?.message ||
+    //           "Something went wrong. Please try again",
+    //         type: "error",
+    //       });
+    //     },
+    //   });
+    // },
     onSubmit: ({ value }) => {
       const loginData = {
         email: value.email,
@@ -74,35 +116,48 @@ export default function LoginForm() {
       };
 
       login(loginData, {
-        onSuccess: (res) => {
-          toast.add({
-            title: "Login Success",
-            description: res.message ?? "Welcome back",
-            type: "success",
-          });
-          
-          if (role) {
-            router.push(`${dashboardRoute[role]}`);
-            return;
-          }
+        onSuccess: async (res) => {
+          try {
+            // Fetch the authenticated user's information after login.
+            const meResponse = await refetchMe();
 
-          toast.add({
-            title: "Authorization failure",
-            description:
-              res.data?.message ||
-              res.message ||
-              "Could not identify your authorization. Please login again",
-            type: "error",
-          });
-          router.push("/login");
+            const role = meResponse.data?.data?.role as Role | undefined;
+
+            if (!role || !dashboardRoute[role]) {
+              toast.add({
+                title: "Authorization failure",
+                description:
+                  "Could not identify your authorization. Please login again.",
+                type: "error",
+              });
+
+              return;
+            }
+
+            toast.add({
+              title: "Login Success",
+              description: res.message ?? "Welcome back",
+              type: "success",
+            });
+
+            router.replace(dashboardRoute[role]);
+            router.refresh();
+          } catch {
+            toast.add({
+              title: "Authorization failure",
+              description:
+                "Login succeeded, but we could not retrieve your account information.",
+              type: "error",
+            });
+          }
         },
-        // biome-ignore lint/suspicious/noExplicitAny: <sd>
+
+        // biome-ignore lint/suspicious/noExplicitAny: API error handling
         onError: (err: any) => {
           toast.add({
             title: "Authorization failure",
             description:
-              err.data?.message ||
-              "Something went wrong. Please try again",
+              err.data?.message || "Something went wrong. Please try again.",
             type: "error",
           });
         },

@@ -15,7 +15,7 @@ import { DashboardNotification } from "@/components/dashboard/dashboard-notifica
 
 const routes = [
   { name: "Home", url: "/" },
-  { name: "Schedules", url: "/schedules" },
+  // { name: "Schedules", url: "/schedules" },
   { name: "About us", url: "/about-us" },
 ];
 
@@ -29,19 +29,30 @@ export default function Layout({ children }: { children: ReactNode }) {
   const handleLogout = () => {
     logout(undefined, {
       onSuccess: (res) => {
+        if (!res.success) {
+          toast.add({
+            title: "Logout failed",
+            description: res.data?.message || res.message || "Something Went Wrong",
+            type: "error",
+          });
+
+          return;
+        }
         toast.add({
           title: "See you soon!",
-          description: res.message ?? "Logged out successfully",
+          description: res.message || "Logged out successfully",
           type: "success",
         });
 
         queryClient.removeQueries({ queryKey: ["user"] });
-        router.push("/");
+
+        router.push("/login");
       },
-      onError: (error) => {
+      // biome-ignore lint/suspicious/noExplicitAny: <sd>
+      onError: (error: any) => {
         toast.add({
           title: "Logout failed",
-          description: error.message ?? "Something went wrong",
+          description: error.data?.message || "Something Went Wrong",
           type: "error",
         });
       },

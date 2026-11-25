@@ -43,7 +43,7 @@ export default function MyAssignmentActions({ role, assignment }: { role: Role, 
         }
 
         {
-          role === "TECHNICIAN" && (assignment.serviceRequest.status === "INSPECTING" || "PAYMENTPENDING") && !assignment.serviceRequest.isDeleted &&
+          role === "TECHNICIAN" && (assignment.serviceRequest.status === "INSPECTING" || assignment.serviceRequest.status === "PAYMENTPENDING") && !assignment.serviceRequest.isDeleted &&
           <Button
             size="sm"
             onClick={() => {

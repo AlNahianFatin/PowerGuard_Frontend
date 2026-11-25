@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npx serve@latest out",
     "format:check": "npx @biomejs/biome format ./src",
     "format:fix": "npx @biomejs/biome format --write ./src",
     "lint:check": "npx @biomejs/biome lint ./src",
