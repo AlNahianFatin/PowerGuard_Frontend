@@ -8,7 +8,7 @@
 
 **A modern, responsive web application for managing scheduled load shedding, reporting power outages, coordinating technicians, and monitoring service restoration through role-based dashboards.**
 
-[Live Demo](https://github.com/AlNahianFatin/Al-Nahian-Fatin-Portfolio-Dashboard) 
+[Live Link](https://power-guardfrontend.vercel.app) 
 [Backend Repository](https://github.com/AlNahianFatin/PowerGuard_Backend)
 
 </div>
